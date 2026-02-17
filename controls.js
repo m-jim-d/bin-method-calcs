@@ -32,7 +32,7 @@ var cityData = null;
 
 async function loadCityData() {
    try {
-      var resp = await fetch('/coolrtu-js/data/Stations.json');
+      var resp = await fetch('data/Stations.json');
       var stations = await resp.json();
       cityData = {};
       for (var i = 0; i < stations.length; i++) {
@@ -281,9 +281,9 @@ function applySpreadsheetToForm(strCorS, ssFields) {
 async function recalcVentilation() {
    try {
       var form = document.forms.HECACParameters;
-      var psychro = await import('./include/psychro.js');
-      var perf = await import('./include/performance_module.js');
-      var engine = await import('./include/engine_module.js?v=14');
+      var psychro = await import('./engine/psychro.js');
+      var perf = await import('./engine/performance_module.js');
+      var engine = await import('./engine/engine_module.js?v=14');
       if (!engine || typeof engine.exportBinCalcsJson !== 'function') return;
 
       // Iterative Establish_SIV matching ASP Controls.asp lines 405-431:
@@ -812,9 +812,9 @@ async function fetchLoadLine() {
          syncBuildingModelFields();
 
          // Run the iterative engine loop (matching submitToEngine) so ventilation is refined
-         var psychro = await import('./include/psychro.js');
-         var perf = await import('./include/performance_module.js');
-         var engine = await import('./include/engine_module.js?v=14');
+         var psychro = await import('./engine/psychro.js');
+         var perf = await import('./engine/performance_module.js');
+         var engine = await import('./engine/engine_module.js?v=14');
          for (var iter = 0; iter < 4; iter++) {
             await engine.exportBinCalcsJson(form, {});
             var ll = engine.getLastLoadLine();
@@ -1554,11 +1554,11 @@ async function submitToEngine() {
 
    try {
       // Import modules
-      var psychro = await import('./include/psychro.js');
-      var perf = await import('./include/performance_module.js');
+      var psychro = await import('./engine/psychro.js');
+      var perf = await import('./engine/performance_module.js');
 
       // Dynamically import the JS engine module
-      var engine = await import('./include/engine_module.js?v=14');
+      var engine = await import('./engine/engine_module.js?v=14');
       if (!engine || typeof engine.exportBinCalcsJson !== 'function') {
          throw new Error('exportBinCalcsJson() not available in engine_module.js');
       }

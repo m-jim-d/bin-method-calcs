@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <title>RTU Bin-Method Calculator</title>
 
-  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="shared/styles_bmc.css" />
 
-  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
-  <script src="/coolrtu-js/bincalcs/help_viewer.js"></script>
+  <script src="load_header_footer.js"></script>
+  <script src="help_viewer.js"></script>
 
   <style>
     #page {
@@ -41,7 +41,7 @@
     <div id="container">
       <div id="main">
         <div class='homeLink_left'><a class='Jump' href='methods/CoolingCorrectionCurvesSensible.html'>Return to Correction Curves</a></div>
-        <div class='homeLink'><a href='/coolrtu-js/bincalcs/controls.html' target='_blank' title='Open a new bin-method calculator.' class='Jump'>Open a calculator</a></div>
+        <div class='homeLink'><a href='Controls.html' target='_blank' title='Open a new bin-method calculator.' class='Jump'>Open a calculator</a></div>
 
         <form id="formBypass" name="formBypass">
           <br>
@@ -102,9 +102,9 @@
       A0_FromBPF,
       STratio_EnergyPlus_A0,
       SC_ADP
-    } from './include/psychro.js';
+    } from './engine/psychro.js';
 
-    import { StageState } from './include/classes.js';
+    import { StageState } from './engine/classes.js';
 
     const dblStandardPressure = 29.921;
 

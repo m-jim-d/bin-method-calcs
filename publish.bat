@@ -39,7 +39,7 @@ IF %help%==on (
       REM data: JSON only. Skip .mdb Access databases.
       xcopy "%SRC%\data\*.json" "%DST%\data\" /Y /I
 
-      REM ---- bincalcs: page-level files ----
+      REM ---- Page-level files ----
       FOR %%F IN (
          Controls.html
          controls.js
@@ -54,14 +54,14 @@ IF %help%==on (
          BuildingLoadModels.pdf
          DetailedPerformanceData.zip
       ) DO (
-         copy /Y "%SRC%\bincalcs\%%F" "%DST%\bincalcs\%%F"
+         copy /Y "%SRC%\%%F" "%DST%\%%F"
       )
 
-      REM ---- bincalcs: spreadsheet downloads ----
-      xcopy "%SRC%\bincalcs\DetailedPerformanceData\*" "%DST%\bincalcs\DetailedPerformanceData\" /Y /I
-      copy /Y "%SRC%\bincalcs\DetailedPerformanceData_VSCD.xlsm" "%DST%\bincalcs\DetailedPerformanceData_VSCD.xlsm"
+      REM ---- Spreadsheet downloads ----
+      xcopy "%SRC%\DetailedPerformanceData\*" "%DST%\DetailedPerformanceData\" /Y /I
+      copy /Y "%SRC%\DetailedPerformanceData_VSCD.xlsm" "%DST%\DetailedPerformanceData_VSCD.xlsm"
 
-      REM ---- bincalcs/include: JS modules only ----
+      REM ---- Engine modules ----
       FOR %%F IN (
          engine_module.js
          performance_module.js
@@ -69,12 +69,12 @@ IF %help%==on (
          database_module.js
          classes.js
       ) DO (
-         copy /Y "%SRC%\bincalcs\include\%%F" "%DST%\bincalcs\include\%%F"
+         copy /Y "%SRC%\engine\%%F" "%DST%\engine\%%F"
       )
 
-      REM ---- bincalcs/methods: all HTML + images ----
-      xcopy "%SRC%\bincalcs\methods\*.html" "%DST%\bincalcs\methods\" /Y /I
-      xcopy "%SRC%\bincalcs\methods\images\*" "%DST%\bincalcs\methods\images\" /Y /I /E
+      REM ---- Methods: all HTML + images ----
+      xcopy "%SRC%\methods\*.html" "%DST%\methods\" /Y /I
+      xcopy "%SRC%\methods\images\*" "%DST%\methods\images\" /Y /I /E
 
       ECHO(
       ECHO Copy complete.
@@ -86,6 +86,6 @@ IF %help%==on (
    )
 
    git add .
-   git commit -am "initial commit of the bin-method-calc project"
+   git commit -am "Updated to use relative paths."
    git push origin main
 )

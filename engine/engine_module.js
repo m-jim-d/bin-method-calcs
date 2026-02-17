@@ -1440,18 +1440,20 @@ export async function runBinCalcs(form, opts = {}) {
     };
 
     const cache = _dataCache;
+    const _moduleBase = new URL('.', import.meta.url).href;
     async function loadJsonCached(url) {
-      if (cache[url]) return cache[url];
-      const resp = await fetch(url, { cache: 'no-store' });
+      const resolvedUrl = new URL(url, _moduleBase).href;
+      if (cache[resolvedUrl]) return cache[resolvedUrl];
+      const resp = await fetch(resolvedUrl, { cache: 'no-store' });
       if (!resp.ok) throw new Error('Failed to load ' + url + ': ' + resp.status);
       const data = await resp.json();
-      cache[url] = data;
+      cache[resolvedUrl] = data;
       return data;
     }
 
     const [stations, weather] = await Promise.all([
-      loadJsonCached('/coolrtu-js/data/Stations.json'),
-      loadJsonCached('/coolrtu-js/data/Tbins_new.json'),
+      loadJsonCached('../data/Stations.json'),
+      loadJsonCached('../data/Tbins_new.json'),
     ]);
 
     const stationsNorm = (stations || []).map((s) => ({
