@@ -61,4 +61,6 @@ methods/                 Engineering methods pages describing the calculations
 
 ## License
 
-This project is provided as a demonstration tool for preliminary analysis. Its output should not be used for final purchasing decisions.
+This project is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). You are free to share and adapt the material for non-commercial purposes with appropriate attribution. See the [LICENSE](LICENSE) file for details.
+
+This calculator is provided as a demonstration tool for preliminary analysis. Its output should not be used for final purchasing decisions.
