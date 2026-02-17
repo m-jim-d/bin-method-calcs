@@ -43,9 +43,9 @@ methods/                 Engineering methods pages describing the calculations
 ## Documentation
 
 - **[User Manual](docs/PNNL-24130.pdf)** — Detailed guide to the calculator's features and inputs
-- **[Quick Start](quickstart.html)** — Step-by-step instructions for running a comparison
-- **[Engineering Methods](methods/methods_outline.html)** — Description of the calculation methods
-- **[Revision History](RevisionHistory.html)** — Version changelog
+- **[Quick Start](https://m-jim-d.github.io/bin-method-calcs/quickstart.html)** — Step-by-step instructions for running a comparison
+- **[Engineering Methods](https://m-jim-d.github.io/bin-method-calcs/methods/methods_outline.html)** — Description of the calculation methods
+- **[Revision History](https://m-jim-d.github.io/bin-method-calcs/RevisionHistory.html)** — Version changelog
 
 ## Technical Notes
 
