@@ -1,5 +1,7 @@
 # Bin-Method Calculator — RTU Cooling Energy
 
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
 A client-side engineering calculator that estimates annual cooling energy usage for rooftop air conditioning units (RTUs) using the bin method of analysis. It compares a high-efficiency candidate unit against a standard-efficiency baseline and provides economic metrics for the investment.
 
 **[Launch the Calculator](https://m-jim-d.github.io/bin-method-calcs/Controls.html)**

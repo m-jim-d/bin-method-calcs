@@ -9,6 +9,11 @@ var helpModalOverlay = null;
 var helpModalFrame = null;
 var currentHelpHash = '';
 var escapeKeyListenerAdded = false; // Track if escape listener is already added
+var _helpViewerBase = (function() {
+    var s = document.currentScript;
+    if (!s || !s.src) return '';
+    return s.src.substring(0, s.src.lastIndexOf('/') + 1);
+})();
 
 // Ensure the modal is initialized when the DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
@@ -193,7 +198,7 @@ function openHelpModal(theHashMark) {
     currentHelpHash = theHashMark || '';
     
     // Set the iframe source with hashmark and cache-busting parameter
-    var helpUrl = "Help_Controls.html";
+    var helpUrl = _helpViewerBase + "Help_Controls.html";
     helpUrl += "?nocache=1234"; // manually update this number to force a refresh
     
     // Add hashmark if provided (after the cache parameter)
