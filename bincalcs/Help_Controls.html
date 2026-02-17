@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RTU Bin-Method Calculator - Help</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <style type="text/css">
+    a.Jump {
+      color: #cf6200;
+      text-decoration: underline;
+    }
+
+    a.Jump:hover {
+      color: #cf6200;
+      text-decoration: none;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    h1.maintitle {
+      border: 7px solid #707276;
+      font-weight: normal;
+      font-style: normal;
+      color: white;
+      text-align: center;
+      background-color: #707276;
+      font-family: Arial;
+      font-size: 150%;
+      text-transform: none;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #b2b3b5;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 0.4em;
+    }
+
+    th {
+      color: #cf6200;
+    }
+
+    td {
+      vertical-align: top;
+      text-align: center;
+    }
+
+    thead th {
+      border-bottom: 2px solid #707276;
+      text-align: center;
+    }
+
+    table.borderless,
+    table.borderless th,
+    table.borderless td {
+      border: none;
+    }
+
+    table.borderless th {
+      font-weight: normal;
+    }
+
+    li {
+      margin-left: 18px;
+      margin-bottom: 8px;
+    }
+
+    body {
+      font-size: 85%;
+      line-height: 140%;
+      font-family: Arial;
+      max-width: 700px;
+    }
+
+    td.header {
+      border-bottom: 3px solid #707276;
+    }
+
+    td.leftborder {
+      border-left: 3px solid #707276;
+    }
+
+    td.left {
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body style="background: white none repeat scroll 0% 50%;
+    -moz-background-clip: initial; -moz-background-origin: initial;
+    -moz-background-inline-policy: initial;">
+  <a name="Intro"></a>
+  <h1 class="maintitle">Bin-Method Calculator &mdash; Help</h1>
+  <p>This help is a collection of topics for the features on the calculator's
+    <em>Controls</em> page. These help topics can be accessed by clicking on the
+    information icon next to a feature's name. This opens the help window and
+    positions the corresponding topic at the top.
+  </p>
+  <p>Help topics are outlined as follows: </p>
+  <blockquote>
+    <p><strong>Name: </strong>Following the feature's
+      name is summary content that is similar to the pop-up tip that
+      is viewed by positioning the mouse cursor over an
+      information icon (and waiting a second or so). </p>
+    <p><strong>Discussion: </strong>General tips on usage will be first in the
+      discussion section. Following this may be qualitative discussions of
+      expected behaviors when changing the values of this feature.</p>
+  </blockquote>
+  <hr>
+  <p><a name="WebBrowser" id="WebBrowser"></a><strong>Web Browsers:</strong>
+    The calculator is tested and fully functional in Mozilla Firefox,
+    Microsoft Edge, Apple Safari, and Google Chrome. Performance
+    and display characteristics are best in Firefox. Starting with calculator
+    version 4.3, WebKit-based browsers such as Google Chrome are supported.</p>
+  <hr>
+  <p><a name="SavingRuns" id="SavingRuns"></a><strong>Submitting the
+  <em>Controls</em> page (and saving the <em>Results</em> page):</strong> Click
+  one of the "Submit" buttons or any of the gray divider rows to submit the
+  <em>Controls</em> page to the calculation engine.</p>
+  <p>The
+    <em>Controls</em> and <em>Results</em> pages can
+    be saved as local web pages to record run parameters and
+    performance results. Note that a parameter-summary table is
+    included on
+    the <em>Results</em> page (after the "Results" table and chart).
+  </p>
+  <p><strong>Discussion: </strong>To capture the details of a calculator run, do a
+    "save-page-as" from the browser and then pick the "web-page, complete" option.
+    This works well from the Firefox and Google Chrome browsers. Google Chrome
+    does the best job capturing all formatting details. Tables, images (graphs),
+    and everything will be captured. (Note that currently the MS Internet Explorer
+    browser does not properly capture the <em>Results</em> page.) From the saved
+    local page, or directly from the original page, you can drag your cursor over
+    tables and paste them into Excel for additional analysis.</p>
+  <p>The <em>Controls</em> and <em>Results</em> pages can also be printed to multiple
+    sheets of letter size paper. Print from the "File / Print" menu
+    option
+    and not the "File / Print preview" option.</p>
+
+  <hr>
+  <a name="Defaults" id="Defaults"></a><strong>Defaults:</strong>
+  Use the "Restore" button to change all feature values back to the defaults
+  shown in the far right column. If a feature has been
+  changed
+  from its default value, the background color of the corresponding
+  cell
+  in this column changes to a slightly darker shade. This color change
+  is intended as an additional reminder to the user as to which
+  features
+  are actively being changed.
+  <p>Most of the default values are static. However, some defaults are
+    calculated (and updated) depending on the settings of other features.
+    "Ventilation Rate" and the three "Power Inputs" features are examples of
+    defaults that depend on other features.</p>
+  <p>The "Power" button is displayed next to the "Restore" button if the
+    "Advanced Features" are turned on. The "Power" button acts to reset the power
+    draw values. Clicking the "Power" button will cause the three power fields
+    (evaporator, auxiliary, and condenser) to be set to default levels as
+    calculated based on current settings of the "EER" and "Capacity" features.
+    (See additional discussion in the help topic for the <a class="Jump" href="#FanCondAux">Power Inputs</a>
+    feature.)</p>
+
+  <hr>
+  <p><a name="Advanced_controls" id="Advanced_controls"></a><strong>Advanced features:</strong>
+  Unhide advanced calculator features and initialize them to their default values.</p>
+  <p>Advanced features are indicated by a tan background color in the features title cell. </p>
+  <p><strong>Discussion:</strong>
+  Advanced features were new with the second release of the calculator. The
+  new features in that release and those after are listed in the calculator's <a
+  class="Jump" href="RevisionHistory.html">revision history</a>.</p>
+
+  <hr>
+  <p> <a name="Building_Type" id="Building_Type"></a><strong>Building
+      Type: </strong>Select the building type which best represents
+    your building. Each building type has an associated load model
+    that is
+    used to predict RTU loads and mechanical ventilation as a function
+    of
+    outdoor temperature. Each load model is derived from EnergyPlus
+    analysis on a prototype ASHRAE building.</p>
+  <p>"Ventilation Rate" is calculated as the
+    building type is changed. Manually entered values for "Ventilation Rate" will be
+    overwritten whenever the building-type
+    selection is changed. </p>
+  <p>To input custom load-model parameters, select the "Advanced
+    Features" option, then edit the parameter fields below the "Building
+    Type" feature.
+    Refer to the help section on <a class="Jump" href="#Custom_Load_Model">custom
+      load models</a>. </p>
+  <p>If the load-line is <a class="Jump" href="#Lock_load_line">locked</a>, the
+  building type (and two of the parameters in the custom-load model) will be
+  locked (disabled). When locked, ventilation levels can be changed directly or
+  by the ventilation parameter in the custom model.</p>
+  
+  <p><strong>Discussion:</strong> There are two supporting PDF documents that
+  can be downloaded: (1) the description of the <a class="Jump" target="_blank"
+  href="/coolrtu-js/docs/prototype%20buildings%20HVAC%20summaries.pdf">prototype
+  buildings</a>, see pages 8-13, and (2) a description of the corresponding
+  EnergyPlus analysis done to develop the load models (see Appendix A in the <a
+  href="/coolrtu-js/docs/PNNL-24130.pdf" class="Jump" target="_blank">User
+  Manual</a>).</p>
+  
+  <hr>
+  <a name="Custom_Load_Model" id="Building_Type"></a><strong>Custom
+    Load Model:</strong> To define a custom load model, edit the
+  three parameters and
+  then click the "Apply" button. This calculates new values for
+  associated
+  features and must be done before submitting the form. (The
+  "Advanced Features" option must be selected to show
+  the parameter fields for the custom load model.)<span style="font-weight: bold;"><br>
+    <br>
+  </span>The parameter
+  values for the custom model are initialized to the
+  default parameters for the currently-selected building type.<br>
+  <br>
+  When
+  entering custom load-model parameters, the units are KBtu/HrF for
+  the slope (S), KBtu/Hr for the intercept (I), and dimensionless for
+  the
+  ventilation-slope fraction (VSF). After editing these custom
+  parameters, the "Apply" button must be used to calculate the
+  corresponding
+  new values for the "Ventilation Rate"
+  parameter.<br>
+  <p>If
+    the load-line is <a class="Jump" href="#Lock_load_line">locked</a>,
+    two of
+    the parameters of the custom-load model are locked (disabled) and
+    cannot be changed. If locked, ventilation levels can be
+    changed
+    directly with the "Ventilation Rate" feature or with the ventilation
+    parameter
+    in the custom load model. The "Apply" button applies the
+    ventilation
+    levels set in the load model and overwrites any changes manually
+    entered through the "Ventilation Rate" feature.</p>
+  <span style="font-weight: bold;">Discussion:</span>
+  A custom load model
+  is defined to describe the approximate linear
+  relationship between the sensible-cooling load on the HVAC
+  system and
+  the difference between the
+  inside and outdoor temperatures. The model is characterized by three
+  parameters: (1) a slope parameter accounting for conduction,
+  ventilation, and infiltration through the building envelope, (2) an
+  intercept parameter accounting for internal loads, and (3) a
+  ventilation-slope fraction parameter that specifies how much of the
+  first parameter is caused by ventilation. Refer to the help section
+  on <a class="Jump" href="#Building_Type">building
+    types</a> for additional information. Appendix A in the <a href="/coolrtu-js/docs/PNNL-24130.pdf"
+    class="Jump" target="_blank">User
+    Manual</a>
+  PDF further describes the concepts and analysis behind this
+  approach.<br>
+  <br>
+  The
+  slope and intercept of the load model are scaled to produce a
+  sensible
+  load that is in balance with the sensible capacity of the RTU at
+  design
+  conditions. In a sense, the building is scaled (sized) to match the
+  capacity of the cooling system. This scaling operation produces the
+  final load-line that is
+  processed in the binned analysis.<br>
+  
+  <hr>
+  <p><a name="State"></a><strong>State/City:
+    </strong>The "State" feature affects the lists of cities appearing
+    in the "City" feature. The "State" and "City" features are used
+    together to
+    query weather data for this location. If your city is not listed,
+    select the city whose climate is most similar yours (usually the
+    closest city).</p>
+  <p>
+    <strong>Discussion:</strong> The calculator uses
+    weather data
+    to conduct a binned energy analysis for the RTU in cities across
+    the
+    United
+    States. Weather tape data (outdoor dry-bulb and coincident
+    web-bulb)
+    was
+    binned in 5 degree increments and filtered by the selected
+    occupancy <a class="Jump" href="#Schedule">schedule</a>. The
+    result is a database of hours (in each bin) and coincident
+    wet-bulb
+    temperatures for each city and schedule combination.
+  </p>
+  
+  <hr>
+  <p><a name="Schedule"></a><strong>Schedule:
+    </strong>This defines the time during which the building is assumed to be
+    occupied. For the unoccupied periods outside of this schedule, the air
+    conditioner is assumed to be shut down (no runtime) or the thermostat is set
+    back. The system behavior during unoccupied periods is determined by the
+    “Indoor Temperature” and the “E-Fan and Condenser” features.</p>
+  <p><strong>Discussion:</strong> The "Schedule" feature
+    filters the number of hours that can accumulate in a weather bin.
+    Shorter
+    occupant schedules translate into fewer potential hours where the
+    cooling system can be subject to a load.</p>
+  <p>The hours outside
+    of this schedule are considered to be unoccupied if the "Indoor
+    Temperature" feature is set to "Cond. Off."</p>
+  <hr>
+  <p><a name="Indoor_Temperature"></a><strong>Indoor
+      Temperature: </strong>
+    This is the thermostat setpoint. The second feature, "Setback,"
+    acts to
+    increase the cooling setpoint temperature during unoccupied hours.
+    The
+    cooling setpoint, during unoccupied hours, is calculated as the
+    sum of
+    these two features (base setpoint + setback = higher setpoint
+    during
+    the unoccupied hours). Additional information for this feature can
+    be
+    found in the topic for the <a class="Jump" href="#FanControls">E-Fan and Condenser</a> feature.</p>
+  <p>This "Setback" feature acts to perform a double run. The
+    load-line is established (locked) in the primary run (for occupied
+    hours) at non-setback conditions. The same load-line is applied
+    again
+    in the secondary setback run for the unoccupied hours. The sum of
+    the
+    two runs is used to populate the energy categories in the
+    "Results"
+    table.</p>
+  <p>A special case is considered when "Setback" is set to "Cond.
+    Off."
+    In this case the
+    condenser and the evaporator fan are not allowed to run during
+    unoccupied hours and during
+    these unoccupied hours only auxiliary energy is
+    calculated (and totaled). In this case bin calculations are not
+    displayed for the
+    unoccupied hours.<br>
+  </p>
+  <p>For all normal setback cases, both condenser and fan energy
+    (and aux energy) are calculated during unoccupied hours. Turning
+    on the
+    "Show Bin Calculations" option will display separate bin
+    calculations
+    for these unoccupied hours. This is in addition to (displayed
+    after)
+    the occupied-hours bin calculations. (Note: there will be a link
+    above
+    each of the two "Loads and Hours" plots for
+    the candidate unit. Clicking this link will scroll/jump the page
+    back
+    and forth between the occupied and the unoccupied-hours results.
+    Just
+    clicking this twice will put this jump into the browser's page
+    history
+    and then you can use the Alt-arrow keys (hold Alt key down, then
+    try
+    the left and right arrow keys) to toggle back and forth. This can
+    be
+    a useful trick for visually comparing the occupied and unoccupied
+    results.)</p>
+  <p>Note that for staged systems using normal setback, the
+    evaporator
+    fan will cycle with the compressor
+    during the unoccupied hours. However if the special case of "Cond.
+    Off"
+    is selected, the condenser and the evaporator fan are always off
+    during
+    unoccupied hours.</p>
+  <p>The "Schedule" (Scheduled Hours) trace is shown in
+    the "Loads and Hours" chart. This illustrates the occupied hours
+    where
+    the condenser is allowed to operate as established by the selected
+    schedule. The "Total Hrs" trace shows all the hours (sum of
+    occupied
+    and unoccupied). Note that for normal setback, the
+    "Schedule" trace in the "Loads and Hours" chart for
+    unoccupied
+    hours
+    will represent the unoccupied hours (i.e. the hours where the
+    condenser is active in the setback run for the unoccupied times).</p>
+  <p><strong>Discussion:</strong> When interpreting the
+    impact of changes to the thermostat "Indoor Temperature" setpoint feature,
+    consideration
+    must be given to whether the non-ventilation load-line is locked
+    or
+    not. If the load-line is locked, this feature will give the most
+    intuitive results. However, in the default state (load-line
+    un-locked),
+    the impact of this feature may be less than expected. Consider the
+    following example:</p>
+  <table width="394">
+    <thead>
+      <tr>
+        <th width="175">Indoor Temperature </th>
+        <th width="207">Candidate Unit (kWhrs) </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td> 75 </td>
+        <td>10,798 </td>
+      </tr>
+      <tr>
+        <td> 70 </td>
+        <td>12,807</td>
+      </tr>
+      <tr>
+        <td> 70L (line locked @ 75) </td>
+        <td>14,670</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2"> Note: All other calculator parameters are at
+          default values. </td>
+      </tr>
+    </tfoot>
+  </table>
+  <p>For the <em>locked</em> case (third row in table
+    above), the primary
+    driver behind the larger increase is that the non-ventilation
+    load-line
+    is not
+    automatically adjusting to accommodate the more severe conditions
+    at
+    the lower
+    setpoint (see discussion on the <a class="Jump" href="#Lock_load_line">locking</a> feature). So the
+    effect of the original non-ventilation load-line (based on
+    delta-T) is
+    clearly increased by the lower setpoint.</p>
+  <p>In the contrasting <em>un-locked</em> case
+    (second row), the load-line
+    is defined to be in balance with the capacity (see <a class="Jump" href="methods/NonVentilationLoad.html">methods
+      page</a>). So the change in setpoint has a less direct impact on
+    the
+    consumption. This is because the lower return temperatures
+    adversely
+    affect mixed-air conditions and the corresponding system
+    performance.
+    And
+    to achieve balance between total sensible load and the reduced
+    capacity, the
+    total sensible load must be reduced. Therefore, the primary driver
+    behind
+    the increase in consumption, for this case, is not directly loads,
+    but
+    rather
+    seen most strongly in two associated effects:</p>
+  <blockquote>
+    <ol>
+      <li><em>Mixed-air conditions</em>: The lower
+        return temperature affects the load-line calculation (at
+        design), the
+        capacity (at bin conditions), and the power (at bin
+        conditions) used
+        while satisfying the load. The overall effect is an increase
+        in power
+        usage (see similar discussion of the un-locked case for the
+        "Ventilation
+        Rate" feature) </li>
+      <li><em>More cooling bins</em>: The lower
+        setpoint essentially extends the cooling season. There are
+        more bins
+        where the cooling loads are satisfied by the economizer but
+        still add
+        to energy consumption because of fan power. </li>
+    </ol>
+  </blockquote>
+  <p>Note that the setpoint affects the mixed-air
+    conditions (for both locked and un-locked cases). The lower return
+    temperature adversely affects the sensible capacity which
+    dominates
+    the performance-correction effects (see the bin data
+    for the
+    overall correction
+    factor (OCF)). The OCF factor is higher for the lower setpoint
+    cases.
+    Higher OCF factors
+    correspond to higher consumption.</p>
+  
+  <hr>
+  <p><a name="Indoor_Relative_Humidity"></a><strong>Indoor
+      Relative Humidity: </strong>Uncheck the "auto" feature to
+    specify a fixed humidity level.
+    In "auto" mode the inside humidity reflects outdoor
+    conditions. In "fixed" mode, the indoor relative humidity is
+    assumed to
+    be
+    controlled to a fixed value.</p>
+  <p>
+    <strong>Discussion:</strong> The "auto" mode models
+    the interior humidity as <em>tracking</em> the outdoor conditions.
+    Tracking is equivalent to assuming a moisture mass balance if moisture
+    gains (from people and processes) equal moisture losses from condensate.
+    This approximation is a simple way to model humidity conditions if no
+    other information is known about moisture dynamics in the building. The
+    tracking mode calculates the interior relative humidity and wet-bulb by
+    assuming the moisture content of the interior air is equivalent to that of
+    the exterior air on a humidity ratio basis (i.e., mass of water per mass
+    of dry air is equivalent inside and out). The tracking mode is constrained
+    to allow indoor humidity of values no less than 20% and no more that 65%.
+    (The "auto" mode generally overestimates the interior humidity ratio. This
+    assumption tends to overestimate associated latent loads. There is a
+    discussion of this assumption in Section A.7 of the
+    <a class="Jump" href="/coolrtu-js/docs/PNNL-24130.pdf" target="_blank">User Manual</a>.)<br>
+    <br>
+    Alternatively a "fixed" mode is used if the "auto" feature is
+    de-selected. In "fixed" mode, the interior humidity ratio is
+    assumed
+    fixed (at the user selected level) and is not affected by the
+    outside
+    conditions.<br>
+    <br>
+    If you know the typical humidity levels in your building during
+    the
+    summer, use the "fixed" mode (especially if you have an associated
+    piece of equipment that controls the humidity). If not, use the
+    "auto"
+    mode. Note that the calculator does not determine
+    the
+    energy usage of any associated humidification or dehumidification
+    devices. It strictly calculates energy estimates for the air
+    conditioner.<br>
+    <br>
+    The following reference discusses empirical validation of
+    simplified
+    methods for modeling humidity: Miller, J.D., "Development and
+    Validation of a Moisture Mass Balance Model for Predicting
+    Residential
+    Cooling Energy Consumption," ASHRAE Transactions, Vol. 90, pt. 2,
+    1984,
+    (275-293).<br>
+    <br>
+    Note that a <a class="Jump" href="methods/EquipmentResponse_Latent.html">sensible load analysis</a> best
+    represents a thermostat's sensible nature and is key in supporting the
+    calculations that are affected by humidity and latent loads. A
+    sensible thermostat responds to temperature changes and sends requests to
+    the unit to remove the sensible cooling load. The effects of humidity are
+    accounted for in how the unit's sensible capacity is diminished by humidity
+    in the entering air (mixture of outside and return).<br>
+    <br>
+    The change to a sensible analysis (in revision 2.0), from the
+    original
+    total-energy analysis, changes the question the
+    calculation answers from:<br>
+    <u><br>
+      Total energy question<br>
+    </u>Given the unit's total capacity at the specified entering
+    conditions, AND assuming that all sensible and latent loads are
+    met by
+    the unit,
+    how much energy would it consume in satisfying the total load?<br>
+    <br>
+    To this one:<u><br>
+      <br>
+      Sensible energy question</u><br>
+    Given the unit's available sensible capacity at the specified
+    entering
+    conditions, AND that the unit is controlled by a thermostat (a
+    purely
+    sensible device), how much energy would it consume in satisfying
+    the
+    sensible component of the total
+    load?
+    <!-- <hr /> <p><a name="Solar_and_Internal_Gains"></a><strong>Solar and Internal Gains: </strong> Specified as fraction of sensible capacity at design conditions. </p> <p>The S&amp;I fraction is considered primarily a calculated value as affected by the building type and city selection. Manual changes to this factor are allowed but not recommended in version 4.1 of the RTUCC. Manual changes support comparisons with version 4.0 of the RTUCC.<span style="font-weight: bold;"> Instead, please use the editable fields associated with the "Building Type" control to establish a custom load line.</span> Also note that manual changes to the S&amp;I factor persist only until this form is updated. An update will cause a calculated value to replace the manual entry.</p> <p><strong>Discussion: </strong>The <em>Solar and Internal Gains</em> control allows for qualitative characterization of the buildings sensitivity to internal cooling loads (all loads not driven by outside temperature). The S&amp;I loads include all cooling loads except ventilation and conduction. This includes loads such as occupancy related internal loads (waste heat from lighting and plug loads) and also solar loads. These internal loads are assumed to be independent of outside conditions and constant through out the day.<br /> <br /> Increasing the S&amp;I fraction results in a less steep load line (less sensitive to outside temperature) and decreasing the S&amp;I fraction makes for a steeper load line (more sensitivity to outside temperature). Setting the S&amp;I load fraction to zero is equivalent to modeling a building with no internal gains or windows (e.g., air conditioned storage building). With "Show bin calculations" selected, notice that increasing the S&amp;I factor essentially lengthens the cooling season (more cooling bins are proceeded).<br /> <br /> Note that the S&amp;I control has no effect if the non-ventilation load line is <a class="Jump" href="#Lock_load_line">locked</a>. </p> -->
+  </p>
+  <hr>
+  <p><a name="Total_Capacity"></a><strong>Total
+      Capacity: </strong>Select
+    the AHRI net cooling capacity of the equipment being used (or
+    equivalently, the
+    cooling load of the building).
+  </p>
+  <p>If a variable-speed system is selected using the "E-Fan and
+    Condenser" feature, the "Number of Stages" feature is ignored. In this case
+    all
+    the bin calculations are reported in the first stage.</p>
+  <p>
+    <strong>Discussion:</strong> This is the total (sensible
+    and
+    latent) net (including evaporator fan energy) cooling capacity at
+    AHRI
+    test conditions. <br>
+    <br>
+    In all cases (unless the <a class="Jump" href="#SpreadsheetData">spreadsheet
+      interface</a> is
+    used), the units are represented with this AHRI rated capacity,
+    the
+    EER,
+    and DOE-2 <a class="Jump" href="methods/CoolingCorrectionCurves.html">correction factors</a>.
+  </p>
+  <p>Note that changing the capacity value automatically changes
+    the default power values for the blower fan and the condenser.</p>
+  <hr>
+  <p><a name="N_stages"></a><strong>Number
+      of Stages: </strong>The number of stages (capacity levels) in
+    the RTU.
+  </p>
+  <p>This feature determines
+    whether the unit will process the load with one or multiple
+    stages. A
+    multiple-stage
+    system minimizes part-load cycling losses and evaporator-fan
+    energy
+    (see methods page on <a class="Jump" href="methods/EquipmentResponse.html">equipment
+      response to loads</a>).</p>
+  <p>
+    <strong>Discussion:</strong>
+  </p>
+  <p>If a variable-speed system is selected using the "E-Fan and
+    Condenser" feature, the "Number of Stages" feature is ignored.</p>
+  <p>A 2-stage
+    unit with a single-speed fan can be modeled by setting the "Number
+    of
+    Stages" feature to "2" and the "E-Fan and Condenser" feature
+    to
+    either of the "1-Spd" options.</p>
+  <p>Capacity levels for each "Number of Stages" setting are set as
+    follows:</p>
+  <table style="text-align: left; width: 349px; height: 80px;" border="1" cellpadding="2" cellspacing="2">
+    <tbody>
+      <tr>
+        <th style="background-color: white;">Stages</th>
+        <th style="background-color: white;">Capacity Levels</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td class="left">1.0</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td class="left">0.5, 1.0</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td class="left">0.4, 0.6, 1.0</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td class="left">0.2, 0.4, 0.6, 0.8, 1.0</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td class="left">0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7,
+          0.8, 0.9, 1.0</td>
+      </tr>
+    </tbody>
+  </table>
+  <p></p>
+  <hr>
+  <p><a name="Oversizing_Factor"></a><strong>Oversizing
+      Factor: </strong>
+    Percent that capacity exceeds load at design conditions.</p>
+  <p>
+    <strong>Discussion:</strong> This factor serves to diminish
+    the load so that the unit is effectively oversized at design
+    conditions.
+  </p>
+  <p>Blower-fan savings associated with variable-speed systems (see
+    "E-Fan and Condenser" feature) are larger for oversized units.</p>
+  <hr>
+  <p><a name="StoT_Ratio"></a><strong>S/T
+      Ratio: </strong>
+    Ratio of sensible to total capacity at AHRI test conditions.</p>
+  <p>
+    <strong>Discussion:</strong> The S/T ratio (@ AHRI
+    conditions)
+    is used in estimating the sensible capacity of the unit. This
+    along
+    with
+    the rated total capacity of the unit are the starting point for
+    calculating
+    sensible capacity and system power draw at conditions other than
+    AHRI
+    test
+    conditions. See the methods page on <a class="Jump" href="methods/CoolingCorrectionCurvesSensible.html">sensible
+      capacity</a> and also the page that calculates a table of <a class="Jump" href="bypass.asp">steady-state
+      system performance values</a> at conditions other than AHRI test
+    conditions.
+  </p>
+  <hr>
+  <p><a name="Candidate_Unit"></a><strong>Candidate
+      Unit: </strong>Energy Efficiency Ratio (EER), Cost (in k$), and
+    Maintenance Cost (in $) for the candidate unit.</p>
+  <p>Note that resetting the EER automatically changes the default
+    power values for the condenser.</p>
+  <p><strong>Discussion:</strong> </p>
+  <ul>
+    <li> EER: Net Capacity / Total System Power, as determined at
+      AHRI test conditions.</li>
+    <li>Cost: Total system purchase and installation cost (in units
+      of thousands of dollars).</li>
+    <li>Maintenance Cost: Total system annual maintenance costs (in
+      units of dollars).</li>
+  </ul>
+  <p>Note that IEER (Integrated Energy Efficiency Ratio) values are
+    not to be entered here. IEER values
+    are a demographically and operationally weighted average of a set
+    of
+    four representative part-load EER values. An IEER projects a
+    unit's
+    performance to a national level. These weighted averages are
+    intended
+    to rank units on a national basis. While IEER values are very
+    useful in
+    sorting units nationally, they are not intended for evaluating a
+    unit
+    for a particular climate and operation strategy. However, the raw
+    EER
+    part-load data that goes into the IEER calculation can be very
+    useful
+    for characterizing a unit's performance under specific conditions.</p>
+  <p>(Refer also to the help section on the <a class="Jump" href="#SpreadsheetData">spreadsheet interface</a>. The
+    modeling of the full and part-load data is described there.)</p>
+  <p>The spreadsheet interface serves to adapt this supporting EER
+    data (originally intended for the IEER calculations) for use in
+    modeling work: </p>
+  <ol>
+    <li><strong>A superset of the four points:</strong>
+      The four points are expanded to a table of sixteen. These added
+      points
+      give sufficient data for regressing the data as a function of
+      part-load
+      fraction and outdoor dry-bulb.</li>
+    <li><strong>Separation of evaporator and condenser power
+        draws: </strong>Removing the evaporator fan power from the
+      EER
+      data set allows for independent modeling of the condenser unit
+      and the
+      evaporator fan.</li>
+  </ol>
+  <hr><a name="Specific_RTU"></a><strong style="font-weight: normal;"><span style="font-weight: bold;">Specific
+      Candidate Unit:</span>
+    Select from a list of three specific high-performance RTU systems.</strong>
+  <p>Each
+    of these three options corresponds to a commercially available
+    rooftop
+    unit or an add-on control system. The basic features are
+    summarized
+    below.</p>
+  <ol>
+    <li><span style="font-weight: bold;">Advanced
+        Controls</span>: This is a retrofit fan controller that
+      minimizes fan usage for any RTU which has a single-speed fan.</li>
+    <li><span style="font-weight: bold;">Three Stages</span>:
+      This is a high-performance RTU with three stages. Capacity
+      levels are
+      40, 60, and 100 percent. This unit uses a three-speed evaporator
+      fan.</li>
+    <li><span style="font-weight: bold;">Variable-Speed
+        Compressor</span>:
+      This is a high performance RTU which uses a combination of
+      staging,
+      variable-capacity condensers, and a variable-speed evaporator
+      fan. This
+      unit first uses its variable capacity to meets the lower loads;
+      at
+      higher loads the additional stages are used.</li>
+  </ol>
+  <p><strong>Discussion:</strong></p>
+  <p>The setting of the <a class="Jump" href="#Indoor_Temperature">Setback</a> and <a class="Jump"
+      href="#FanControls">E-Fan and Condenser</a>
+    calculator parameters significantly affects the assessment of the
+    <span style="font-weight: bold;">Advanced Control</span>
+    system. Please also refer to the help topics for these two
+    calculator
+    parameters.
+  </p>
+  <p><strong><span style="font-weight: normal;">The
+        following outline lists the fan levels set by the Advanced
+        Control
+        system. For two-stage RTUs, the first-stage cooling runs the
+        fan at</span><span style="font-weight: normal;"> 75% and
+        second-stage cooling
+        runs the fan at 90%. Single-stage RTUs address all calls for</span><span style="font-weight: normal;"> cooling
+        by running the fan at
+        90%.</span><br style="font-weight: normal;">
+    </strong></p>
+  <ul>
+    <li><strong><span style="font-weight: normal;">No
+          call for cooling:</span></strong></li>
+    <ul>
+      <li><strong><span style="font-weight: normal;">Fan
+            runs at 40%</span></strong></li>
+    </ul>
+    <li><strong><span style="font-weight: normal;">Normal
+          operation</span></strong></li>
+    <ul>
+      <li><strong><span style="font-weight: normal;">First-stage
+            call:</span></strong></li>
+      <ul>
+        <li>ODB &gt;= 70F; <strong><span style="font-weight:
+                normal;">Fan at 75%</span></strong></li>
+        <li>ODB &lt; 70F; <strong><span style="font-weight:
+                normal;">Fan at 90%</span></strong></li>
+      </ul>
+      <li><strong><span style="font-weight: normal;">Second-stage
+            call: Fan at 90%</span></strong></li>
+    </ul>
+    <li><strong><span style="font-weight: normal;">Economizer</span></strong></li>
+    <ul>
+      <li>Fan at 75%<strong><span style="font-weight: normal;"></span></strong></li>
+      <li><strong><span style="font-weight: normal;">Fan at
+            90% (integrated)</span></strong></li>
+    </ul>
+  </ul>
+  <p>Selection
+    of either the <span style="font-weight: bold;">Three
+      Stages </span>or the <span style="font-weight: bold;">Variable-Speed
+      Compressor</span> RTU options invokes corresponding sets of
+    capacity
+    and efficiency correction curves for that unit. The <span style="font-weight: bold;">"Advanced Controls"</span>
+    option only affects the behavior of the evaporator fan and
+    therefore
+    uses the default corrections curves.</p>
+  <p>Note that selection
+    of a specific unit acts to configure associated features for the
+    candidate unit. For example, selecting the "Three Stages" option
+    sets
+    the "Number of Stages" feature to "3" and the "E-Fan and
+    Condenser"
+    feature to "N-Spd: Always ON." Specific performance curves are
+    used in
+    the calculation engine depending on the selection.</p>
+  <p>However,
+    a selection here does not automatically set either the "EER,"
+    Total
+    Capacity," or "Power Inputs" fields. It is necessary for the user
+    to
+    set
+    these manually.</p>
+  <hr><a name="Standard_Unit"></a><strong>Standard
+    Unit: </strong>Energy Efficiency Ratio (EER), Cost (in k$), and
+  Maintenance Cost (in $) for the standard unit.
+  <p><strong>Discussion:</strong> See discussion under <a class="Jump" href="#Candidate_Unit">Candidate
+      unit</a> section.</p>
+  <p>
+    Note that the "Standard Unit" cost features can be used to
+    investigate
+    the economics of replacing an existing unit (with indefinite life
+    remaining). In this case, the standard unit is not new and
+    represents
+    an existing unit. For example, starting with default settings, set
+    the
+    standard (existing) unit to an EER of 8 and a cost of 1k$ (assumed
+    cost
+    for an anticipated compressor replacement). Adjust maintenance
+    costs to
+    reflect the need for more annual service on the existing unit.</p>
+  <hr>
+  <p><a name="FanCondAux"></a><strong>Power
+      Inputs: </strong>
+    Specification of all the power inputs at AHRI rating
+    conditions
+    (in kWatts). This includes the
+    evaporator fan (blower), auxiliary power (power needed for control
+    electronics), and condenser unit (fan and compressor).
+  </p>
+  <p>
+    These three fields are initialized to default levels based on the
+    total
+    capacity and EER of the unit. Changing these three values
+    will cause the EER to be recalculated. A helpful editing pattern
+    is to
+    first edit the "EFn" and "Aux" fields, then
+    re-enter the "EER" value. Clicking the "Power" button (top
+    or bottom right) will cause the three fields to be set
+    to default levels based on current EER and Capacity. Note that
+    blower
+    power can be determined from manufacturer's performance data as
+    the
+    difference between gross and net capacity when expressed in
+    kWatts.</p>
+  <p>(Note that condenser-fan power can be specified with
+    the <a class="Jump" href="#Condenser_Fan">Condenser
+      Fan</a>
+    feature.)</p>
+  <p>The corresponding three categories of energy consumption are
+    shown as columns in the bin-calcs table (the "Show Bin
+    Calculations"
+    option must be on). Their annual sums are shown in the "Results"
+    table
+    (the "Advanced Features" option must be on).</p>
+  <hr>
+  <p>
+    <strong><a name="Condenser_Fan"></a>Condenser
+      Fan:</strong>
+    Condenser-fan power as a percentage of the total condenser
+    power
+    (at AHRI rating conditions).<br>
+  </p>
+  <p>This feature has an effect on energy
+    calculations ONLY in the case of variable-capacity condensers.
+    This
+    feature is disabled if the "E-Fan and
+    Condenser" feature is set to a non-variable-speed mode.
+  </p>
+  <p><strong><span style="font-weight: bold;">Discussion</span></strong><span style="font-weight: bold;">:</span>
+    This feature acts to split out the condenser-fan power for use in
+    accounting for the reduced-power draw of variable-speed condenser
+    fans
+    in the calculation engine. It has impact ONLY in the case of
+    a
+    variable-speed system. Fan-affinity
+    laws are used to estimate the reduced (from full-load) power
+    consumption
+    of the condenser fan. Full-load condenser-fan power is calculated
+    as
+    this feature's indicated percentage of the AHRI-rated condenser
+    power
+    (as specified in the "Cnd" field of the <a class="Jump" href="#FanCondAux">Power
+      Inputs</a> section).</p>
+  <hr>
+  <strong></strong><a name="FanControls"></a><strong></strong><span style="font-weight: bold;">E-Fan and
+    Condenser</span><strong>:
+  </strong>Characteristics of the evaporator fan and the condenser.
+  <p>This feature is dual purpose in that it allows the user to
+    select:
+    (1) the fan type for single or multiple-stage systems or
+    (2) a variable-speed system (i.e. variable-capacity condenser
+    and a variable-speed evaporator fan).<br>
+  </p>
+  <p>The following options are available:<br>
+  </p>
+  <ul>
+    <li>1-Speed Fan (1-Spd) for 1 or 2-Stage Condenser: </li>
+    <ul>
+      <li>Always ON<comment title="OFF When Unoccupied (i.e., always
+            ON during schedule, otherwise OFF outside of schedule if
+            setback control is set to &quot;Cond. Off&quot;)"></comment>
+      </li>
+    </ul>
+    <ul>
+      <li>Cycles With Compressor</li>
+    </ul>
+    <li>N-Speed Fan (N-Spd) for N-Stage Condenser: </li>
+    <ul>
+      <li>Always ON</li>
+    </ul>
+    <ul>
+      <li>Cycles With Compressor</li>
+    </ul>
+    <li>Variable-Speed Fan for Variable-Capacity Condenser
+      (V-Spd):</li>
+    <ul>
+      <li>Always ON</li>
+    </ul>
+  </ul>
+  <p>The "Cycles with Compressor" fan modes will cycle the blower
+    fan
+    with the compressor during both occupied and unoccupied hours. In
+    this
+    case the fan is completely off whenever the compressor is off. An
+    exception to this occurs when the economizer is active. When
+    economizing, the blower fan always runs at full speed.</p>
+  <p>The
+    “…Always ON” fan-mode choices for staged units will cause the
+    blower
+    fan to be “…Always ON” during occupied hours, but will cycle
+    the fan with the compressor during unoccupied hours. In other
+    words,
+    the "...Always ON" mode runs the fan at all times during occupied
+    hours, but cycles during unoccupied hours. The fan is
+    effectively in "Cycles With Compressor" mode during unoccupied
+    hours.</p>
+  <p>The behavior
+    of the system during unoccupied hours is affected by the
+    "Setback"
+    feature which determines if the condenser is allowed to run during
+    that
+    time. When the "Setback" feature is set
+    to "Cond. Off,"
+    then DX cooling and the evaporator fan are kept off during the
+    unoccupied hours. When
+    the "Setback" feature is set to any
+    value other than "Cond. Off," then DX cooling is allowed during
+    unoccupied hours and at loads as determined by a reduced
+    thermostat
+    setpoint.</p>
+  <p>A special case where the condenser and the evaporator
+    fan
+    are OFF during
+    unoccupied hours can be investigated by setting the "Setback"
+    feature to "Cond. Off." This will set everything OFF
+    during
+    unoccupied hours independent of how the "E-Fan and Condenser"
+    feature
+    is set.</p>
+  <p>(For clarity, the following two paragraphs restate the
+    information above from a different perspective: condenser ON or
+    OFF.)</p>
+  Blower-fan energy, when the
+  condenser is OFF, is handled in three ways: (1) If a “Cycles…” fan
+  mode
+  is in effect, the blower fan is completely off when the condenser is
+  off, (2) if a “…Always On” fan mode is in effect, the unit will
+  reduce
+  fan speeds if it can (e.g. an N-Spd or V-Spd fan) to levels that
+  support ventilation, (3) whenever the economizer is active the fan
+  runs
+  at full speed.<br>
+  <br>
+  Blower-fan energy when the condenser is ON
+  depends on the type of the unit, but basically the fan fraction goes
+  up
+  and down with the capacity fraction for any unit except those with
+  single-speed fans. The main exception to this is when the economizer
+  is
+  active; then the fan always runs at full speed.
+  <p>The "N-Spd:" fan-mode choice is a valid option only when the
+    unit has two or more
+    stages. If the "Stages" feature is not set to "2" or higher, a
+    warning
+    message is displayed when the user attempts to "Submit" to the
+    calculation engine.</p>
+  <p><span style="font-weight: bold;">Discussion:</span> </p>
+  <p>A
+    noteworthy special case is a system with two stages and a
+    single-speed
+    fan. A single-speed fan system runs at one speed (full speed)
+    during
+    both first-stage and second-stage compressor operation. This
+    system, if
+    there
+    are two stages, is assumed to have a row-split evaporator design
+    (i.e., essentially two evaporator coils in series, one after
+    the
+    other, subject to the same air flow from one blower fan). The
+    row-split
+    design yields
+    high sensible (less latent) performance when only the first-stage
+    is
+    active as compared to when both
+    stages are active. In first-stage mode, the coil will be warmer
+    and
+    therefore yield a more sensible output (high fan flow coupled with
+    lower
+    condenser cooling cause warmer supply temperatures). This
+    higher
+    sensible capacity in the first stage can be seen in the calculator
+    by
+    looking at the S/T values in the tables and charts for bins
+    where the first stage is active without the second stage.<br>
+  </p>
+  The following table illustrates the variation in evaporator (blower)
+  fan energy usage as affected by parameters in the calculator: (1)
+  economizer mode, (2) setback mode, (3) condenser mode, and (4) fan
+  mode. The results shown here are for the candidate unit.
+  All parameters not represented in the table are set to default
+  levels. Fan energies ran from the high of 3,167 kWhrs, to the low of
+  397 for a variable-speed
+  fan that adjusts to reduce fan speeds when additional flow is not
+  needed.<br>
+  <br>
+  Generally,
+  the table shows reductions in fan energy for systems that can reduce
+  fan speeds when full-flow is not needed. Also, the control option of
+  allowing the fan to cycle with the compressor reduces the fan use
+  and
+  energy consumption. When the economizer is active, the fan savings
+  of
+  a "V-Spd" and "N-Spd" system are reduced (because the fan runs at
+  full
+  speed
+  while economizing). The "1-Spd" fan
+  consumes the most fan energy because it's always running at
+  full speed.<br>
+  <br>
+  It helps to consider a few specific comparisons in the table: <br>
+  <ul>
+    <li>Note
+      that the 2,347 for the 2-stage unit (in row 6) is higher than
+      the 2,088
+      for the 1-stage unit (in row 5). Because of the setback mode,
+      the condenser is active and the fan is cycling with it during
+      unoccupied hours. The 1-stage unit satisfies the load with
+      shorter
+      condenser run-times (always running at full capacity). So there
+      is more
+      fan-only time
+      (which means more time when the fan is off) during the
+      unoccupied
+      hours with the 1-stage unit. A result, the 1-stage unit uses
+      less fan
+      energy in this case.</li>
+    <li>Contrast the above case with the corresponding two rows in
+      the "Cond. Off" block of
+      runs: 1,498 for both cases. The two systems yield identical
+      results
+      here because the fan is always on during occupied hours and
+      always
+      off during unoccupied hours.</li>
+    <li>Contrast two cases for the variable-speed fan: 397 (4th
+      row) but
+      1,782 in the last row. The last run has more requirements for
+      the fan
+      to be running at full speed. As a result, the distinction
+      between
+      1-Spd, 2-Spd, and V-Spd units in the last group of runs
+      is smaller
+      than the other three groups of runs.</li>
+  </ul>
+  <br>
+  <table style="text-align: left; width: 418px; height: 403px;">
+    <tbody>
+      <tr>
+        <td class="header" style="text-align: center;
+            background-color: rgb(51, 51, 51);" colspan="6" rowspan="1"><span style="color: white;">Evaporator
+            Fan Energy (kWhrs)</span></td>
+      </tr>
+      <tr>
+        <td class="header" style="vertical-align: middle;
+            background-color: rgb(235, 235, 235);">Econ<br>
+          Mode</td>
+        <td class="header" style="vertical-align: middle;
+            background-color: rgb(235, 235, 235);" colspan="1" rowspan="1">Setback<br>
+          Mode</td>
+        <td class="header" style="vertical-align: middle;
+            background-color: rgb(235, 235, 235);" colspan="1" rowspan="1">Cond<br>
+          Mode</td>
+        <td class="header" style="vertical-align: middle;
+            background-color: rgb(102, 255, 255);" colspan="1" rowspan="1">Fan<br>
+          Mode</td>
+        <td class="header leftborder" rowspan="1" colspan="1" style="vertical-align: middle; background-color: rgb(102,
+            255, 255);">Always
+          On</td>
+        <td class="header" style="vertical-align: middle;
+            background-color: rgb(102, 255, 255);">Cycles</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">Off</td>
+        <td style="background-color: rgb(235, 235, 235);">Cond.
+          Off</td>
+        <td style="background-color: rgb(235, 235, 235);">1-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">1-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">1,498</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">771</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">Off</td>
+        <td style="background-color: rgb(235, 235, 235);">Cond.
+          Off</td>
+        <td style="background-color: rgb(235, 235, 235);">2-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">1-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">1,498</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">1,030</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">Off</td>
+        <td style="background-color: rgb(235, 235, 235);">Cond.
+          Off</td>
+        <td style="background-color: rgb(235, 235, 235);">2-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">N-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">552</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">484</td>
+      </tr>
+      <tr>
+        <td class="header" style="background-color: rgb(235, 235,
+            235);">Off</td>
+        <td class="header" style="background-color: rgb(235, 235,
+            235);">Cond. Off</td>
+        <td class="header" style="background-color: rgb(235, 235,
+            235);">V-Spd</td>
+        <td class="header" style="background-color: rgb(102, 255,
+            255);">V-Spd</td>
+        <td class="leftborder header" style="color: white;
+            background-color: rgb(51, 51, 51);">397</td>
+        <td class="header" style="color: white; background-color:
+            rgb(51, 51, 51);">NA</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">Off</td>
+        <td style="background-color: rgb(235, 235, 235);">5
+          deg.</td>
+        <td style="background-color: rgb(235, 235, 235);">1-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">1-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">2,088</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">1,361</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">Off</td>
+        <td style="background-color: rgb(235, 235, 235);">5
+          deg.</td>
+        <td style="background-color: rgb(235, 235, 235);">2-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">1-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">2,347</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">1,879</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">Off</td>
+        <td style="background-color: rgb(235, 235, 235);">5
+          deg.</td>
+        <td style="background-color: rgb(235, 235, 235);">2-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">N-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">794</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">726</td>
+      </tr>
+      <tr>
+        <td class="header" style="background-color: rgb(235, 235,
+            235);">Off</td>
+        <td class="header" style="background-color: rgb(235, 235,
+            235);">5 deg.</td>
+        <td class="header" style="background-color: rgb(235, 235,
+            235);">V-Spd</td>
+        <td class="header" style="background-color: rgb(102, 255,
+            255);">V-Spd</td>
+        <td class="leftborder header" style="color: white;
+            background-color: rgb(51, 51, 51);">558</td>
+        <td class="header" style="color: white; background-color:
+            rgb(51, 51, 51);">NA</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">On</td>
+        <td style="background-color: rgb(235, 235, 235);">Cond.
+          Off</td>
+        <td style="background-color: rgb(235, 235, 235);">1-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">1-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">1,498</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">1,229</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">On</td>
+        <td style="background-color: rgb(235, 235, 235);">Cond.
+          Off</td>
+        <td style="background-color: rgb(235, 235, 235);">2-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">1-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">1,498</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">1,417</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">On</td>
+        <td style="background-color: rgb(235, 235, 235);">Cond.
+          Off</td>
+        <td style="background-color: rgb(235, 235, 235);">2-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">N-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">958</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">953</td>
+      </tr>
+      <tr>
+        <td class="header" style="background-color: rgb(235, 235,
+            235);">On</td>
+        <td class="header" style="background-color: rgb(235, 235,
+            235);">Cond. Off</td>
+        <td class="header" style="background-color: rgb(235, 235,
+            235);">V-Spd</td>
+        <td class="header" style="background-color: rgb(102, 255,
+            255);">V-Spd</td>
+        <td class="leftborder header" style="color: white;
+            background-color: rgb(51, 51, 51);">756</td>
+        <td class="header" style="color: white; background-color:
+            rgb(51, 51, 51);">NA</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">On</td>
+        <td style="background-color: rgb(235, 235, 235);">5
+          deg.</td>
+        <td style="background-color: rgb(235, 235, 235);">1-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">1-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">3,167</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">2,898</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">On</td>
+        <td style="background-color: rgb(235, 235, 235);">5
+          deg.</td>
+        <td style="background-color: rgb(235, 235, 235);">2-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">1-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">3,283</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">3,202</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">On</td>
+        <td style="background-color: rgb(235, 235, 235);">5
+          deg.</td>
+        <td style="background-color: rgb(235, 235, 235);">2-Stage</td>
+        <td style="background-color: rgb(102, 255, 255);">N-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">2,320</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">2,315</td>
+      </tr>
+      <tr>
+        <td style="background-color: rgb(235, 235, 235);">On</td>
+        <td style="background-color: rgb(235, 235, 235);">5
+          deg.</td>
+        <td style="background-color: rgb(235, 235, 235);">V-Spd</td>
+        <td style="background-color: rgb(102, 255, 255);">V-Spd</td>
+        <td class="leftborder" style="color: white; background-color:
+            rgb(51, 51, 51);">1,782</td>
+        <td style="color: white; background-color: rgb(51, 51, 51);">NA</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  Capacity unloading can be achieved by multiple stages or other variable
+  capacity methods. Consider a two-stage unit with a two-speed fan. A
+  two-speed fan system has a lower fan speed when running only the first
+  stage. Based on fan-affinity laws, power consumption at the lower fan speed
+  (1/2 the air flow of the high-speed mode) is assumed to be one eighth
+  ((1/2)^3=1/8) of the high-speed power specified in "EFn" field on the
+  <em>Controls</em> page. Note: this feature is only visible when the "Advanced
+  Features" are turned on. When only ventilating, the two-speed system
+  runs at its lower fan speed.<br>
+  <p>The variable-speed choice represents a system that has a
+    variable-speed
+    evaporator fan and a variable-capacity condenser. Variable
+    capacity is
+    achieved either though many stages or other capacity-unloading
+    methods.
+    Detailed part-load condenser-performance behavior can be
+    represented
+    through the <a class="Jump" href="#SpreadsheetData">spreadsheet
+      interface</a>. The spreadsheet data represents the condenser fan
+    and the compressor at part-load conditions and can be used
+    to account for condenser fans that can reduce their speed. When
+    either
+    of the variable-speed options is selected, the
+    "Stages" feature is effectively disabled and all bin results are
+    reported in the columns for the first stage. The
+    cycling-degradation
+    factor is set to zero when either of the two variable-speed modes
+    is
+    selected; it is assumed that the variable-speed unit does not
+    cycle.<br>
+    <br>
+    Both variable-speed and staged-condenser systems run
+    the condenser and evaporator
+    fan at capacity levels needed to satisfy the
+    sensible load. At reduced
+    load, capacity and fan air flow are reduced together, yielding
+    different sensible-latent splitting (as determined
+    by the apparatus dew-point and bypass factor method) of the total
+    capacity. These systems are
+    assumed to have either a
+    row-split or interlaced evaporator design (serial air flow from
+    one
+    multi-speed fan).
+  </p>
+  <hr>
+  <p><a name="DegradationFactor"></a><strong>Degradation
+      Factor: </strong>
+    Part-load degradation factor (percent).
+  </p>
+  <p>This value controls how much the unit performance is degraded
+    as a
+    function of load fraction. At no load, performance is degraded by
+    this
+    percentage. At full load, the degradation is zero. A linear
+    relationship is used
+    for load fractions between these two extremes. </p>
+  <hr>
+  <p><a name="N_Affinity"></a><strong>N Affinity:
+    </strong>N (exponent value) used in fan-affinity law calculations.</p>
+  <p>This value sets the exponent in the fan power calculations.
+    For
+    example, if the fan runs at one half of its flow capacity, the
+    power it
+    consumes will be (1/2)^N of its full-flow power draw. If N is 3,
+    then
+    at one half flow it will consume (1/2)^3 or 1/8 of its full-flow
+    power.</p>
+  <p><span style="font-weight: bold;">Discussion:</span></p>
+  <p>An
+    N of 3 is considered to represent the theoretical fan-affinity law
+    behavior for an ideal fan and yields a high-end estimate of the
+    fan
+    energy savings associated with a multi-speed fan. At lower fan
+    speeds
+    this value is considered to overestimate fan savings. An N value
+    of
+    2.5 is typically accepted as an exponent that best represents
+    overall fan behavior.</p>
+  <p>An N of 3.0 was assumed for all calculator versions before 4.3.</p>
+  <p>Also see the discussion in the <a class="Jump" href="#FanControls">E-Fan and Condenser</a>
+    topic.</p>
+  <!-- 
+  <hr /> <p><a name="DefaultCurves"></a><strong>Default Curves: </strong>If checked, DOE-2 curves are used as default correction curves. If not checked, the new Carrier curves are used.</p> <p><span style="font-weight: bold;">Discussion:</span></p> <p>This is a temporary control that can be used to evaluate the differences between the DOE-2 curves and the Carrier curves. The Carrier curves are being considered as an update to the DOE-2 curves which have been used in the calculator since the first release.</p> <p>The curves correct full-load total capacity and EIR (efficiency) as affected by evaporator and condenser operating temperatures.</p> 
+  -->
+  <hr>
+  <p><a name="Demand"></a><strong>Demand Cost: </strong>Use these features to
+    set the monthly demand rate ($/kW) and the number of applicable months.</p>
+  <p>
+    The calculation engine keeps track of the peak power draw during
+    the
+    season. The demand charge is calculated
+    as the simple product of this peak value and the rate and number
+    of
+    months values entered in the two fields. Demand costs are shown in
+    the
+    "Results" table if the "Advanced Features" option is on.</p>
+  <hr>
+  <p><a name="SpreadsheetData"></a><strong>Spreadsheet
+      Data: </strong>
+    Detailed performance data from the specification spreadsheet.</p>
+  <p><span style="font-style: italic;"><span style="font-style:
+          italic;"><span style="font-style: italic;"></span></span></span>The
+    purpose
+    of the spreadsheet data is to facilitate detailed modeling of
+    the full-load and part-load performance of the RTU's condenser
+    (compressor and condenser fan). The RTU's evaporator fan is
+    explicitly
+    modeled in the calculator and its part-load behavior is not
+    characterized by the spreadsheet. Some characteristics of the RTU
+    at
+    rating conditions are imported from the spreadsheet and serve to
+    populate some of the features in the calculator (e.g. S/T ratio,
+    Power
+    Inputs...).<span style="font-style: italic;"></span></p>
+  <p><span style="font-style: italic;">Note: the
+      sample spreadsheet referred to in this topic can be downloaded
+      in
+      a </span><a style="font-style: italic;" class="Jump" href="DetailedPerformanceData.zip">zip
+      file</a><span style="font-style: italic;"> which
+      includes the DetailedPerformanceData_VSCD.xlsm
+      spreadsheet. This spreadsheet contains Visual
+      Basic (VB) code. </span><span style="font-style: italic;">To
+      enable the VB code (sometimes
+      referred
+      to as macros)</span><span style="font-style: italic;">
+    </span><span style="font-style: italic;">the user </span><span style="font-style: italic;">will usually need to
+      click a
+      button titled "Enable Editing" and then a button titled
+      "Enable Content" at
+      the top of the Excel interface.</span><span style="font-style:
+        italic;"> </span></p>
+  <p>Copy (select with a mouse drag or use <span style="font-style: italic;">control-a</span> to select
+    and then <span style="font-style: italic;">control-c</span>
+    to
+    copy)
+    all data from the "Data Summary" sheet of a detailed specification
+    <span class="Jump">spreadsheet</span>
+    and paste (<span style="font-style: italic;">control-v</span>)
+    it in the "Spreadsheet Data" text box. Then click
+    the check box next to the text box. This feature is a mechanism to
+    import detailed performance data to the calculation engine of the
+    web
+    application.
+  </p>
+  <p>The web application produces four regression models from the
+    pasted data:</p>
+  <ul>
+    <li><strong>Gross Total Capacity</strong>: <br>
+      Function of ODB (Outside Dry-Bulb) temperature and EWB (Entering
+      Wet-Bulb) temperature. <br>
+      This is a <strong>relative</strong> model and depends on
+      the nominal capacity value set on the <em>Controls</em> page.</li>
+    <li><strong>Condenser Power</strong>: <br>
+      Function of ODB and EWB. <br>
+      This is a <strong>relative</strong> model and depends on
+      the nominal condenser power value set on the <em>Controls</em> page.</li>
+    <li><strong>S/T Ratio</strong>:<br>
+      Function of ODB, EWB, and EDB (Entering Dry-Bulb) temperature. <br>
+      This is an <strong>absolute</strong> model and ignores the
+      nominal S/T value set on the <em>Controls</em> page.</li>
+    <li><strong>Part-Load Performance</strong>: <br>
+      Normalized EER (excluding blower-fan power), as a function of load
+      fraction and ODB. The EER data is first normalized by the first row in the
+      part-load performance table (the 100% load EER), so data feeding this
+      regression is relative to the full-load performance in the first row. This
+      essentially captures the part-load behavior of the condenser (and its fan)
+      and is used with the full-load condenser-power model above. The part-load
+      behavior of the evaporator blower fan is accounted for separately with
+      fan-affinity laws. The end result of this is a<strong>
+        relative </strong>part-load model of the condenser which
+      ignores
+      the nominal degradation factor set on the <em>Controls</em> page.<br />
+      <br />
+      If part-load data comes to the calculator from the spreadsheet interface,
+      the spreadsheet data will take priority in modeling condenser's part-load
+      behavior. The energy use of the evaporator fan is <b>always</b> <b>modeled
+        in the calculator</b>. So if you are modeling the condenser behavior with
+      the spreadsheet, you will still need to specify the characteristics of the
+      evaporator fan in the calculator. The following two features of the
+      calculator <b>must</b> be used to characterize the evaporator fan: "Number
+      of Stages" and "E-Fan and Condensor."
+    </li>
+  </ul>
+  <p>A <span class="Jump">sample spreadsheet</span>
+    is provided to illustrate and test the import feature. Right-click
+    on
+    the link and then choose to open or choose to save ("Save Link
+    As...")
+    the Excel file to your computer. Note that this spreadsheet is
+    version
+    marked to insure compatibility with the web application. Paste
+    operations from older versions will not be accepted. </p>
+  <p>This sample spreadsheet has two "scratch" sheets that
+    illustrate how supporting data be can be found in PDF format on
+    manufacturers' web sites and used for this feature. One of the
+    scratch
+    sheets shows the raw images of the supporting tables (from a
+    Lennox
+    PDF). The other sheet shows intermediate tables that were
+    assembled by
+    pasting data from the PDF into the spreadsheet.</p>
+  <p>The "Part-Load Performance" sheet has detailed part-load
+    performance data that serves to characterize the part-load
+    behavior of
+    the condenser. The upper table of data on this sheet corresponds
+    to the
+    part-load data that is used to determine a unit's IEER value. As a
+    confirmation of this, the cells on the diagonal of the upper table
+    are
+    used to calculate the unit's IEER (the IEER result is shown on
+    this
+    sheet). For modeling work, the off-diagonal cells in the table are
+    needed to characterize the part-load behavior as a function of
+    load
+    fraction and the outdoor dry-bulb. The lower table specifically
+    represents the condenser unit and has the evaporator-fan power and
+    evaporator-fan heat subtracted out of the EERs in the upper table.
+    These special EER-Cond values are needed to represent the
+    condenser's
+    part-load behavior (including the condenser fan). The equation for
+    calculating EER-Cond is given on the "Part-Load Performance"
+    sheet.
+    Only the YELLOW cells on the "Part-Load Performance" sheet feed
+    into
+    the regression models. As mentioned above, the part-load behavior
+    of
+    the evaporator's blower fan is accounted for separately with
+    fan-affinity laws.</p>
+  <p>Note, however, that the "Part-Load Performance" data will
+    almost never be available on a manufacturer's web site. In the
+    future,
+    fully populated spreadsheets, including the part-load data, may be
+    available for download from the calculator site. These will be provided
+    to
+    us from manufacturers for a selected set of rooftop units. But for
+    now,
+    leave this data set to NA or try out the feature using the test
+    data
+    that is provided with the sample spreadsheet.</p>
+  <p>Steps for importing the spreadsheet data:</p>
+  <ol>
+    <li><strong>Copy</strong>:<br>
+      Copy all the data on the "Data Summary" sheet. Using <span style="font-style: italic;">control-a</span> is one
+      way to
+      select a whole sheet. Another is to click the little corner cell
+      in the
+      upper left, or simply drag with your cursor over all the active
+      cells
+      in the sheet. The part-load data (last four rows of the Data
+      Summary
+      sheet), may optionally be excluded if the manufacturer's
+      part-load data
+      is not available.</li>
+    <li><strong>Paste</strong>:<br>
+      Turn on the "Advanced Features" on the web site first. Paste
+      this data
+      into the appropriate "Spreadsheet Data" cell on the <em>Controls</em>
+      page.
+      There is one spreadsheet cell for the Candidate unit and one for
+      the
+      Standard unit. After pasting, the cell may appear empty (blank);
+      not
+      until after step 3 will there be visible text in the cell (so
+      don't
+      double paste). Note: to remove data from a "Spreadsheet Data"
+      cell, put
+      the cursor in the cell, then use <span style="font-style:
+          italic;">control-a</span> (to
+      select all the content
+      in the cell), then use <span style="font-style: italic;">control-x</span>
+      (to clear it).</li>
+    <li><strong>Click the check box</strong> (just to
+      the right of the spreadsheet field):<br>
+      This sets features to reflect the corresponding values in the
+      spreadsheet (e.g. EER, net capacity, evaporator fan power, aux
+      power,
+      condenser power, and S/T ratio). Note, after pasting spreadsheet
+      data,
+      the check box is checked automatically if you click anywhere
+      (outside
+      the spreadsheet cell) on the page. After clicking the check box,
+      the
+      model number of the unit will be displayed in the spreadsheet
+      cell.</li>
+    <li><strong>Submit</strong>:<br>
+      Click the "Submit" button. On the report page, you'll see the
+      raw sheet
+      contents parsed and reconstituted by the engine and displayed.
+      There
+      will also be a table for each of the four regression models that
+      have
+      been developed (the table indicates the model form and the model
+      coefficients and their corresponding T values). If data is
+      insufficient
+      for modeling, a warning message will be displayed where the
+      regression
+      model table would normally be displayed.</li>
+  </ol>
+  <p>After pasting in the data, the cell background color for the <strong>"S/T
+      Ratio</strong>" and the "<strong>Degradation Factor</strong>"
+    features will be a light yellow. This is a warning that these
+    features
+    are effectively disabled if the modeling process succeeds. The
+    corresponding S/T model and degradation model are <strong>absolute</strong>
+    and do not use these values. It is best to think of the values for
+    these
+    features as backups that will be used if the corresponding part of
+    the
+    modeling process fails (or if insufficient data is provided). The
+    report page will indicate which of the models have succeeded.
+    Again,
+    there will be corresponding warning messages for those that fail.</p>
+  <p>All the other features on the <em>Controls</em> page are still active
+    and can be changed by the user. Note that by unchecking the check
+    box
+    (also see step 3 above), you are then free to edit the nominal
+    values
+    for any of the parameters brought in by the spreadsheet (i.e.,
+    EER, net
+    capacity, blower power, aux power, and condenser power).
+    Re-checking
+    the check box then brings back the nominal spreadsheet values and
+    displays them on the <em>Control</em> page. Note that the "Power" (top
+    right)
+    button (see help for the <a class="Jump" href="#FanCondAux">power
+      fields</a>) will act to uncheck this check box and set the the
+    power fields to their default levels; re-checking the check box
+    will
+    again display the values from the spreadsheet.</p>
+  <p>The regression models will be in effect as long as there is
+    spreadsheet data in the spreadsheet field (regardless of the check
+    box
+    state). To remove data from a "Spreadsheet Data" field, put the
+    cursor
+    in the field, then use <span style="font-style: italic;">control-a</span>
+    (to select all the content in the
+    field), then use <span style="font-style: italic;">control-x</span>
+    (to clear it).</p>
+  <hr>
+  <p><a name="Ventilation_Rate"></a><strong>Ventilation
+      Rate: </strong>
+    Specify in CFM or as a percent of the fan capacity. Remaining fan
+    capacity (not used in ventilation) is available for use by the
+    economizer.</p>
+  <p>Ventilation rates are calculated automatically when a building
+    type is selected. Ventilation rates are calculated so as to
+    produce the
+    same fractional contribution to the slope of load-line as was
+    determined in a corresponding EnergyPlus analysis of these
+    building
+    types (see the <a class="Jump" href="#Building_Type">Building
+      Type</a> feature). Updating any feature that affects this
+    calculation will cause the ventilation rate to be updated.
+    Manually
+    entered values are allowed but will only persist until a
+    ventilation-rate update is triggered by changing the value of a
+    related
+    feature (for example the city/state).</p>
+  <p>An alternate method for establishing the ventilation level is
+    by
+    adjusting the ventilation fraction in a custom building-load model
+    (see
+    the <a class="Jump" href="#Building_Type">Building
+      Type</a>
+    feature).</p>
+  <p>When the Ventilation Rate feature is in the "% of fan
+    capacity" mode, the ventilation parameter can be set anywhere
+    between
+    0% (entering mixed air is composed completely of return air) to
+    100%
+    (entering mixed air is composed completely of outside air) of the
+    fan's
+    capacity. This parameter range is equivalent to changing the fresh
+    air
+    damper from fully closed (0%) to fully open (100%). <br>
+    <br>
+    When in the "CFM" mode, values above 100% of fan capacity may be
+    allowed. CFM values in excess of primary fan capacity are
+    assumed to be supported by a secondary fan.
+  </p>
+  <p> For both the "% of fan capacity" and the "CFM" modes,
+    ventilation values are not allowed to exceed levels where the
+    non-ventilation load would be less than
+    the internal load (i.e., a negative conduction load is not
+    allowed; see
+    <a class="Jump" href="methods/NonVentilationLoad.html">Methods</a>
+    page). An error message is reported to the user in this case.
+    Another
+    way to look at this issue is to remember that the design load is
+    calculated to match the design capacity and that as ventilation is
+    increased the non-ventilation loads must decrease to maintain the
+    match. However, ventilation levels are not allowed beyond the
+    point
+    where the non-ventilation load model would have a negative slope
+    (an
+    envelope better than a perfect insulator). <br>
+    <br>
+    <strong>Discussion:</strong>
+  </p>
+  <p>Effect of location (city/state) on calculated
+    ventilation levels:</p>
+  <p>You may notice that the calculated ventilation rates change as
+    the city and state change; the milder the climate (i.e., cooler
+    summer
+    design temperature) the higher the
+    ventilation rate. The milder climate causes the unit to have a
+    larger
+    effective capacity (better coil performance) at the cooler design
+    conditions, and because our building
+    auto-sizes to balance loads with capacity at design conditions,
+    this
+    mean higher loads from all contributing components, including
+    ventilation. Our building model assumes that ventilation
+    contributes a
+    certain fraction of the slope in the load model. This fractional
+    contribution from ventilation is only dependent on building type
+    and
+    does not change with location. However, even
+    though the
+    fraction stays constant, the actual ventilation CFM will increase
+    as
+    the design loads are increased for milder climates. You can think
+    of
+    this as a
+    larger building (to match the higher capacity) requiring more
+    ventilation because it
+    has more square footage.The ventilation portion of the load
+    is specified for each load model (see Appendix A in the
+    <a class="Jump" target="_blank" href="/coolrtu-js/docs/PNNL-24130.pdf">User
+      Manual</a>) and is
+    also apparent in the "loads-and-hours" bin-calc plots as the difference
+    between the "total" and "non-ventilation" lines.
+  </p>
+  <p>Impact of ventilation changes as influenced by
+    competing effects:</p>
+  <p>As intuitively expected, increasing ventilation levels
+    generally causes higher consumption (and higher savings) to be
+    reported
+    by the calculator. But there are several competing
+    effects that can
+    cause unexpected changes in consumption as ventilation
+    increases. Settings of associated parameters in the calculator
+    determine the
+    relative impact of
+    these competing effects. The following outline discusses these
+    associated
+    parameters from within the context of a locked or unlocked
+    load-line:</p>
+  <table style="height: 267px; width: 331px;">
+    <thead>
+      <tr>
+        <th><br>
+        </th>
+        <th width="175">Ventilation rate<br>
+        </th>
+        <th width="160">Candidate Unit (kWhrs) </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td> 24%</td>
+        <td>10,798</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td> 50% </td>
+        <td>11,654</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>50% (locked @ 24%) </td>
+        <td>10,777</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>100% (locked @ 24%)</td>
+        <td>10,954</td>
+      </tr>
+      <tr>
+        <td>5<br>
+        </td>
+        <td>200% (locked @ 24%)</td>
+        <td>12,758</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" rowspan="1"> Note: All calculator parameters are at
+          default values. </td>
+      </tr>
+    </tfoot>
+  </table>
+  <p>The table above contrasts the savings as affected by changes
+    in ventilation levels (all other settings are at default values).
+    The
+    first row
+    is the base case of 24% ventilation flow. The second row shows the
+    results
+    when the ventilation feature is manually set to 50%. The third row
+    shows
+    the result when the calculator starts at a ventilation rate of 24%,
+    then
+    locks the non-ventilation load-line, then changes the ventilation
+    to
+    50%. A comparison of rows 1 and 3 illustrates that an
+    expected
+    increase in consumption can essentially be nullified if the
+    ventilation is increased when the
+    load-line
+    is locked (see explanation below in the "locked" section). Higher
+    ventilation rates (rows 4 and 5) show an expected increase in
+    consumption.</p>
+  <p>If non-ventilation load-line is <em><b> un-locked
+      </b></em></p>
+  <ul>
+    <li><em></em>As ventilation increases, the
+      composition of the load
+      changes but the overall load is still constrained to match the
+      unit's
+      capacity at design conditions. If it were not for the
+      effect
+      of
+      ventilation
+      on the mixed-air conditions, there would be essentially <u> NO
+        effect</u> by ventilation on consumption in the
+      un-locked case.
+      Put in other words, in the un-locked case, changes in
+      consumption are
+      not directly caused by changes in ventilation load; these
+      ventilation
+      changes have only a very minor effect on the
+      total-sensible load-line. (As a result, the truncating effect,
+      where
+      there can be less fan
+      energy because of fewer cooling bins, rarely happens in the
+      un-locked
+      case; this is described below for the locked
+      case.)<br>
+    </li>
+    <li><b>Mixed-air</b> conditions may become more
+      favorable to the load-line and system performance as ventilation
+      increases. The mixed-air conditions (and how they affect the
+      unit's
+      sensible capacity and power draw) are predominately responsible
+      for
+      changes in consumption as ventilation levels change. Consider
+      the three
+      primary steps where the mixed-air conditions have influence:
+      <ol>
+        <li><b>The design point</b>: The load-lines are
+          based on the sensible capacity at the design point. Unlike
+          when in
+          locked mode, here the non-ventilation line is re-calculated
+          with each
+          parameter change. The weather conditions and ventilation
+          rates (and
+          corresponding mixed-air conditions) at the design point
+          affect the
+          sensible capacity at design and the resulting load-line.</li>
+        <li>The bin calculations of <b>sensible capacity</b>:
+          Bin conditions determine how the equipment (sensible
+          capacity) can
+          respond (runtime) to the load-line. </li>
+        <li>The bin calculations of <b>power draw</b>:
+          Bin conditions determine how much power is used while the
+          system is
+          running.</li>
+      </ol>
+    </li>
+  </ul>
+  If non-ventilation load-line is <b><em>
+      locked</em></b>
+  <ul>
+    <li>Fewer <b> cooling bins</b> and less fan
+      energy: Cooling bins that have total sensible-cooling load less
+      than
+      zero are excluded from the analysis. Increasing ventilation can
+      decrease the number of cooling bins (below the setpoint) because
+      ventilation cooling satisfies the internal gains and results in
+      no
+      cooling load. This effectively shortens the cooling season for
+      the
+      unit. The shortening occurs in bins of minor internal loads
+      where the
+      fan-only mode is predominant (economizer is satisfying the load
+      without
+      much compressor on time). The result is that low temperature
+      bins are
+      often truncated from the analysis as ventilation increases.
+      <ul>
+        <li><b>Oversizing</b> strengthens this effect
+          because when the system is oversized, fan energy accounts
+          for a higher
+          fraction of the total system energy use.<br>
+        </li>
+      </ul>
+    </li>
+    <li><b>Mixed-air</b> conditions (from increased
+      ventilation) may be favorable to system performance. </li>
+    <li><b>Internal gains</b> are better satisfied (in
+      bins below the setpoint; especially true if the economizer is
+      disabled): </li>
+  </ul>
+  <hr>
+  <p><a name="Economizer"></a><strong>Economizer:
+    </strong>Allows economizer to assist in meeting loads.</p>
+  <p>
+    <strong>Discussion: </strong>The economizer feature
+    enables the calculator to simulate the use of an
+    economizer.
+    The economizer is
+    simulated by effectively increasing the ventilation rate from the
+    specified
+    rate to 100% of fan capacity. If enabled, economizer is activated
+    in
+    any weather bin where increasing the ventilation acts to decrease
+    the
+    air conditioning load.
+  </p>
+  <hr>
+  <p><a name="Electric_Utility_Rate"></a><strong>Electric
+      Utility Rate: </strong>
+    Enter your local electric rate. If you do not know the rate, you
+    can
+    find it on your bill or call the local utility provider.</p>
+  <hr>
+  <p><a name="Equipment_Life"></a><strong>Equipment
+      Life: </strong>Number of years of life before equipment is
+    replaced.
+  </p>
+  <hr>
+  <p><a name="Number_of_Units"></a><strong>Number
+      of Units: </strong>
+    This is a simple multiplication factor used in calculating costs
+    for a
+    group of units.</p>
+  <hr>
+  <p><a name="Chart_present_value"></a><strong>Chart
+      discounted costs: </strong>
+    If checked, discounted purchase and operating costs are calculated
+    (the
+    present value). If unchecked, undiscounted costs are used (simple
+    payback).</p>
+  <p>The discount rate is the rate ABOVE inflation (not the nominal
+    discount rate that INCLUDES
+    inflation).</p>
+  <p><strong>Discussion:</strong> The discount rate is
+    an interest rate that is adjusted to remove the effects of actual
+    or
+    expected inflation. Specifically, it is an interest rate that is
+    used
+    to calculate the present value of expected yearly costs <em>excluding</em>
+    the effects of inflation.<br>
+    <br>
+    Note that the discount rate in the calculator is
+    not a
+    nominal discount rate. Nominal discount rates <em>include</em>
+    the effects of inflation. The discount rate is always lower than
+    the
+    corresponding nominal discount rate.
+  </p>
+  <hr>
+  <p><a name="Show_bin_calculations"></a><strong>Show bin calculations:
+    </strong> Show the detailed calculations for each outside dry-bulb bin.</p>
+  <p><strong>Discussion:</strong> Detailed results include engineering
+    calculations on system loads and performance, tabulated and charted by outside
+    dry-bulb bin temperature. </p>
+  <hr>
+  <p><a name="Lock_load_line"></a><strong>Lock
+      load-line: </strong>Preserves the current non-ventilation
+    load-line for use in any submits that follow.</p>
+  <p> Locking the non-ventilation load-line is equivalent to fixing
+    the characteristics of a fictitious building that is the source of
+    the
+    cooling loads. Locking causes loads that are associated with
+    internal
+    gains to be fixed. Loads associated with conduction through the
+    envelope
+    are still driven by weather conditions, but the relationship to
+    the
+    temperature differential is fixed (slope of the load-line is
+    fixed).
+    Ventilation
+    loads can still be adjusted after locking either by directly
+    editing
+    the ventilation value or by changing the building type or the
+    ventilation parameter of a custom load model.</p>
+  <p><strong>Discussion:</strong> In the default
+    (unlocked) mode, loads are calculated so as to balance the unit's
+    capacity at design conditions. Total sensible loads automatically
+    adjust to balance capacity (also see the <a class="Jump" href="methods/NonVentilationLoad.html">Methods page</a>
+    on the non-ventilation load for additional discussion). This
+    principal
+    assumption
+    in the calculator can lead to counterintuitive (but
+    correct)
+    results in some of the features. For example, starting from the
+    humidity feature's default "fixed mode" (not auto mode) value of
+    60%
+    relative humidity, and then changing to 40%, results in a
+    significant
+    drop in consumption if the load-line is locked (when at the
+    original value of 60% humidity). A strong drop results when the
+    load-line is locked because sensible non-ventilation loads stay <em>
+      fixed</em> as sensible capacity <em> increases</em>
+    at lower humidity levels. The result is <em>lower</em> run
+    times.</p>
+  <table width="408">
+    <thead>
+      <tr>
+        <th width="174">Inside Relative Humidity (% R.H.) </th>
+        <th width="222">Candidate Unit (kWhrs) </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td> 60 </td>
+        <td>11,074</td>
+      </tr>
+      <tr>
+        <td> 40 (line locked @ 60) </td>
+        <td style="font-weight: bold;">9,932</td>
+      </tr>
+      <tr>
+        <td> 40 </td>
+        <td>11,190</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2"> Note: All calculator parameters except
+          "Fixed" inside relative humidity are at default values. </td>
+      </tr>
+    </tfoot>
+  </table>
+  <br>
+  Locking the non-ventilation load-line can be useful in testing
+  the sensitivities to a parameter. Locking changes the "question"
+  that
+  is presented to the calculator. Consider, for
+  example,
+  the ventilation level parameter:
+  <blockquote>
+    <ol type="A">
+      <li>
+        <strong>If </strong><strong><em>
+            locked</em></strong><strong> the question is</strong>:
+        For fixed building characteristics, what is the energy impact
+        of
+        changing the ventilation level from:
+        <ol>
+          <li>an initial state where loads and capacities balance
+            at design conditions, </li>
+          <li> to a new state (different ventilation) where total
+            loads are <em>free</em> to be higher or lower
+            (non-ventilation load is <strong> <em>locked</em></strong>)
+            than capacity at design? </li>
+        </ol>
+      </li>
+      <li><strong>If<em> not locked</em> the
+          question is</strong>: For an "adjustable" building that can
+        adapt
+        to be in balance with loads, what is the energy impact of
+        changing the
+        ventilation level from:
+        <ol>
+          <li>an initial state where loads and capacities balance
+            at design conditions, </li>
+          <li> to a new state (different ventilation) where loads
+            and capacity are again <em> constrained</em> to match and
+            where the matching is again achieved by adjusting the
+            non-ventilation
+            load (the conduction component of the "adjustable"
+            building)?</li>
+        </ol>
+      </li>
+    </ol>
+  </blockquote>
+  <p>Or more simply put, once in locked mode, the non-ventilation
+    building characteristics are fixed. When not locked, the
+    "adjustable"
+    building adjusts (conduction loads) to achieve balance between the
+    specified ventilation load and the capacity of the unit.
+  </p>
+  <p>Note:
+    when using the locking feature, it may be best to use some
+    "oversizing"
+    to allow for extra capacity to accommodate load changes. The
+    oversizing
+    feature can help to minimize the number of bins where runtimes
+    exceed
+    1.0. When locked, runtimes exceeding 1.0 are highlighted with
+    light
+    yellow
+    background.<br>
+  </p>
+  <hr>
+  <p><a name="ADPBPF"></a><strong>APD/BPF:
+    </strong>Demonstration Page for the Apparatus Dew Point and
+    ByPass Factor Method (Carrier et al. 1959) </p>
+  <p><strong>Discussion:</strong> The first row of
+    features serves to establish the capacity, flow rate, and sensible
+    to
+    total ratio (S/T) at AHRI rating conditions. These can be used to
+    calculate the corresponding bypass factor at AHRI conditions. The
+    bypass
+    factor can be projected onto other mass flow rates using the
+    expression
+    <em>BF = exp(-A0/massflowrate)</em>. <em>A0</em>
+    can be determined at AHRI conditions and then the expression can
+    be
+    applied at other mass flow rates. The second row of features,
+    capacity
+    and air flow rate, establish a baseline for a projection exercise
+    as
+    illustrated in the output table below the features. The table
+    displays
+    S/T results for a variety of operating conditions, all at the
+    capacity
+    and flow rate established in the second line of features, all
+    dependent
+    on the <em>A0</em> term established by the first row of
+    features. By default the second line is set to equal the first
+    line
+    whenever a first-line feature is changed.
+  </p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+</body>
+
+</html>

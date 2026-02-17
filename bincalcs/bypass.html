@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RTU Bin-Method Calculator</title>
+
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css" />
+
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+  <script src="/coolrtu-js/bincalcs/help_viewer.js"></script>
+
+  <style>
+    #page {
+      margin: 0 auto;
+    }
+
+    #errors,
+    #output {
+      margin: 10px auto;
+      width: 750px;
+    }
+
+    table#bypassTbl {
+      margin: 18px auto;
+      border-collapse: collapse;
+      width: 750px;
+    }
+    table#bypassTbl th, table#bypassTbl td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body class="col1 CEpage">
+  <div id="page">
+    <div id="header"></div>
+
+    <div id="container">
+      <div id="main">
+        <div class='homeLink_left'><a class='Jump' href='methods/CoolingCorrectionCurvesSensible.html'>Return to Correction Curves</a></div>
+        <div class='homeLink'><a href='/coolrtu-js/bincalcs/controls.html' target='_blank' title='Open a new bin-method calculator.' class='Jump'>Open a calculator</a></div>
+
+        <form id="formBypass" name="formBypass">
+          <br>
+
+          <h1 style="margin: 18px 75px;">System Performance: <em>ADP/BPF Projection</em> <span class="help-icon" style="vertical-align: -4px;" onclick="OpenWindow('ADPBPF');" title="click for instructions"></span></h1>
+
+          <table style="margin: 20px auto; width: 750px; border-collapse: collapse; border: 1px solid #d57500;">
+            <tr>
+              <th colspan="4" style="color: #fff; background-color: #d57500">Unit Data at AHRI Rating Conditions (ODB=95 / EDB=80 / EWB=67)</th>
+            </tr>
+            <tr>
+              <th style="color: #fff; background-color: #d57500">Total Cap (Gross)</th>
+              <th style="color: #fff; background-color: #d57500">CFM</th>
+              <th colspan="2" style="vertical-align: bottom; color: #fff; background-color: #d57500">S/T ratio</th>
+            </tr>
+            <tr>
+              <td id="tdCap" style="background-color: #eee">
+                <input type="textbox" name="txtTotalCap" id="txtTotalCap" />
+              </td>
+              <td id="tdCFM" style="background-color: #eee">
+                <input type="textbox" name="txtCFM" id="txtCFM" />
+              </td>
+              <td id="tdSTRatio" style="background-color: #eee">
+                <input type="textbox" name="txtSTatARI" id="txtSTatARI" />
+              </td>
+              <td style="background-color: #eee">
+                <input value="Submit" type="submit" />
+              </td>
+            </tr>
+
+            <tr>
+              <th colspan="4" style="color: #fff; background-color: #d57500">The row below applies the BPF (established in the row above) to these new capacity and flow conditions.</th>
+            </tr>
+            <tr>
+              <td id="tdCap_New" style="background-color: #eee">
+                <input type="textbox" name="txtTotalCap_New" id="txtTotalCap_New" />
+              </td>
+              <td colspan="3" id="tdCFM_New" style="background-color: #eee">
+                <input type="textbox" name="txtCFM_New" id="txtCFM_New" />
+              </td>
+            </tr>
+          </table>
+        </form>
+
+        <div id="errors"></div>
+        <div id="output"></div>
+
+      </div>
+    </div>
+
+    <div id="footer"></div>
+  </div>
+
+  <script type="module">
+    import {
+      Phr_wb,
+      BPF_ADP_SC,
+      A0_FromBPF,
+      STratio_EnergyPlus_A0,
+      SC_ADP
+    } from './include/psychro.js';
+
+    import { StageState } from './include/classes.js';
+
+    const dblStandardPressure = 29.921;
+
+    function Tot_Capacity_Correction_nfrc(ODB, WB) {
+      return 0.87403018 + (-0.0011416 * WB) + (0.0001711 * WB ** 2) + (-0.002957 * ODB) + (0.00001018 * ODB ** 2) + (-0.00005917 * WB * ODB);
+    }
+
+    function fmt(value, decimals) {
+      const n = Number(value);
+      if (!Number.isFinite(n)) return String(value ?? '');
+      return n.toFixed(decimals);
+    }
+
+    function fmtInt(value) {
+      const n = Number(value);
+      if (!Number.isFinite(n)) return String(value ?? '');
+      return String(Math.round(n));
+    }
+
+    function fmtThousandsInt(value) {
+      const n = Number(value);
+      if (!Number.isFinite(n)) return String(value ?? '');
+      return Math.round(n).toLocaleString('en-US');
+    }
+
+    function setDefaults() {
+      const cap = document.getElementById('txtTotalCap');
+      const cfm = document.getElementById('txtCFM');
+      const st = document.getElementById('txtSTatARI');
+      const capNew = document.getElementById('txtTotalCap_New');
+      const cfmNew = document.getElementById('txtCFM_New');
+
+      cap.value = '90000';
+      cfm.value = '3000';
+      st.value = '0.72';
+      capNew.value = cap.value;
+      cfmNew.value = cfm.value;
+    }
+
+    function readInputs() {
+      return {
+        cap: Number(document.getElementById('txtTotalCap').value),
+        cfm: Number(document.getElementById('txtCFM').value),
+        st: Number(document.getElementById('txtSTatARI').value),
+        capNew: Number(document.getElementById('txtTotalCap_New').value),
+        cfmNew: Number(document.getElementById('txtCFM_New').value),
+      };
+    }
+
+    function renderError(message) {
+      const el = document.getElementById('errors');
+      if (!message) {
+        el.innerHTML = '';
+        return;
+      }
+      el.innerHTML = `<div style="background: #fff3cd; border: 1px solid #ffeeba; padding: 10px;">${message}</div>`;
+    }
+
+    function renderTable({ bpf, capNew, cfmNew, a0 }) {
+      const headerColor = '#d57500';
+      const defaultRowColor = '#fff';
+      const highlightRowColor = '#d4d4d6';
+
+      const stage = new StageState();
+      stage.ResetToFullLoad();
+
+      let html = '';
+      html += `<table id="bypassTbl">`;
+      html += `<tr><td colspan="11" style="color: #fff; background: ${headerColor}">Projected Unit Performance (BPF @ AHRI = ${fmt(bpf, 3)})</td></tr>`;
+      html += `<tr>`;
+      html += `<th title="Outdoor Dry-Bulb Temperature" style="text-align: center; background: ${headerColor}">&nbsp;ODB&nbsp;</th>`;
+      html += `<th title="Entering Wet-Bulb Temperature" style="text-align: center; background: ${headerColor}">&nbsp;EWB&nbsp;</th>`;
+      html += `<th title="Total Gross Capacity" style="text-align: center; background: ${headerColor}">&nbsp;TCap (Gross)&nbsp;</th>`;
+      html += `<th title="Entering Dry-Bulb Temperature" style="text-align: center; background: ${headerColor}">&nbsp;EDB&nbsp;</th>`;
+      html += `<th title="Entering Humidity Ratio" style="text-align: center; background: ${headerColor}">&nbsp;EHR&nbsp;</th>`;
+      html += `<th title="ByPass Factor" style="text-align: center; background: ${headerColor}">&nbsp;BPF&nbsp;</th>`;
+      html += `<th title="Sensible to Total Ratio (Calculated using a method based on the ADP/BPF algorithms in EnergyPlus.)" style="text-align: center; background: ${headerColor}">&nbsp;S/T&nbsp;</th>`;
+      html += `<th title="Supply-Air Dry-Bulb Temperature (Fan heat not included.)" style="text-align: center; background: ${headerColor}">&nbsp;SDB&nbsp;</th>`;
+      html += `<th title="Supply-Air Humidity Ratio (Fan heat not included.)" style="text-align: center; background: ${headerColor}">&nbsp;SHR&nbsp;</th>`;
+      html += `<th title="Apparatus Dew Point Temperature (Fan heat not included.)" style="text-align: center; background: ${headerColor}">&nbsp;ADP&nbsp;</th>`;
+      html += `</tr>`;
+
+      for (let odb = 85; odb <= 115; odb += 10) {
+        for (let ewb = 63; ewb <= 71; ewb += 4) {
+          const totalCapCorrected = capNew * Tot_Capacity_Correction_nfrc(odb, ewb);
+          const groupRowColor = (odb === 95 && ewb === 67) ? highlightRowColor : defaultRowColor;
+
+          let firstRow = true;
+          for (let edb = 75; edb <= 85; edb += 5) {
+            const ehr = Phr_wb(edb, ewb, dblStandardPressure);
+
+            const stRes = STratio_EnergyPlus_A0(a0, totalCapCorrected, cfmNew, stage, ehr, edb, dblStandardPressure);
+            const stRatio = stRes?.stRatio;
+            const bpfAdjusted = stRes?.bpfAdjusted;
+
+            const sc = SC_ADP(totalCapCorrected, stRatio, cfmNew, edb, ehr, dblStandardPressure);
+
+            let rowColor = defaultRowColor;
+            if (edb === 80 && odb === 95 && ewb === 67) rowColor = highlightRowColor;
+
+            if (firstRow) {
+              html += `<tr>`;
+              html += `<td rowspan="3" style="text-align: center; background: ${groupRowColor}">${odb}</td>`;
+              html += `<td rowspan="3" style="text-align: center; background: ${groupRowColor}">${ewb}</td>`;
+              html += `<td rowspan="3" style="text-align: center; background: ${groupRowColor}">${fmtThousandsInt(Math.round(totalCapCorrected / 1000) * 1000)}</td>`;
+              firstRow = false;
+            } else {
+              html += `<tr>`;
+            }
+
+            html += `<td style="text-align: center; background: ${rowColor}">${edb}</td>`;
+            html += `<td style="text-align: center; background: ${rowColor}">${fmt(ehr, 4)}</td>`;
+            html += `<td style="text-align: center; background: ${rowColor}">${fmt(bpfAdjusted, 3)}</td>`;
+            html += `<td style="text-align: center; background: ${rowColor}">${fmt(stRatio, 3)}</td>`;
+            html += `<td style="text-align: center; background: ${rowColor}">${fmt(sc?.sdb, 1)}</td>`;
+            html += `<td style="text-align: center; background: ${rowColor}">${fmt(sc?.shr, 4)}</td>`;
+            html += `<td style="text-align: center; background: ${rowColor}">${fmt(sc?.adp, 1)}</td>`;
+            html += `</tr>`;
+          }
+        }
+      }
+
+      html += `</table>`;
+      document.getElementById('output').innerHTML = html;
+    }
+
+    function run() {
+      const { cap, cfm, st, capNew, cfmNew } = readInputs();
+
+      const dblEDB_start = 80;
+      const dblEWB_start = 67;
+      const dblEHR_start = Phr_wb(dblEDB_start, dblEWB_start, dblStandardPressure);
+
+      const bpfRes = BPF_ADP_SC(cap, st, cfm, dblEDB_start, dblEHR_start, dblStandardPressure);
+      if (bpfRes?.errorMessage) {
+        renderError(bpfRes.errorMessage);
+        document.getElementById('output').innerHTML = '';
+        return;
+      }
+
+      const dblBPF = bpfRes.bpf;
+      const dblA0_BPF = A0_FromBPF(dblBPF, cfm);
+
+      renderError('');
+      renderTable({ bpf: dblBPF, capNew, cfmNew, a0: dblA0_BPF });
+    }
+
+    document.getElementById('formBypass').addEventListener('submit', (e) => {
+      e.preventDefault();
+      run();
+    });
+
+    setDefaults();
+    run();
+  </script>
+</body>
+</html>

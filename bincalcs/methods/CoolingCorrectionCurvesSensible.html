@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RTU Bin-Method Calculator - Corrections to Tested Performance: Sensible Capacity</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="links col1">
+  <div id="page">
+    <div id="header"></div>
+    
+    <div id="main">
+      <div class="homeLink">
+        <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+      </div>
+      
+      <p><a href="CoolingCorrectionCurves.html">&lt;&lt; Previous</a> | <a href="methods_outline.html">Outline</a> | <a href="CoolingCorrectionCurves_Manufacturer.html">Next &gt;&gt;</a></p>
+      <h1>Corrections to Tested Performance: <em>Sensible Capacity</em></h1>
+      
+      <div style="float: right; margin: 0 0 10px 20px; width: 470px;">
+        <figure>
+          <img src="images/bypass_factor.jpg" alt="Bypass Factor Illustration" height="351" width="447" />
+          <figcaption><strong>Figure 1a.</strong> Graphical illustration of the definition of the bypass factor: ratio of segment yellow-blue to segment red-blue.</figcaption>
+        </figure>
+        
+        <figure style="margin-top: 20px;">
+          <img src="images/bypass_factor2.jpg" alt="Bypass Factor Technique Illustration" height="347" width="466" />
+          <figcaption><strong>Figure 1b.</strong> Graphical illustration of the iterative technique used to determine the sensible-to-total ratio from a given bypass factor and total capacity. This method answers the question: At what S/T ratio does the cooling process preserve the bypass factor that is determined at ARI rating conditions?</figcaption>
+        </figure>
+        
+        <figure style="margin-top: 20px;">
+          <img src="images/cooling_curves_sensible.jpg" alt="Cooling Curves Sensible" border="0" height="452" width="443" />
+          <figcaption><strong>Figure 2.</strong> Total and sensible capacity data normalized by corresponding values at ARI rating conditions. This graph shows the stronger dependence of the sensible capacity on the humidity of the entering (mixed) air.</figcaption>
+        </figure>
+      </div>
+      
+      <ul>
+        <li> Sensible / Total
+          <ul>
+            <li>The sensible/total capacity ratio is determined by an iterative
+            technique based on the apparatus dew-point and bypass factor method
+            (ADP/BPF). This method is dependent on the <em>S/T</em> ratio (at
+            rating conditions), air flow rate, total capacity, <em>ODB, EWB, and
+            EDB</em>.</li>
+            <li>This iterative technique&nbsp;can be represented functionally:<br />
+              <strong style="color: rgb(128, 0, 0);"><em></em></strong><strong style="color: rgb(128, 0, 0);"><em>S/T</em></strong><sub>ADP</sub>&nbsp;<em></em>=&nbsp;<strong style="color: rgb(128, 0, 0);"><em>S/T</em></strong><sub>ADP</sub><strong style="color: rgb(128, 0, 0);"><em></em></strong>(<span style="font-style: italic;">S/T</span><sub>rated</sub><em>, </em><em>Flow,&nbsp;Capacity</em><em>, ODB, EWB, EDB</em>)
+            </li>
+          </ul>
+        </li>
+        <li>Sensible capacity is the product of this ratio and the total capacity.
+          <ul>
+            <li><strong style="color: red;"><em>SC</em></strong> =<strong style="color: rgb(128, 0, 0);"><em> S/T</em></strong><sub>ADP</sub><em></em><em></em> * <span style="color: rgb(0, 113, 113);"><strong><em>TC</em></strong>(<em>ODB, EWB</em>)</span> </li>
+          </ul>
+        </li>
+      </ul>
+      
+      <h2>Discussion</h2>
+      
+      <p>In making predictions of sensible capacity at conditions differing from
+      ARI test conditions, the calculation engine makes use of the iterative
+      apparatus dew-point and bypass factor method. This method acts to first
+      characterize the cooling coil with a bypass factor based on its sensible
+      and total capacity at ARI test conditions (see Figure 1a). This bypass
+      factor can then be used to predict the sensible-to-total ratio of the coil
+      at entering conditions, flow rates, and total capacity levels, other than
+      those at ARI test conditions (see Figure 1b).</p>
+      
+      <p>There is a separate <a class="Jump" target="_top"
+      href="/coolrtu-js/bincalcs/bypass.html">system performance</a> calculation
+      page that serves to dynamically illustrate the ADP/BPF method
+      described here. The results shown in the "S/T" columns are the result of
+      the iterative calculation using the ADP/BPF method. Of the three
+      variations of this S/T result, the S/T (BP-EP) is the one actually used in
+      calculation engine. This version has algorithmic similarities with the
+      form of the method that is used in the EnergyPlus system simulator.</p>
+      
+      <p>The letters "S" stands for <em>supply, </em>"E" for <em>entering</em>,
+      and "O" for <em>outside</em>, "HR" for <em>humidity ratio, </em>"DB" for
+      <em>dry-bulb</em>, and "WB" for <em>wet-bulb</em>. The "BPF" factor, shown
+      at the top row of the second table, is the calculated bypass factor at the
+      user-entered ARI conditions. All columns to the right of and including the
+      "BPF" column are calculated with the ADP/BPF method.</p>
+      
+      <p>To run the calculation, enter system performance data (at ARI test
+      conditions) in the text boxes in the top row and then press the "Submit"
+      button. This produces a table of predicted coil performance for a variety
+      of entering conditions. The second row of inputs allows you to change the
+      capacity level and air flow rate that the projection table is based on (by
+      default, these values are left equal to the ARI conditions specified in
+      the first row of inputs).</p>
+    </div>
+    
+    <div id="footer_new"></div>
+  </div>
+</body>
+</html>

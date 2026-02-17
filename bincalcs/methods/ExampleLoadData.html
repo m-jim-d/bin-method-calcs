@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RTU Bin-Method Calculator - Establishing Loads</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="links col1">
+  <div id="page">
+    <div id="header"></div>
+    
+    <div id="main">
+      <div class="homeLink">
+        <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+      </div>
+      
+      <p><a href="NonVentilationLoad.html">&lt;&lt; Previous</a> | <a href="methods_outline.html">Outline</a> | <a href="CoolingCorrectionCurves.html">Next &gt;&gt;</a></p>
+      <h1>Establishing Loads: <em>An example</em></h1>
+      <div style="float: right;">
+        <figure>
+          <img alt="Wichita, KS" src="images/Wichita.png">
+          <figcaption style="padding-left: 60px; margin-right: auto;"><strong>Loads and Hours: Wichita, KS; Medium Office</strong></figcaption>
+        </figure>
+      </div>
+      <ul>
+        <li>Economizer
+          <ul>
+            <li>Sensible load is reduced by fully opening the outside-air damper
+            and running the supply fan at full speed.</li>
+          </ul>
+        </li>
+        <li>Hours of operation from weather tapes
+          <ul>
+            <li>Schedule acts as filter</li>
+            <li>Binned by dry-bulb (with coincident wet-bulb)</li>
+          </ul>
+        </li>
+      </ul>
+      <h2>Discussion:</h2>
+
+      <p>Fan capacity, not used in ventilation, can optionally be used in
+      economizing the load. The economizer reduces the sensible load, at outdoor
+      temperatures below the setpoint, by fully opening the outside-air damper
+      and bringing in additional ventilation air. When economizing, the supply
+      fan runs at full speed.</p>
+
+      <p>In the example chart (produced by the RTU Comparison Calculator) for
+      Wichita, the "After Economizer" trace shows the final load data that will
+      drive the run-time calculation (this trace is reduced to zero for those
+      bins where the economizer can satisfy all the cooling load).</p>
+
+      <p>For temperature bins where the economizer cannot satisfy the load on
+      its own, supplemental DX cooling is modeled in the calculator in what is
+      called integrated mode (see the 70F bin in Wichita chart). In this mode,
+      the unit balances the load against the two cooling sources to determine
+      how much DX runtime is needed in the hour. During the economizer-only
+      portion of the hour the fan runs at full speed. During the DX-only portion
+      of the hour the fan runs at full-speed for a single-speed system. However,
+      for a variable-capacity unit, the DX-only portion of the hour runs at a
+      fan speed that corresponds to the first-stage of a staged unit or the
+      minimum capacity of a unit with a variable-capacity condenser.</p>
+
+      <p>The final step in presenting the load data to the unit is to determine
+      the number of hours in which the unit experiences that load. In the
+      example chart for Wichita, with a schedule of Monday - Friday, 7am - 7pm,
+      the hour distribution, as binned by outside temperature, is shown
+      normalized, with a fine red line (max value = 254 hours). This line is
+      labeled "Schedule." The potential total hours, as would be the case if no
+      schedule were filtering the hours, is shown by the fine dark-brown line,
+      labeled "Total Hours." This Total Hours trace is displayed for use as a
+      reference to give the user a sense of the impact of the filtering by the
+      schedule. When an "All Day, All Week" schedule is selected, these two
+      traces (filtered and unfiltered) are identical and lay on top of each
+      other.</p>
+
+      <p>When considering how unit performance varies from city to city, it is
+      useful to keep in mind that the building-load model (in this case:
+      "Office-Medium") is scaled to match the capacity of the candidate unit at
+      design conditions. As a result of this explicit balance, design
+      temperature is not by itself a primary driver of energy usage, but rather
+      two associated weather characteristics have more impact: </p>
+
+      <ol>
+        <li>Hour count in the cooling bins (longer cooling season means more
+        energy use).</li>
+        <li>The skew of the hour distribution (the more skewed toward high
+        temperatures, the more time at high load and low capacity; the result is
+        longer run times per bin hour).</li>
+      </ol>
+      <p> The RTU Comparison Calculator reports calculation results for any
+      temperature bin where there is a positive cooling load (before economizer
+      reductions). </p>
+    </div>
+    
+    <div id="footer_new"></div>
+  </div>
+</body>
+</html>

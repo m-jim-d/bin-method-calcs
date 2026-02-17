@@ -1,0 +1,42 @@
+/* Subset of the original public-server styles */
+
+#page {
+    margin: 0 auto;
+    background-image: none !important;
+  }
+  
+#subBanner {
+    margin-top: 10px;
+}
+
+#container {
+    float: left;
+    width: 100%;
+}
+
+#main {
+    margin: 20px 100px 0 100px;
+    font-size: 100%;
+    line-height: 150%;
+    padding-top: 2px;
+    padding-bottom: 0px;
+  }
+
+#container>#main {height: auto;}
+
+body.col1 #main {width: auto; margin: 14px 1.5em 15px;}
+#main p {margin: 0 0 1em 0;}
+
+#main img {max-width: 520px;}
+body.col2 #main img {max-width: 700px;}
+body.col1 #main img {max-width: 940px;}
+
+.floatRight, .floatLeft, .floatCenter {
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.floatRight {
+  float: right;
+  margin: 0 0 10px 20px;
+}

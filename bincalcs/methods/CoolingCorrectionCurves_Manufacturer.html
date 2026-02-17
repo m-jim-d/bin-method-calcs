@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RTU Bin-Method Calculator - Corrections to Tested Performance: Specific Manufacturer Data</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="links col1">
+  <div id="page">
+    <div id="header"></div>
+    
+    <div id="main">
+      <div class="homeLink">
+        <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+      </div>
+      
+      <p><a href="CoolingCorrectionCurvesSensible.html">&lt;&lt; Previous</a> | <a href="methods_outline.html">Outline</a> | <a href="CoolingCorrectionCurves_3SpecificUnits.html">Next &gt;&gt;</a></p>
+      <h1>Corrections to Tested Performance:&nbsp;<em>Manufacturers' Data and the Spreadsheet Interface</em></h1>
+      
+      <div style="float: right; margin: 0px 0px 10px 20px; width: 470px;">
+        <figure>
+          <img src="images/Coolin10.gif" border="0" height="498" width="430" alt="Cooling Correction Chart 1" />
+        </figure>
+        
+        <figure style="margin-top: 20px;">
+          <img src="images/Coolin9.gif" border="0" height="497" width="430" alt="Cooling Correction Chart 2" />
+        </figure>
+        
+        <figure style="margin-top: 20px;">
+          <img src="images/Coolin12_cropped.gif" border="0" height="498" width="442" alt="Cooling Correction Chart 3" />
+        </figure>
+      </div>
+      
+      <ul>
+        <li>Regression of manufacturers' performance data:
+          <ul>
+            <li><span style="color: rgb(0, 0, 255);"><em style="font-size: 1.3em;">f</em><sub>GTC</sub> = </span>Gross Total Capacity Correction = <br>
+              <span style="color: rgb(0, 0, 255);">Regression_GTC(ODB, EWB)</span> / <span style="color: rgb(0, 0, 255);">Regression_GTC(95, 67)</span><br>
+              Polynomial model form = ODB + ODB^2 + EWB^2 + ODB*EWB + ODB^2*EWB^2<br>
+              <br>
+            </li>
+            <li><span style="color: rgb(0, 0, 255);"><em style="font-size: 1.3em;">f</em><sub>CP</sub> = </span>Condenser Power Correction = <br>
+              <span style="color: rgb(0, 0, 255);">Regression_CP(ODB, EWB)</span> / <span style="color: rgb(0, 0, 255);">Regression_CP(95, 67)</span><br>
+              Polynomial model form = ODB^2 + EWB^2 + ODB*EWB + ODB^2*EWB^2 + ODB^3*EWB^3<br>
+              <br>
+            </li>
+            <li><span style="color: rgb(0, 0, 255);"><em style="font-size: 1.3em;">f</em><sub>S/T </sub>= </span>Sensible to Total Ratio = <br>
+              <span style="color: rgb(0, 0, 255);">Regression_S/T(ODB, EWB, EDB)<br>
+              </span>Polynomial model form = EWB + EDB + EWB*EDB + EWB^2*EDB + ODB*EWB*EDB^2 + ODB*EWB^2*EDB <br>
+              <br>
+            </li>
+            <li><span style="color: rgb(0, 0, 255);"><em style="font-size: 1.3em;">f</em><sub>PLDF</sub> = </span>Part-Load Degradation Factor = <br>
+              <span style="color: rgb(0, 0, 255);">Regression_DegradationFactor(Load Fraction, ODB)<br>
+              </span>Polynomial model form = Intercept + LF + LF^2 + LF*ODB + LF^2*ODB<br>
+              <br>
+            </li>
+          </ul>
+        </li>
+        <li>Apply corrections to gross AHRI values, then add the effects of fans to give net performance relationships
+          <ul>
+            <li><strong style="color: rgb(128, 0, 0);">N</strong>et <strong style="color: rgb(128, 0, 0);">T</strong>otal <strong style="color: rgb(128, 0, 0);">C</strong>apacity = <span style="color: rgb(0, 0, 255);"><em style="font-size: 1.3em;">f</em><sub>GTC </sub>(ODB, EWB)</span> * GTC<sub>ARI</sub> - (P<sub>evap-fan</sub> * 3.413)</li>
+            <li>Net Sensible Capacity = <span style="color: rgb(0, 0, 255);"><em style="font-size: 1.3em;">f</em><sub>GTC </sub>(ODB, EWB)</span> * GTC<sub>ARI</sub> * <span style="color: rgb(0, 0, 255);"><em style="font-size: 1.3em;">f</em><sub>S/T</sub>(ODB, EWB, EDB)</span> - (P<sub>evap-fan</sub> * 3.413)</li>
+            <li><strong style="color: rgb(128, 0, 0);">C</strong>ondenser <strong style="color: rgb(128, 0, 0);">P</strong>ower = <span style="color: rgb(0, 0, 255);"><em style="font-size: 1.3em;">f</em><sub>CP</sub>(ODB, EWB) </span>* CP<sub>ARI</sub></li>
+            <li><strong style="color: rgb(128, 0, 0);">EER</strong><span style="color: rgb(0, 0, 255);"> = </span><strong style="color: rgb(128, 0, 0);">NTC</strong> /<strong>(</strong><strong style="color: rgb(128, 0, 0);">CP</strong> + P<sub>evap-fan </sub>+ P<sub>aux</sub>) <br><br></li>
+          </ul>
+        </li>
+      </ul>
+      
+      <h2>Discussion</h2>
+            
+      <p>For manufacturers' performance data specified in detail via the
+      spreadsheet interface, the regression forms outlined above are used to
+      represent the unit in the calculation engine. This detailed data (except
+      for degradation data), is commonly provided in a manufacturer's detailed
+      specification brochure. These unit-specific regression models serve to
+      replace the default DOE-2 regression models for capacity and power draw.
+      The S/T regression model replaces the default apparatus dew-point
+      bypass-factor method for predicting sensible capacity. The degradation
+      regression model replaces the default linear degradation model that is
+      characterized by the "degradation factor" on the <em>Controls
+      </em>page.</p>
+      
+      <p>Regressions are done for four categories of performance data: (1) gross
+      capacity, (2) condenser power, (3) sensible-to-total capacity ratio, and
+      (4) part-load degradation. The polynomial regression forms illustrate the
+      dependence on outside dry-bulb (ODB), entering wet-bulb (EWB), entering
+      dry-bulb (EDB), and load fraction (LF). Net performance relationships are
+      determined by including the effects of the evaporator fan.</p>
+      
+      <p>The part-load degradation data that is needed for the regression above
+      is a 16-point table of EER data, indexed by load fraction and outdoor
+      temperature. This is basically an expanded version of the EER dataset that
+      is required for an IEER calculation (4-points). This EER table differs
+      from that used in the IEER calculation in that the evaporator fan power
+      has been removed from the EER calculations. The first step in processing
+      this table is to normalize all the EER data by the corresponding full-load
+      values. This results in a 16-point normalized representation of the
+      part-load efficiency factor (the values in the full-load row are all 1.00
+      after normalization).</p>
+      
+      <p>The graphs to the right are examples of these regression models for one
+      particular unit. Regression lines are in blue and corresponding raw data
+      is marked by red circles.</p>
+      
+      <p>These specific regression models are utilized in ways similar to the
+      default methods outlined above and in the previous pages. Equipment
+      performance at operating conditions is calculated by applying these
+      regression models to shape (or correct) the AHRI rated performance
+      specifications.</p>
+    </div>
+    
+    <div id="footer_new"></div>
+  </div>
+</body>
+</html>

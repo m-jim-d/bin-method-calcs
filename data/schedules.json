@@ -1,0 +1,8 @@
+[
+  {"schedule_todd":"all.6.to.22","schedule":"All week, 6 a.m. to 10 p.m."},
+  {"schedule_todd":"all.6.to.24","schedule":"All week, 6 a.m. to Midnight"},
+  {"schedule_todd":"all.1.to.24","schedule":"All week, All day"},
+  {"schedule_todd":"monfri.7.to.5","schedule":"M-Fri, 7 a.m. to 5 p.m."},
+  {"schedule_todd":"monfri.7.to.7","schedule":"M-Fri, 7 a.m. to 7 p.m."},
+  {"schedule_todd":"monsat.9.to.10.sun.11.to.6","schedule":"M-Fri, 9am - 10pm; Sun 11-6"}
+]

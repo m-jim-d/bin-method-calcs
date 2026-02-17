@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RTU Bin-Method Calculator - Corrections to Tested Performance: System Power Draw</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="links col1">
+  <div id="page">
+    <div id="header"></div>
+    
+    <div id="main">
+      <div class="homeLink">
+        <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+      </div>
+      
+      <p><a href="ExampleLoadData.html">&lt;&lt; Previous</a> | <a href="methods_outline.html">Outline</a> | <a href="CoolingCorrectionCurvesSensible.html">Next &gt;&gt;</a></p>
+      <h1>Corrections to Tested Performance: <em>Capacity and Condenser Power</em></h1>
+      
+      <figure style="float: right; margin: 0 0 10px 20px;">
+        <img src="images/cooling_curves.jpg" border="0" height="431" width="389" alt="Cooling Correction Curves" />
+      </figure>
+      
+      <ul>
+        <li>DOE-2 Correction Curves:
+          <ul>
+            <li><span style="color: rgb(0, 113, 113);">Total Gross Capacity</span> = TGC<sub>rated</sub> <span style="color: rgb(0, 113, 113);">* <em style="font-size: 1.3em;">f</em><sub>TC</sub>(ODB, EWB)</span></li>
+            <li><span style="color: rgb(255, 0, 0);">Condenser Power</span> = CP<sub>rated</sub> 
+              <span style="color: rgb(0, 113, 113);">* <em style="font-size: 1.3em;">f</em><sub>TC</sub>(ODB, EWB)</span> <span style="color: rgb(0, 0, 255);">* <em style="font-size: 1.3em;">f</em><sub>EIR</sub>(ODB, EWB)</span></li>
+          </ul>
+        </li>
+      </ul>
+      
+      <h2>Discussion:</h2>
+
+      <p>Because of the binned analysis in the RTU Comparison Calculator, there is need to determine
+      equipment performance at ambient conditions other than the AHRI rating
+      conditions (ODB=95 <sup>o</sup>F, EWB=67 <sup>o</sup>F). The DOE-2 cooling
+      correction curves allow performance to be estimated at other environmental conditions. These
+      corrections are functions of outside dry-bulb temperature (ODB) and entering (mixed air) wet-bulb temperature (EWB).</p>
+      
+      <p>In making corrections to system power draw, the RTU Comparison Calculator makes use of two of these DOE-2 correction
+      functions. In DOE-2 reference literature, these can be identified in the
+      commercial package DX group of functions:</p>
+
+      <p style="margin-left: 20px; color: rgb(0, 113, 113);">COOL-CAP-FT: correction to the rated total gross cooling capacity</p>
+      <p style="margin-left: 20px; color: rgb(0, 0, 255);">COOL-EIR-FT: correction to cooling energy input ratio (EIR = BTU<sub>in</sub>/BTU<sub>out</sub>)</p>
+      
+      <p>The RTU Comparison Calculator's correction function for condenser power draw is derived as the product of these
+      two functions.</p>
+
+      <p style="margin-left: 0px;">The <a class="Jump"
+      href="/coolrtu-js/bincalcs/bypass.html">system performance</a> calculation
+      page serves to demonstrate the correction methods described on this
+      page and the next. The results of corrections to total gross capacity are
+      seen in columns with header names "TCap (Gross)."</p>
+    </div>
+    
+    <div id="footer_new"></div>
+  </div>
+</body>
+</html>

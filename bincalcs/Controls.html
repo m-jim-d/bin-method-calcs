@@ -1,0 +1,699 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <title>RTU Bin-Method Calculator</title>
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+   <meta name="Author"             content="Jim Miller" />
+   <meta name="keywords"           content="HVAC,UAC,cost,estimator,calculator,bin,analysis,energy,unitary,air,conditioner,pychrometric,economic,savings,charting,sensible,correction,mixed,air,design,cities,states,stages,cycling,degradation" />
+   <meta name="robots"             content="noindex, nofollow" />
+
+   <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+   <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css?101" />
+   <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?124" />
+
+   <script src="/coolrtu-js/bincalcs/help_viewer.js"></script>
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+   </script>
+</head>
+
+<body class="col1 CEpage">
+<div id="page">
+
+<div id="subBanner" style="width: 940px; height: 40px; display: flex; overflow: hidden; border-radius: 7px 7px 0 0;">
+    <div style="width: 25%; height: 100%; background-color: #0A5F23;"></div>
+    <div style="width: 75%; height: 100%; background-color: #707276; display: flex; align-items: center; padding-left: 20px;">
+        <span style="color: white; font-size: 22px; font-weight:500; font-family: Arial, sans-serif;">Bin Method Calculator &mdash; RTU Cooling Energy</span>
+    </div>
+</div>
+
+<div id="container">
+<div id="main" style="margin-bottom:4px;">
+
+<!-- ============================================================ -->
+<!-- CONTROLS VIEW                                                -->
+<!-- ============================================================ -->
+<div id="bpfWarningArea" style="display:none; color:#cc0000; font-weight:bold; padding:4px 8px; margin-bottom:4px;"></div>
+<div id="controlsView">
+   <table class='controls'>
+   <form name='HECACParameters' onsubmit="return false;">
+   <input type='hidden' name='txtResetMode' id='txtResetMode' value=''/>
+   <tr>
+   <td class='headers col1'></td>
+   <td class='headers col2'>
+   <input type='button' style='width:50pt;' value='Reload' onclick='Reload_engine()' />
+   </td>
+   <td class='headers col3'>
+   <input type='button' style='width:50pt;' value='Submit' onclick='submitToEngine();' />
+   <span class='help-icon-light' onclick="OpenWindow('SavingRuns');" title='Submit these parameters to the calculator and display the results page.'></span>
+   </td>
+   <td class='headers col4' colspan='3'>
+   <input type='button' style='width:50pt;' value='Restore' onclick='restoreDefaults();' />
+   <input type='button' class='bmAdvanced' style='width:50pt; display:none;' value='Power' onclick='resetPowerDefaults();' />
+   <span class='help-icon-light bmAdvanced' style='display:none;' onclick="OpenWindow('Defaults');" title='Restore all defaults or reset power controls.'></span>
+   <span class='help-icon-light bmAdvancedHide' onclick="OpenWindow('Defaults');" title='Restore all defaults.'></span>
+   </td>
+   </tr>
+   <tr>
+
+      <td id='tdInstructions' rowspan=20 style="vertical-align: top; text-align: left;">
+      The bin-method calculator simulates the energy usage of both a high
+      efficiency and a standard efficiency rooftop unit (RTU) air conditioner. It
+      then compares their energy and economic performance.
+      <br><br>
+      This calculator is primarily a demonstration of the bin-method. Its output should
+      only be used in preliminary analysis and NOT for final purchasing decisions.
+      <br><br>
+      To run the calculator, characterize the two systems and their environment
+      using the features on this page. Then click the "Submit" button.
+      Use the "Restore" button to change all features back to their
+      <a class="Jump" href="javascript: OpenWindow('Defaults');">defaults</a>.
+      <br><br>
+      Move your cursor over an information icon near a feature's name to display a
+      <a class="Jump" href="javascript: OpenWindow('Intro');">help</a> tip. Click on the icon for more
+      details.
+      <br><br>
+      The <a class="Jump" target="_blank" href='quickstart.html'>quick start</a> provides instructions for using the calculator.
+      The engineering <a class="Jump" target="_blank" href='methods/methods_outline.html'>methods</a> describe the calculations.
+      Review the supporting <a class="Jump" target="_blank" href='downloads.html'>documents</a>
+      and revision <a class="Jump" target="_blank" title="Revision History" href='RevisionHistory.html'>history</a>.
+      </td>
+
+   <!-- Advanced Features -->
+   <td class='rowname'>
+   Advanced Features <span class='help-icon' onclick="OpenWindow('Advanced_controls');" title='Advanced Features: Unhide the advanced calculator features (and initialize them to their default values).'></span>
+   </td>
+   <td class='controls'>
+   <input type='checkbox' name='chkAdvancedControls' id='chkAdvancedControls' onclick='toggleAdvanced()' />
+   <input type='hidden' id='txtSlope' name='txtSlope' value='' size='4' />
+   <input type='hidden' id='txtIntercept' name='txtIntercept' value='' size='4' />
+   </td>
+   <td class='def' colspan='3' id='tdAdvancedControls_default'>Hidden</td>
+   </tr>
+
+   <!-- Show bin calculations -->
+   <tr>
+   <td class='rowname'>
+   Show bin calculations <span class='help-icon' onclick="OpenWindow('Show_bin_calculations');" title='Show bin calculations: Show the detailed calcs for each outside dry-bulb bin.'></span>
+   </td>
+   <td class='controls'>
+   <input type='checkbox' name='chkDetails' onclick="checkForDefaults('chkDetails')" />
+   </td>
+   <td class='def' colspan='3' id='tdDetails_default'>Hide bin calcs</td>
+   </tr>
+
+   <!-- Lock load line (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Lock load line <span class='help-icon' onclick="OpenWindow('Lock_load_line');" title='Lock load line: Preserve the non-ventilation load line for use in any submits that follow.'></span>
+   </td>
+   <td class='controls'>
+   <input type='checkbox' name='chkLockLoadLine' onclick="checkForDefaults('chkLockLoadLine'); fetchLoadLine();" />
+   </td>
+   <td class='def' colspan='3' id='tdLockLoadLine_default'>Automatically adjust</td>
+   </tr>
+
+   <tr><td class='breakRow' colspan='5'></td></tr>
+
+   <!-- Building Type -->
+   <tr>
+   <td class='rowname'>
+   Building Type <span class='help-icon' onclick="OpenWindow('Building_Type');" title='Building Type: Select the building type which best represents your building.'></span>
+   <input type='hidden' name='txtSI_Fraction_NotAdvanced' value='0.527' />
+   <input type='hidden' name='txtVentilationValue_NotAdvanced' value='24' />
+   <span class='bmAdvanced' style='display:none'>
+   <input type='hidden' name='txtSI_Fraction' id='txtSI_Fraction' value='0.527' />
+   <br><input type='button' style='width:40pt; height:18pt;' value='Apply' onclick='SubmitTheBuildingModelParameters();' />
+   <span class='help-icon' onclick="OpenWindow('Custom_Load_Model');" title='Custom Load Model: Edit load-model parameters and click the "Apply" button.'></span>
+   </span>
+   </td>
+   <td class='controls' id='tdBuildingType_controlscell'>
+   <input type='hidden' id='txtBuildingType_previousvalue_hidden' name='txtBuildingType_previousvalue_hidden' value='Office-Medium' />
+   <select size='1' name='cmbBuildingType' id='cmbBuildingType' onchange="onChangeHandler('cmbBuildingType'); checkForDefaults('cmbBuildingType')">
+   <option>Apartment-MidRise</option>
+   <option>Healthcare-Hospital</option>
+   <option>Healthcare-Outpatient</option>
+   <option>Hotel-Large</option>
+   <option>Office-Small</option>
+   <option selected>Office-Medium</option>
+   <option>Office-Large</option>
+   <option>Restaurant-FastFood</option>
+   <option>Restaurant-SitDown</option>
+   <option>Retail-StandAlone</option>
+   <option>Retail-StripMall</option>
+   <option>School-Primary</option>
+   <option>School-Secondary</option>
+   <option>Warehouse</option>
+   </select>
+   <input type='hidden' id='txtBuildingType_hidden' name='txtBuildingType_hidden' value='Office-Medium' />
+   <input type='hidden' id='txtBM_Slope_hidden' name='txtBM_Slope_hidden' value='' />
+   <input type='hidden' id='txtBM_Intercept_hidden' name='txtBM_Intercept_hidden' value='' />
+   <input type='hidden' id='txtBM_VentSlopeFraction_hidden' name='txtBM_VentSlopeFraction_hidden' value='' />
+   <input type='hidden' id='txtBM_postingstate' name='txtBM_postingstate' value='' size='1' />
+   <span class='bmAdvanced' style='display:none'><br>
+   <input type='text' class='alignright' style='width:3.6em;' id='txtBM_Slope' name='txtBM_Slope' value='' size='1' onchange="onChangeHandler('txtBM_Slope')" />S&nbsp;
+   <input type='text' class='alignright' style='width:4.1em;' id='txtBM_Intercept' name='txtBM_Intercept' value='' size='1' onchange="onChangeHandler('txtBM_Intercept')" />Int&nbsp;
+   <input type='text' class='alignright' style='width:2.2em;' id='txtBM_VentSlopeFraction' name='txtBM_VentSlopeFraction' value='' size='1' onchange="onChangeHandler('txtBM_VentSlopeFraction')" />VSF
+   </span>
+   </td>
+   <td class='def' colspan='3' id='tdBuildingType_default'>Office-Medium</td>
+   </tr>
+
+   <!-- State / City -->
+   <tr>
+   <td class='rowname'>
+   State / City <span class='help-icon' onclick="OpenWindow('State');" title='State/City: The "State" control affects the lists of cities appearing in the "Cities" control.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbState' id='cmbState' onchange="checkForDefaults('cmbState'); updateCities(); recalcVentilation()">
+   <option>AK</option><option>AL</option><option>AR</option><option>AZ</option><option>CA</option>
+   <option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option>
+   <option>HI</option><option>IA</option><option>ID</option><option>IL</option><option>IN</option>
+   <option>KS</option><option>KY</option><option>LA</option><option>MA</option><option>MD</option>
+   <option>ME</option><option>MI</option><option>MN</option><option selected>MO</option><option>MS</option>
+   <option>MT</option><option>NC</option><option>ND</option><option>NE</option><option>NH</option>
+   <option>NJ</option><option>NM</option><option>NV</option><option>NY</option><option>OH</option>
+   <option>OK</option><option>OR</option><option>PA</option><option>PR</option><option>RI</option>
+   <option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option>
+   <option>VA</option><option>VT</option><option>WA</option><option>WI</option><option>WV</option>
+   <option>WY</option>
+   </select>
+   <select size='1' name='cmbCityName2' id='cmbCityName2' onchange="checkForDefaults('cmbCityName2'); recalcVentilation()">
+   <option value='COLUMBIA'>Columbia</option>
+   <option selected value='KANSAS CITY'>Kansas City</option>
+   <option value='SPRINGFIELD'>Springfield</option>
+   <option value='ST. LOUIS'>St. Louis</option>
+   </select>
+   </td>
+   <td class='def' colspan='1' id='tdState_default'>MO</td>
+   <td class='def' colspan='2' id='tdCity_default'>Kansas City</td>
+   </tr>
+
+   <!-- Schedule -->
+   <tr>
+   <td class='rowname'>
+   Schedule <span class='help-icon' onclick="OpenWindow('Schedule');" title='Schedule: This defines the time during which the building is assumed to be occupied.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbSchedule' id='cmbSchedule' onchange="checkForDefaults('cmbSchedule'); recalcVentilation()">
+   <option>All week, 6 a.m. to 10 p.m.</option>
+   <option>All week, 6 a.m. to Midnight</option>
+   <option>All week, All day</option>
+   <option>M-Fri, 7 a.m. to 5 p.m.</option>
+   <option selected>M-Fri, 7 a.m. to 7 p.m.</option>
+   <option>M-Fri, 9am - 10pm; Sun 11-6</option>
+   </select>
+   </td>
+   <td class='def' colspan='3' id='tdSchedule_default'>M-Fri, 7a.m. to 7p.m.</td>
+   </tr>
+
+   <!-- Indoor Temperature -->
+   <tr>
+   <td class='rowname'>
+   Indoor Temperature <span class='help-icon' onclick="OpenWindow('Indoor_Temperature');" title='Indoor Temperature: These are the thermostat setpoint and setback controls.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbIDB' id='cmbIDB' onchange="checkForDefaults('cmbIDB'); recalcVentilation()">
+   <option>50</option><option>55</option><option>60</option><option>65</option><option>66</option>
+   <option>67</option><option>68</option><option>69</option><option>70</option><option>71</option>
+   <option>72</option><option>73</option><option>74</option><option selected>75</option><option>76</option>
+   <option>77</option><option>78</option><option>79</option><option>80</option><option>81</option>
+   <option>82</option><option>83</option><option>84</option><option>85</option><option>90</option>
+   <option>95</option>
+   </select><sup>o</sup>F
+   &nbsp;&nbsp;&nbsp;&nbsp;Setback
+   <select size='1' name='cmbIDB_SetBack' id='cmbIDB_SetBack' onchange="checkForDefaults('cmbIDB_SetBack')">
+   <option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option>
+   <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+   <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
+   <option>Cond. Off</option>
+   </select><sup>o</sup>F
+   </td>
+   <td class='def' colspan='1' id='tdIDB_default'>75 <sup>o</sup>F</td>
+   <td class='def' colspan='2' id='tdIDB_SetBack_default'>5 <sup>o</sup>F</td>
+   </tr>
+
+   <!-- Inside Rel. Humidity (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Inside Rel. Humidity (%) <span class='help-icon' onclick="OpenWindow('Indoor_Relative_Humidity');" title='Inside Rel. Humidity: Uncheck the "auto" control to specify a fixed inside relative humidity level.'></span>
+   </td>
+   <td class='controls'>
+   Auto<input checked type='checkbox' name='chkTrackOHR' onclick="checkForDefaults('chkTrackOHR');onChangeHandler('chkTrackOHR');" />
+   &nbsp;Fixed
+   <select size='1' name='cmbIRH' id='cmbIRH' disabled onchange="checkForDefaults('cmbIRH');onChangeHandler('cmbIRH')">
+   <option>30</option><option>35</option><option>40</option><option>45</option><option>50</option>
+   <option>55</option><option selected>60</option><option>65</option><option>70</option>
+   </select>
+   <input type='hidden' name='txtIRH_hidden' id='txtIRH_hidden' value='60' />
+   </td>
+   <td class='def' id='tdTrackOHR_default'>Auto</td>
+   <td class='def' colspan='2' id='tdIRH_default'>60%</td>
+   </tr>
+
+   <tr><td class='breakRow' colspan='5'></td></tr>
+
+   <!-- Total Capacity -->
+   <tr>
+   <td class='rowname'>
+   Total Capacity <span class='help-icon' onclick="OpenWindow('Total_Capacity');" title='Total Capacity: Select the ARI net cooling capacity of the equipment being used.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbTotalCap' id='cmbTotalCap' onchange="onChangeHandler('cmbTotalCap')">
+   </select>kBtuh
+   <input type='hidden' name='txtTotalCap' id='txtTotalCap' value='84' />
+   <input type='hidden' name='txtManufacturer' value='generic' />
+   </td>
+   <td class='def' colspan='3' id='tdTotalCapacity_default'>84 kBtuh</td>
+   </tr>
+
+   <!-- Oversizing Factor -->
+   <tr>
+   <td class='rowname'>
+   Oversizing Factor <span class='help-icon' onclick="OpenWindow('Oversizing_Factor');" title='Oversizing Factor: Percent that capacity exceeds load at design conditions.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbOversizePercent' id='cmbOversizePercent' onchange="checkForDefaults('cmbOversizePercent'); recalcVentilation()">
+   <option selected>0</option><option>5</option><option>10</option><option>15</option><option>20</option>
+   <option>25</option><option>30</option><option>35</option><option>40</option><option>45</option>
+   <option>50</option><option>55</option><option>60</option><option>65</option><option>70</option>
+   <option>75</option><option>80</option><option>85</option><option>90</option><option>95</option>
+   <option>100</option><option>150</option><option>200</option><option>250</option><option>300</option>
+   </select>%
+   </td>
+   <td class='def' colspan='3' id='tdOversizePercent_default'>0%</td>
+   </tr>
+
+   <!-- Ventilation Rate (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Ventilation Rate <span class='help-icon' onclick="OpenWindow('Ventilation_Rate');" title='Ventilation Rate: Specify in CFM or as a percent of the fan capacity. Remaining fan capacity (not used in ventilation) is available for use by the economizer.'></span>
+   </td>
+   <td class='controls'>
+   <input type='text' class='alignright' id='txtVentilationValue' name='txtVentilationValue' value='24' size='4' onchange="checkForDefaults('txtVentilationValue')" />
+   <select size='1' name='cmbVentilationUnits' id='cmbVentilationUnits' onchange="checkForDefaults('cmbVentilationUnits'); recalcVentilation()">
+   <option selected>% of Fan Cap.</option><option>CFM</option>
+   </select>
+   </td>
+   <td class='def' id='tdVentilationValue_default'>24</td>
+   <td class='def' colspan='2' id='tdVentilationUnits_default'>of Fan Cap</td>
+   </tr>
+
+   <!-- N for Fan Energy Calcs (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   N for Fan Energy Calcs <span class='help-icon' onclick="OpenWindow('N_Affinity');" title='N Affinity: Exponent value used in fan-affinity law calculations.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbN_Affinity' id='cmbN_Affinity' onchange="checkForDefaults('cmbN_Affinity')">
+   <option>3.0</option><option>2.9</option><option>2.8</option><option>2.7</option><option>2.6</option>
+   <option selected>2.5</option><option>2.4</option><option>2.3</option><option>2.2</option><option>2.1</option><option>2.0</option>
+   </select>
+   <input checked type='checkbox' style='display:none;' name='chkDOE2_Curves' />
+   </td>
+   <td class='def' colspan='3' id='tdN_Affinity_default'>2.5</td>
+   </tr>
+
+   <tr><td class='breakRow' colspan='5'></td></tr>
+
+   <!-- Candidate Unit -->
+   <tr>
+   <td class='rowname'>
+   Candidate Unit <span class='help-icon' onclick="OpenWindow('Candidate_Unit');" title='Candidate Unit: Energy Efficiency Ratio (EER), purchase and installation cost (k$), and annual maintenance costs ($/yr).'></span>
+   </td>
+   <td class='controls'>
+   <input class='alignright' style='width:25pt;' type='text' name='txtEER' id='txtEER' value='12' size='1' maxlength='5' onchange="checkForDefaults('txtEER');onChangeHandler('txtEER')" />EER &nbsp;@&nbsp;
+   <input class='alignright' style='width:30pt;' type='text' name='txtUnitCost' id='txtUnitCost' value='4.5' size='1' maxlength='5' onchange="checkForDefaults('txtUnitCost')" />k$ &nbsp;
+   <input class='alignright' style='width:25pt;' type='text' name='txtMaintenance_Candidate' id='txtMaintenance_Candidate' value='0' size='1' maxlength='5' onchange="checkForDefaults('txtMaintenance_Candidate')" />$/yr
+   </td>
+   <td class='def' id='tdEER_default'>12 EER</td>
+   <td class='def' id='tdUnitCost_default'>$4,500</td>
+   <td class='def' id='tdMaintenance_Candidate_default'>$0</td>
+   </tr>
+
+   <!-- Specific Candidate Unit (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Specific Candidate Unit <span class='help-icon' onclick="OpenWindow('Specific_RTU');" title='Specific RTU: Select from a list of three specific high-performance RTU systems.'></span>
+   </td>
+   <td class='controls' style='background:#E5E5E5'>
+   <select size='1' name='cmbSpecific_RTU_C' id='cmbSpecific_RTU_C' onchange="checkForDefaults('cmbSpecific_RTU_C');onChangeHandler('cmbSpecific_RTU_C')">
+   <option selected>None</option><option>Advanced Controls</option><option>Variable-Speed Compressor</option><option>Three Stages</option>
+   </select>
+   </td>
+   <td class='def' colspan='3' id='tdSpecific_RTU_C_default'>None</td>
+   </tr>
+
+   <!-- Enable Economizer (Candidate) -->
+   <tr>
+   <td class='rowname'>
+   Enable Economizer <span class='help-icon' onclick="OpenWindow('Economizer');" title='Economizer: Allows economizer to assist in meeting loads.'></span>
+   </td>
+   <td class='controls'>
+   <input checked type='checkbox' name='chkEconomizer_C' onclick="checkForDefaults('chkEconomizer_C')" />
+   </td>
+   <td class='def' colspan='3' id='tdEconomizer_C_default'>Economizer enabled</td>
+   </tr>
+
+   <!-- Power Inputs - Candidate (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Power Inputs (kW) <span class='help-icon' onclick="OpenWindow('FanCondAux');" title='Power Inputs: Specification of all the power inputs at ARI rating conditions (in kWatts): EFn (evaporator fan), Aux (auxiliary), Cnd (condenser).'></span>
+   </td>
+   <td class='controls'>
+   <input class='alignright' style='width:25pt;' type='text' name='txtBFn_kw_C' id='txtBFn_kw_C' value='' size='1' maxlength='5' onchange="checkForDefaults('txtBFn_kw_C');onChangeHandler('txtBFn_kw_C');" />EFn &nbsp;
+   <input class='alignright' style='width:25pt;' type='text' name='txtAux_kw_C' id='txtAux_kw_C' value='' size='1' maxlength='5' onchange="checkForDefaults('txtAux_kw_C');onChangeHandler('txtAux_kw_C');" />Aux &nbsp;
+   <input class='alignright' style='width:30pt;' type='text' name='txtCond_kw_C' id='txtCond_kw_C' value='' size='1' maxlength='6' onchange="checkForDefaults('txtCond_kw_C');onChangeHandler('txtCond_kw_C');" />Cnd
+   </td>
+   <td class='def' id='tdBFn_kw_C_default'></td>
+   <td class='def' id='tdAux_kw_C_default'></td>
+   <td class='def' id='tdCond_kw_C_default'></td>
+   </tr>
+
+   <!-- Condenser Fan - Candidate (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Condenser Fan <span class='help-icon' onclick="OpenWindow('Condenser_Fan');" title='Condenser Fan: Condenser-fan power as a percentage of the total condenser power (at ARI rating conditions).'></span>
+   </td>
+   <td class='controls'>
+   <input type='text' class='alignright' name='txtCondFanPercent_C' id='txtCondFanPercent_C' value='9.0' style='width:2.5em;' size='3' maxlength='5' onchange="checkForDefaults('txtCondFanPercent_C');onChangeHandler('txtCondFanPercent_C');" disabled />%
+   <input type='hidden' name='txtCondFanPercent_C_hidden' id='txtCondFanPercent_C_hidden' value='9.0' />
+   </td>
+   <td class='def' colspan='3' id='tdCondFanPercent_C'>9.0 %</td>
+   </tr>
+
+   <!-- Degradation Factor - Candidate (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Degradation Factor <span class='help-icon' onclick="OpenWindow('DegradationFactor');" title='Degradation Factor: Partload degradation factor (percent).'></span>
+   </td>
+   <td class='controls' id='tdPLDegrFactor_C_control'>
+   <select size='1' name='cmbPLDegrFactor_C' id='cmbPLDegrFactor_C' onchange="checkForDefaults('cmbPLDegrFactor_C');onChangeHandler('cmbPLDegrFactor_C')">
+   </select>
+   <input type='hidden' name='txtPLDegrFactor_C' id='txtPLDegrFactor_C' value='25' />
+   </td>
+   <td class='def' colspan='3' id='tdPLDegrFactor_C_default'>25</td>
+   </tr>
+
+   <!-- Number of Stages - Candidate (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Number of Stages <span class='help-icon' onclick="OpenWindow('N_stages');" title='Number of Stages: The number of stages (capacity levels) in the RTU.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbNstages_C' id='cmbNstages_C' onchange="checkForDefaults('cmbNstages_C');onChangeHandler('cmbNstages_C')">
+   <option selected>1</option><option>2</option><option>3</option><option>5</option><option>10</option>
+   </select>
+   <input type='hidden' name='txtNstages_C' value='1' size='1' />
+   </td>
+   <td class='def' colspan='3' id='tdNStages_default_C'>1</td>
+   </tr>
+
+   <!-- E-Fan and Condenser - Candidate (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   E-Fan and Condenser <span class='help-icon' onclick="OpenWindow('FanControls');" title='E-Fan and Condenser: Characteristics of the evaporator fan and the condenser.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbFanControls_C' id='cmbFanControls_C' style='max-width:150px' onchange="checkForDefaults('cmbFanControls_C');onChangeHandler('cmbFanControls_C')">
+   <option selected>1-Spd: Always ON</option><option>1-Spd: Cycles With Compressor</option><option>N-Spd: Always ON</option><option>N-Spd: Cycles With Compressor</option><option>V-Spd: Always ON</option>
+   </select>
+   </td>
+   <td class='def' colspan='3' id='tdFanControls_C_default'>1-Spd: Always ON</td>
+   </tr>
+
+   <!-- S/T Ratio - Candidate (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   S/T Ratio <span class='help-icon' onclick="OpenWindow('StoT_Ratio');" title='S/T Ratio: Ratio of sensible to total capacity at ARI test conditions.'></span>
+   </td>
+   <td class='controls' id='tdST_Ratio_C_control'>
+   <select size='1' name='cmbST_Ratio_C' id='cmbST_Ratio_C' onchange="checkForDefaults('cmbST_Ratio_C');onChangeHandler('cmbST_Ratio_C')">
+   <option>0.70</option><option>0.71</option><option selected>0.72</option><option>0.73</option><option>0.74</option>
+   <option>0.75</option><option>0.76</option><option>0.77</option><option>0.78</option><option>0.79</option><option>0.80</option>
+   </select>
+   </td>
+   <td class='def' colspan='3' id='tdST_Ratio_default_C'>0.72</td>
+   </tr>
+
+   <!-- Spreadsheet Data - Candidate (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Spreadsheet Data <span class='help-icon' onclick="OpenWindow('SpreadsheetData');" title='Spreadsheet Data: Detailed performance data to be pasted from the specification spreadsheet.'></span>
+   </td>
+   <td class='controls'>
+   <textarea name='txtSpreadsheetData_C' id='txtSpreadsheetData_C' onchange="checkForDefaults('txtSpreadsheetData_C');onChangeHandler('txtSpreadsheetData_C')" oninput="checkForDefaults('txtSpreadsheetData_C');onChangeHandler('txtSpreadsheetData_C')" onblur="if(this.value===''){var w=document.getElementById('bpfWarningArea');if(w){w.innerHTML='';w.style.display='none';}}" cols='21' rows='1' style='height:1.3em; overflow-x:hidden;'></textarea>
+   <input type='checkbox' name='chkSpreadsheetControl_C' id='chkSpreadsheetControl_C' onclick="onChangeHandler('chkSpreadsheetControl_C');" />
+   </td>
+   <td class='def' colspan='3' id='tdSpreadsheetData_C_default'>blank</td>
+   </tr>
+
+   <tr><td class='breakRow' colspan='5'></td></tr>
+
+   <!-- Standard Unit -->
+   <tr>
+   <td class='rowname'>
+   Standard Unit <span class='help-icon' onclick="OpenWindow('Standard_Unit');" title='Standard Unit: Energy Efficiency Ratio (EER), purchase and installation cost (k$), and annual maintenance costs ($/yr).'></span>
+   </td>
+   <td class='controls'>
+   <input class='alignright' style='width:25pt;' type='text' name='txtEER_Standard' id='txtEER_Standard' value='9' size='1' maxlength='5' onchange="checkForDefaults('txtEER_Standard');onChangeHandler('txtEER_Standard')" />EER &nbsp;@&nbsp;
+   <input class='alignright' style='width:30pt;' type='text' name='txtUnitCost_Standard' id='txtUnitCost_Standard' value='4' size='1' maxlength='5' onchange="checkForDefaults('txtUnitCost_Standard')" />k$ &nbsp;
+   <input class='alignright' style='width:25pt;' type='text' name='txtMaintenance_Standard' id='txtMaintenance_Standard' value='0' size='1' maxlength='6' onchange="checkForDefaults('txtMaintenance_Standard')" />$/yr
+   </td>
+   <td class='def' id='tdEER_Standard_default'>9 EER</td>
+   <td class='def' id='tdUnitCost_Standard_default'>$4,000</td>
+   <td class='def' id='tdMaintenance_Standard_default'>$0</td>
+   </tr>
+
+   <!-- Enable Economizer (Standard) -->
+   <tr>
+   <td class='rowname'>
+   Enable Economizer <span class='help-icon' onclick="OpenWindow('Economizer');" title='Economizer: Allows economizer to assist in meeting loads.'></span>
+   </td>
+   <td class='controls'>
+   <input checked type='checkbox' name='chkEconomizer_S' onclick="checkForDefaults('chkEconomizer_S')" />
+   </td>
+   <td class='def' colspan='3' id='tdEconomizer_S_default'>Economizer enabled</td>
+   </tr>
+
+   <!-- Power Inputs - Standard (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Power Inputs (kW) <span class='help-icon' onclick="OpenWindow('FanCondAux');" title='Power Inputs: Specification of all the power inputs in kWatts: EFn (evaporator fan), Aux (auxiliary), Cnd (condenser).'></span>
+   </td>
+   <td class='controls'>
+   <input class='alignright' style='width:25pt;' type='text' name='txtBFn_kw_S' id='txtBFn_kw_S' value='' size='1' maxlength='5' onchange="checkForDefaults('txtBFn_kw_S');onChangeHandler('txtBFn_kw_S');" />EFn &nbsp;
+   <input class='alignright' style='width:25pt;' type='text' name='txtAux_kw_S' id='txtAux_kw_S' value='' size='1' maxlength='5' onchange="checkForDefaults('txtAux_kw_S');onChangeHandler('txtAux_kw_S');" />Aux &nbsp;
+   <input class='alignright' style='width:30pt;' type='text' name='txtCond_kw_S' id='txtCond_kw_S' value='' size='1' maxlength='6' onchange="checkForDefaults('txtCond_kw_S');onChangeHandler('txtCond_kw_S');" />Cnd
+   </td>
+   <td class='def' id='tdBFn_kw_S_default'></td>
+   <td class='def' id='tdAux_kw_S_default'></td>
+   <td class='def' id='tdCond_kw_S_default'></td>
+   </tr>
+
+   <!-- Condenser Fan - Standard (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Condenser Fan <span class='help-icon' onclick="OpenWindow('Condenser_Fan');" title='Condenser Fan: Condenser-fan power as a percentage of the total condenser power (at ARI rating conditions).'></span>
+   </td>
+   <td class='controls'>
+   <input type='text' class='alignright' name='txtCondFanPercent_S' id='txtCondFanPercent_S' value='9.0' style='width:2.5em;' size='3' maxlength='5' onchange="checkForDefaults('txtCondFanPercent_S');onChangeHandler('txtCondFanPercent_S');" disabled />%
+   <input type='hidden' name='txtCondFanPercent_S_hidden' id='txtCondFanPercent_S_hidden' value='9.0' />
+   </td>
+   <td class='def' colspan='3' id='tdCondFanPercent_S'>9.0 %</td>
+   </tr>
+
+   <!-- Degradation Factor - Standard (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+      <td class='AdvancedControls'>
+         Degradation Factor <span class='help-icon' onclick="OpenWindow('DegradationFactor');"
+            title='Degradation Factor: Partload degradation factor (percent).'></span>
+      </td>
+      <td class='controls' id='tdPLDegrFactor_S_control'>
+         <select size='1' name='cmbPLDegrFactor_S' id='cmbPLDegrFactor_S' onchange="checkForDefaults('cmbPLDegrFactor_S');onChangeHandler('cmbPLDegrFactor_S')">
+         </select>
+         <input type='hidden' name='txtPLDegrFactor_S' id='txtPLDegrFactor_S' value='25' />
+      </td>
+      <td class='def' colspan='3' id='tdPLDegrFactor_S_default'>25</td>
+   </tr>
+
+   <!-- Number of Stages - Standard (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Number of Stages <span class='help-icon' onclick="OpenWindow('N_stages');" title='Number of Stages: The number of stages (capacity levels) in the RTU.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbNstages_S' id='cmbNstages_S' onchange="checkForDefaults('cmbNstages_S');onChangeHandler('cmbNstages_S')">
+   <option selected>1</option><option>2</option><option>3</option><option>5</option><option>10</option>
+   </select>
+   <input type='hidden' name='txtNstages_S' value='1' size='1' />
+   </td>
+   <td class='def' colspan='3' id='tdNStages_default_S'>1</td>
+   </tr>
+
+   <!-- E-Fan and Condenser - Standard (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   E-Fan and Condenser <span class='help-icon' onclick="OpenWindow('FanControls');" title='E-Fan and Condenser: Characteristics of the evaporator fan and condenser.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbFanControls_S' id='cmbFanControls_S' style='max-width:150px' onchange="checkForDefaults('cmbFanControls_S');onChangeHandler('cmbFanControls_S')">
+   <option selected>1-Spd: Always ON</option><option>1-Spd: Cycles With Compressor</option><option>N-Spd: Always ON</option><option>N-Spd: Cycles With Compressor</option><option>V-Spd: Always ON</option>
+   </select>
+   </td>
+   <td class='def' colspan='3' id='tdFanControls_S_default'>1-Spd: Always ON</td>
+   </tr>
+
+   <!-- S/T Ratio - Standard (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   S/T Ratio <span class='help-icon' onclick="OpenWindow('StoT_Ratio');" title='S/T Ratio: Ratio of sensible to total capacity at ARI test conditions.'></span>
+   </td>
+   <td class='controls' id='tdST_Ratio_S_control'>
+   <select size='1' name='cmbST_Ratio_S' id='cmbST_Ratio_S' onchange="checkForDefaults('cmbST_Ratio_S');onChangeHandler('cmbST_Ratio_S')">
+   <option>0.70</option><option>0.71</option><option selected>0.72</option><option>0.73</option><option>0.74</option>
+   <option>0.75</option><option>0.76</option><option>0.77</option><option>0.78</option><option>0.79</option><option>0.80</option>
+   </select>
+   </td>
+   <td class='def' colspan='3' id='tdST_Ratio_default_S'>0.72</td>
+   </tr>
+
+   <!-- Spreadsheet Data - Standard (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Spreadsheet Data <span class='help-icon' onclick="OpenWindow('SpreadsheetData');" title='Spreadsheet Data: Detailed performance data to be pasted from the specification spreadsheet.'></span>
+   </td>
+   <td class='controls'>
+   <textarea name='txtSpreadsheetData_S' id='txtSpreadsheetData_S' onchange="checkForDefaults('txtSpreadsheetData_S');onChangeHandler('txtSpreadsheetData_S')" oninput="checkForDefaults('txtSpreadsheetData_S');onChangeHandler('txtSpreadsheetData_S')" onblur="if(this.value===''){var w=document.getElementById('bpfWarningArea');if(w){w.innerHTML='';w.style.display='none';}}" cols='21' rows='1' style='height:1.3em; overflow-x:hidden;'></textarea>
+   <input type='checkbox' name='chkSpreadsheetControl_S' id='chkSpreadsheetControl_S' onclick="onChangeHandler('chkSpreadsheetControl_S');" />
+   </td>
+   <td class='def' colspan='3' id='tdSpreadsheetData_S_default'>blank</td>
+   </tr>
+
+   <tr><td class='breakRow' colspan='5'></td></tr>
+
+   <!-- Electric Utility Rate -->
+   <tr>
+   <td class='rowname'>
+   Electric Utility Rate <span class='help-icon' onclick="OpenWindow('Electric_Utility_Rate');" title='Electric Utility Rate: Enter your local electric rate.'></span>
+   </td>
+   <td class='controls'>
+   <input type='text' class='alignright' name='txtElectricityRate' id='txtElectricityRate' value='0.08' style='width:30pt;' size='3' maxlength='6' onchange="checkForDefaults('txtElectricityRate')" />$/kWhrs
+   </td>
+   <td class='def' colspan='3' id='tdElectricityRate_default'>0.08 $/kWhrs</td>
+   </tr>
+
+   <!-- Demand (Advanced) -->
+   <tr class='advancedRow' style='display:none'>
+   <td class='AdvancedControls'>
+   Demand <span class='help-icon' onclick="OpenWindow('Demand');" title='Demand: Monthly demand rate ($/kW) and the number of months that this rate applies.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbDemandMonths' id='cmbDemandMonths' onchange="checkForDefaults('cmbDemandMonths')">
+   <option selected>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+   <option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
+   </select>Months&nbsp;&nbsp;
+   <input class='alignright' style='width:35pt;' type='text' name='txtDemandCostPerKW' id='txtDemandCostPerKW' value='0' onchange="checkForDefaults('txtDemandCostPerKW');" />$/kW&nbsp;
+   </td>
+   <td class='def' colspan='1' id='tdDemandMonths_default'>0 Months</td>
+   <td class='def' colspan='2' id='tdDemandCostPerKW_default'>0 $/kW</td>
+   </tr>
+
+   <!-- Equipment Life -->
+   <tr>
+   <td class='rowname'>
+   Equipment Life <span class='help-icon' onclick="OpenWindow('Equipment_Life');" title='Equipment Life: Number of years of life before equipment is replaced.'></span>
+   </td>
+   <td class='controls'>
+   <select size='1' name='cmbEquipmentLife' id='cmbEquipmentLife' onchange="checkForDefaults('cmbEquipmentLife')">
+   <option>10</option><option selected>15</option><option>20</option><option>25</option><option>30</option>
+   </select>years
+   </td>
+   <td class='def' colspan='3' id='tdEquipmentLife_default'>15 years</td>
+   </tr>
+
+   <!-- Number of Units -->
+   <tr>
+   <td class='rowname'>
+   Number of Units <span class='help-icon' onclick="OpenWindow('Number_of_Units');" title='Number of Units: This is a simple multiplication factor used in calculating costs for a group of units.'></span>
+   </td>
+   <td class='controls'>
+   <input type='text' class='alignright' name='txtNUnits' id='txtNUnits' value='1' style='width:30pt;' size='3' maxlength='3' onchange="checkForDefaults('txtNUnits')" />units
+   </td>
+   <td class='def' colspan='3' id='tdNUnits_default'>1 unit</td>
+   </tr>
+
+   <!-- Chart discounted costs / Discount Rate -->
+   <tr>
+   <td class='RevisionHistory'><a class='Jump' target='_blank' title="the calculator's revision history" href='RevisionHistory.html'>Version 6.0</a></td>
+   <td class='rowname'>
+   Chart discounted costs <span class='help-icon' onclick="OpenWindow('Chart_present_value');" title='Discounted Costs: If checked, discounted purchase and operating costs are calculated (the present value).'></span>
+   </td>
+   <td class='controls'>
+   <input checked type='checkbox' name='chkChartPW' id='chkChartPW' onclick="checkForDefaults('chkChartPW'); onChangeHandler('chkChartPW');" />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   Discount Rate
+   <input type='text' class='alignright' name='txtDiscountRate' id='txtDiscountRate' value='7' style='width:30pt;' size='3' maxlength='5' onchange="checkForDefaults('txtDiscountRate'); onChangeHandler('txtDiscountRate');" />%
+   <input type='hidden' name='txtDiscountRate_hidden' id='txtDiscountRate_hidden' value='7'>
+   </td>
+   <td class='def' colspan='2' id='tdChartPW_default'>Discounted</td>
+   <td class='def' colspan='1' id='tdDiscountRate_default'>7.0 %</td>
+   </tr>
+
+   <!-- Bottom buttons -->
+   <tr>
+   <td class='headers col1'></td>
+   <td class='headers col2'>
+   <input type='button' style='width:50pt;' value='Reload' onclick='Reload_engine()' />
+   </td>
+   <td class='headers col3'>
+   <input type='button' style='width:50pt;' value='Submit' onclick='submitToEngine();' />
+   </td>
+   <td class='headers col4' colspan='3'>
+   <input type='button' style='width:50pt;' value='Restore' onclick='restoreDefaults();' />
+   <input type='button' class='bmAdvanced' style='width:50pt; display:none;' value='Power' onclick='resetPowerDefaults();' />
+   </td>
+   </tr>
+   </form>
+   </table>
+</div><!-- end controlsView -->
+
+
+<!-- ============================================================ -->
+<!-- RESULTS VIEW (hidden initially)                               -->
+<!-- ============================================================ -->
+<div id="resultsView" style="display:none;">
+   <span class='homeLink_left'><a class='Jump' href='javascript:returnToControls()'>Return to Controls Page</a></span>
+   <span class='float_center' id='binChartsToggleLink' style='display:none;'><a class='Jump' id='binChartsToggleAnchor' href='javascript:toggleBinChartsGrid()'>Show side-by-side charts</a></span>
+   <span class='homeLink'><a class='Jump' href='javascript:restoreDefaults()' title='RESET: Return to the controls page with defaults.'>Reset the Calculator</a></span>
+   <br>
+
+   <div id="resultsContent">
+      <!-- Populated by JS -->
+   </div>
+</div><!-- end resultsView -->
+
+
+<!-- ============================================================ -->
+<!-- CLIENT-SIDE SCRIPT                                            -->
+<!-- ============================================================ -->
+<script defer src="controls.js"></script>
+
+<!-- remaining closing tags below -->
+<!-- REMOVED: ~2400 lines of inline script moved to controls.js -->
+
+</div>
+</div>
+<div style="clear:both;"></div>
+<div id="subBanner" style="width: 940px; height: 18px; display: flex; overflow: hidden; border-radius: 0px 0px 7px 7px;">
+    <div style="width: 25%; height: 100%; background-color: #0A5F23;"></div>
+    <div style="width: 75%; height: 100%; background-color: #707276; display: flex; align-items: center; padding-left: 20px;">
+        <span style="color: white; font-size: 22px; font-weight:500; font-family: Arial, sans-serif;"></span>
+    </div>
+</div>
+<p>&nbsp;</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,217 @@
+/* Styles unique to the Bin-Method Calculator */
+
+/* Scrollbar styling for consistent appearance across browsers */
+html {
+    overflow-y: scroll; /* Always show vertical scrollbar */
+    scrollbar-width: thin; /* For Firefox - makes scrollbar thinner */
+}
+/* For Webkit browsers like Chrome/Safari */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.CEpage h2, .CEpage h3 {
+   margin: 20px 0 0 0;
+   padding: 0;
+}
+
+/* removed the " h2" after the .CEpage */
+.CEpage {
+   clear: both;
+}
+
+table.controls {table-layout:fixed; width:895px;} 
+td.col1 {width: 245px;}
+td.col2 {width: 154px;}
+td.col3 {width: 215px;}
+td.col4 {width: 185px;}
+
+input.alignright {text-align: right;}
+/* select {text-align: right} */
+
+/* 
+The following takes precedence over (overrides) a "td" style (vertical-align: top) for the "main" div that is specific in one of the PNNL sheets.
+This avoids a vertical centering problem with Google Chrome.
+*/
+#main td {
+  vertical-align: middle;
+}
+
+/* Note: On the Engine page, can force a right alignment in a td but not in a th. */
+/* th.HeaderBC     {background: #bee; text-align: center; white-space: nowrap;} */
+th.HeaderDC     {text-align: right;  white-space: nowrap;}
+th.HeaderBold   {background:#eee; font-weight: bolder; white-space: nowrap;}
+th.HeaderLarge  {font-size: 1.3em; color:#d57500; white-space: nowrap;}
+th.Header       {background:#eee; white-space: nowrap;}
+
+td.HeaderCenterBold {color:#d57500; font-weight: bolder; background:#eee; text-align: center; white-space: nowrap;}
+td.HeaderCenter {color:#d57500; background:#eee; text-align: center; white-space: nowrap;}
+td.HeaderRight {color:#d57500; background:#eee; text-align: right; white-space: nowrap;}
+td.TitlesDEF     {color:#d57500; background:#eee; text-align: right; white-space: nowrap;}
+td.ValuesDEF    {color:black; background:#fff; text-align: left; white-space: normal;}
+td.TitlesResults          {                   color:black; background:#fff; text-align: right; white-space: nowrap;}  /* #d57500 */
+td.TitlesResultsBold {font-weight: bold; color:black; background:#eee; text-align: right; white-space: nowrap;}  /* #f00    */
+td.def              {color:#fff; background:#707276; text-align: left; white-space: nowrap}
+td.headers        {background:#707276; color: #fff; font-weight: bold;  text-align: center;}
+td.statename {text-align: right; background:#eee; white-space: nowrap;}
+td.HeaderBC     {font-size: 0.9em; background:#eee; color:#d57500; text-align: center; white-space: nowrap;}
+td.rowname          {background:#fff;   text-align: right; white-space: nowrap}
+td.AdvancedControls {background:#eec899; text-align: right; white-space: nowrap}
+td.controls         {background:#fff; text-align: left; white-space: nowrap}
+td.RevisionHistory  {color:white;   background:#eee;   text-align: center; white-space: nowrap}
+
+td.HeaderModel {font-size: 1.1em; background:#eee; color:#d57500; text-align: center; white-space: nowrap;}
+td.NormalDataModel {background:#fff; text-align: right; font-size: 1.0em;}
+
+td.BoldRed      {font-weight: bold; color:#f00; background:#fff; text-align: right;  white-space: nowrap;}
+td.NormalDataBC {background:#fff;     text-align: right; font-size: .8em;}
+td.YellowDataBC {background:#eec899;  text-align: right; font-size: .8em;}
+td.NormalData   {background:#fff; text-align: right;  white-space: nowrap;}
+
+td.HeaderDC          {color:#d57500; background:#eee; text-align: right;  white-space: nowrap;}
+td.TitlesDC          {color:#d57500;   background:#fff; text-align: right; white-space: nowrap;}
+td.NormalDataDC {color:black;   background:#fff; text-align: left;  white-space: nowrap;}
+
+td.breakRow {
+   height: 0px; 
+   background: #eee;
+}
+
+#bypassTbl {
+   margin: auto;
+   width: 750px;
+}
+
+#bypassTbl th {
+   color: #fff;
+}
+
+
+.homeLink_left {
+   float: left;
+}
+
+.float_center {
+  float: left;
+  position: relative;
+  left: 28%;
+}
+
+.homeLink {
+   float: right;
+}
+
+
+/* Widths for the two bin-calcs tables.*/
+table.dataTbl_A {width: 970px;}
+table.dataTbl_B {width: 435px;}
+
+
+/* These LINK classes are needed to make some links in the text more visible. */
+a.MoreVisible { color:#6495ED; text-decoration:underline;}  /*color:#008080;*/
+a.MoreVisible:hover { color:red; text-decoration:underline;} /*text-decoration:none*/ /*background:#008080;*/
+
+a.RevHistory { color:#6495ED; text-decoration:none;}
+a.RevHistory:hover { color:red; text-decoration:underline;}
+
+a.black { color:black; text-decoration:underline;}
+a.black:hover { color:red; text-decoration:none;}
+ 
+a.Jump { color:#cf6200; text-decoration:underline;} /*color:#cf6200;  or inherit */
+a.Jump:hover {color:#cf6200; text-decoration:none; } 
+
+
+/* The following two modifications for SUB and SUP are needed to make IE8 render correctly.*/
+sup {
+   font-size: xx-small;
+   vertical-align: text-top;
+}
+sub {
+   font-size: x-small;
+   vertical-align: text-bottom;
+}
+
+/*
+.graph img {
+   height: 350px; 
+}
+*/
+
+.graph {
+   float: left;
+}
+
+.graph_right {
+   float: right;
+   position: relative;
+   right: 23%;
+}
+
+/* "none" allows floating elements on both sides (none is the default value). */   
+/*
+.graph h3 {
+   clear: none;
+}
+*/
+
+/* These need to reflect menu changes to make the left menu work on the home page (and other similar pages in the menu). */
+/*
+body.uacHome #leftNav a#uacHome, 
+   body.history #leftNav a#history, 
+   body.links #leftNav a#links, 
+   body.methods_outline #leftNav a#methods_outline, 
+   body.quickstart #leftNav a#quickstart, 
+   body.rev_history #leftNav a#rev_history, 
+   body.downloads #leftNav a#downloads, 
+   body.uac #leftNav a#uac, 
+   body.rac #leftNav a#rac {
+      color: #cf6200;
+      font-weight: bold;
+      background-color: white;
+      border-radius: 4px 0 0 4px;
+      -moz-border-radius: 4px 0 0 4px;
+      -webkit-border-radius: 4px 0 0 4px;
+}
+*/
+
+/* Help icon styling */
+.help-icon {
+   cursor: pointer;
+   display: inline-block;
+   width: 20px; height: 20px;
+   transition: transform 0.1s ease;
+   vertical-align: -6px;
+ }
+ .help-icon:hover {
+   transform: scale(1.2);
+ }
+ .help-icon::after {
+   content: '';
+   display: inline-block;
+   width: 20px; height: 20px;
+   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' stroke='%23666' fill='none'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-size='12' fill='%23666'%3Ei%3C/text%3E%3C/svg%3E");
+}
+
+ /* Light version of help icon for dark backgrounds */
+.help-icon-light {
+   cursor: pointer;
+   display: inline-block;
+   width: 20px; height: 20px;
+   transition: transform 0.1s ease;
+   vertical-align: top;
+ }
+ .help-icon-light:hover {
+   transform: scale(1.2);
+ }
+ .help-icon-light::after {
+   content: '';
+   display: inline-block;
+   width: 20px; height: 20px;
+   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' stroke='%23fff' fill='none'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-size='12' fill='%23fff'%3Ei%3C/text%3E%3C/svg%3E");
+}

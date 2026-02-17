@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RTU Bin-Method Calculator - Corrections to Tested Performance: Three Specific Units</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="links col1">
+  <div id="page">
+    <div id="header"></div>
+    
+    <div id="main">
+      <div class="homeLink">
+        <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+      </div>
+      
+      <p><a href="CoolingCorrectionCurves_Manufacturer.html">&lt;&lt; Previous</a> | <a href="methods_outline.html">Outline</a> | <a href="EquipmentResponse.html">Next &gt;&gt;</a></p>
+      <h1>Corrections to Tested Performance: <em>Three Specific RTUs</em></h1>
+      
+      <p>The calculator was adapted in version 4.3 to support the evaluation of three specific high-performance RTU units. The performance curves and algorithms that characterize these units are explicitly written into the computer code of the calculator's computation engine. This contrasts with the spreadsheet interface (as described on previous <em>Methods</em> pages) that facilitates a general interface for characterizing full-load and part-load performance. The following outline briefly explains each of the three computational approaches used in representing these units:</p>
+      
+      <ul>
+        <li><span style="font-weight: bold;">Advanced Controls</span>: This is a
+        retrofit package and includes adding a controller and a
+        variable-frequency drive to the supply fan. The controller also adds an
+        integrated economizer option. Although some controllers in the market
+        are capable of adding demand-controlled ventilation, the calculator does not
+        yet provide that feature. The following outline lists the fan levels set
+        by the Advanced Control system. For two-stage RTUs, the first-stage
+        cooling runs the fan at 75% and second-stage cooling runs the fan at
+        90%. Single-stage RTUs address all calls for cooling by running the fan
+        at 90%.
+          <ul>
+            <li>No call for cooling:
+              <ul>
+                <li>Fan runs at 40%</li>
+              </ul>
+            </li>
+            <li>Normal operation
+              <ul>
+                <li>First-stage call:
+                  <ul>
+                    <li>ODB &gt;= 70F; Fan at 75%</li>
+                    <li>ODB &lt; 70F; Fan at 90%</li>
+                  </ul>
+                </li>
+                <li>Second-stage call: Fan at 90%</li>
+              </ul>
+            </li>
+            <li>Economizer
+              <ul>
+                <li>Fan at 75%</li>
+                <li>Fan at 90% (integrated)</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        
+        <li><span style="font-weight: bold;">Three-Stage RTU</span>: This is a high-performance unit with three stages. Stage capacities are approximately 40, 60, and 100 percent of full-load capacity. This unit uses a three-speed evaporator fan and single-speed condenser fans.<br>
+          <br>
+          This three-stage unit is represented by six correction curves. Each of the three stage levels is modeled by a pair of correction curves: (a) one for modifying the rated gross capacity, and (b) one for modifying the rated energy input ratio (EIR). Each of these six curves has a polynomial form and is a function of the wet-bulb temperature entering the evaporator coil and the outside dry-bulb temperature entering the condenser coil.<br>
+        </li>
+        
+        <li><span style="font-weight: bold;">RTU with Variable-Speed Compressor</span>: This is a high-performance unit that uses a combination of staging and variable-capacity control and a variable-speed evaporator and condenser fans. This unit first engages its variable-capacity condenser to satisfy smaller loads; at higher loads, the additional stages are also used.
+          <ul>
+            <li>The variable-speed compressor unit's performance curves (polynomial form) have been modified to estimate full-load capacity. This modified curve was generated from test data that corresponds to full-load operation. This modified curve is used to determine full-load capacity values at bin conditions. Full-load capacities and corresponding building loads are used to estimate the load fraction (sensible coil load/sensible coil capacity). Sensible to total capacity splits are determined with the ADP/BPF (apparatus dew-point/bypass factor) method.</li>
+            <li>Load balance equations are solved by iteratively searching for the <em>ff</em> value (flow) at which the corrected capacity balances the load. A fan-flow based modification function is used in the capacity correction. During the iterative process sensible capacity is determined with the ADP/BPF method.</li>
+            <li>This <em>ff</em> value (determined in the load balance) is then used to modify the EIR and capacity corrections to determine the appropriate power consumption of the condenser.</li>
+            <li>These correction curves fully capture the hybrid nature of the condenser unit. They represent the two-stage (one variable-capacity stage and one fixed-capacity stage) design and the performance of the condenser fan. There is no need for explicit modeling of the staging or the condenser fan used in this system.</li>
+            <li>The evaporator fan performance is estimated with a power-law model (fan-affinity law) using the default exponent of 2.5. The model depends on the <em>ff</em> value as described above.</li>
+            <li>The evaporator fan runs at 40% (<em>ff</em>=0.40) during times of pure ventilation.</li>
+            <li>If the coil load is less than the minimum capacity of the RTU (15%), the condenser runs less than the full hour. In this case, the run time equals the ratio of the coil load to the minimum capacity. In all other cases, the variable-capacity condenser runs the full hour.</li>
+          </ul>
+        </li>
+      </ul>
+      
+      <p>Selection of either the <em>Three Stages</em> or the <em>Variable-Speed Compressor</em> RTU options invokes corresponding sets of capacity and efficiency correction curves for that unit. The "Advanced Controls" option only affects the behavior of the evaporator fan and therefore uses the default DOE-2 corrections curves.</p>
+      
+      <h2>Discussion</h2>
+      
+      <p>The calculator can model generic versions of the variable-speed and three-stage units described above. This is done by setting the "Specific Candidate Unit" feature to "None" and setting the "E-Fan and Condenser" feature to either "V-Spd: Always on" or one of the "N-Spd..." options.</p>
+      
+      <ul>
+        <li><span style="font-weight: bold;">Variable-Speed Compressor</span>: The general iterative approach used in the load balance described above is also used to model the generic variable-capacity unit. The iteration searches for the capacity fraction at which the unit's sensible capacity balances the sensible load. The key differences here are: (1) that the part-load capacity and part-load compressor power at bin conditions are determined by scaling the full-load value by the capacity fraction (no specific modifying curve), and (2) the default DOE-2 curves are used to represent corrections to capacity and EIR as affected by operation conditions.</li>
+      </ul>
+      
+      <ul>
+        <li><span style="font-weight: bold;">Three-Stages</span>: The generic model uses the DOE-2 correction curves for each stage level.</li>
+      </ul>
+      
+      <p>Please refer to the <a href="../quickstart.html" class="Jump">quick-start</a> page for more information on generic modeling.</p>
+    </div>
+    
+    <div id="footer_new"></div>
+  </div>
+</body>
+</html>

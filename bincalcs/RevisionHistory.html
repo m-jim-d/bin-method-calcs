@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>PNNL: RTU Comparison Calculator - Version History</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+
+</head>
+
+<body class="rev_history col2">
+  <div id="page">
+    <div id="header"></div>
+
+    <div id="main">
+      <div class="homeLink">
+        <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+      </div>
+
+      <h1>Revision History</h1>
+      <h3 style="font-weight: normal;">Version 6.0 (2026)</h3>
+      <ul>
+        <li>Ported the calculation engine from server-side ASP/VBScript to
+        client-side JavaScript. The calculator now runs entirely in the browser
+        with no server-side computation. Version 6.0 is algorithmically
+        equivalent to version 5.0.
+        <ul>
+          <li>Calculation engine ported to an ES module
+            (<code>engine_module.js</code>) that exports structured JSON
+            results instead of rendering HTML directly.</li>
+          <li>Supporting ASP modules ported to ES modules:
+            psychrometric functions (<code>psychro.js</code>),
+            performance correction factors (<code>performance_module.js</code>),
+            weather data access (<code>database_module.js</code>),
+            and data classes (<code>classes.js</code>).</li>
+          <li>Weather station and temperature-bin data converted from
+            Access database queries to static JSON files
+            (<code>Stations.json</code>, <code>Tbins_new.json</code>).</li>
+          <li>Results page built client-side from engine JSON output.
+            Economics calculations (LCC, payback, ROR, SIR) moved to
+            client-side code.</li>
+          <li>Inline page script extracted to a separate file
+            (<code>controls.js</code>).</li>
+          <li>Regression modeling of manufacturer spreadsheet data now
+            performed in client-side JavaScript, eliminating the dependency
+            on the server-side DataFitX software.</li>
+          <li>Charting rewritten using Google Charts API directly
+            (replaced the older prototype-based chart objects).</li>
+          <li>Added high-level architecture documentation
+            (<code>ARCHITECTURE.md</code>).</li>
+        </ul>
+        </li>
+      </ul>
+      <h3 style="font-weight: normal;">Version 5.0 (6/20/2025)</h3>
+      <ul>
+        <li>Developed a retirement-hobby version of the calculator as a demonstration of the bin
+        method. The output of the calculator is NOT intended for use in any
+        economic analysis or purchasing decisions. Version 5.0 is
+        algorithmically equivalent to version 4.4 but has been updated to be
+        compatible with Windows-11 (or similar IIS) servers and current web standards.
+        <ul>
+          <li>Renamed the calculator to Bin-Method Calculator. Removed all
+          references to the old name, RTU Comparison Calculator (RTUCC). (PNNL's
+          current screening tool has kept the RTUCC name but not the bin-method
+          projection. The RTUCC now uses a more advanced hourly-building simulation to model RTU
+          performance).</li>
+          <li>Removed the frameset (deprecated): 
+            <ul>
+            <li>All state information, including locked-load-line values and control settings, are now kept in local storage.</li>
+            <li>An async function, fetchLoadLine, is used by the controls page to retrieve the load-line data from the engine page.</li>
+            </ul>
+          </li>
+          <li>Removed all dependence on PNNL servers: images, scripts, and stylesheets.</li>
+          <li>Replaced pop-up windows (to display help info) with a modal viewer.</li>
+          <li>Improved handling of recordsets and database connections.</li>
+        </ul>
+        </li>
+      </ul>
+      <h3 style="font-weight: normal;" dir="ltr">Version 4.4 (4/14/2016)</h3>
+      <ul dir="ltr">
+        <li dir="ltr">
+          <p style="font-weight: normal;" dir="ltr">Converted all charts
+            on the calculator's <em>Results</em> page to be rendered using
+            Google Charts. <br />
+            (Note: if there are layout problems on the report page, use CTRL+F5 to
+            remove any cached content from version 4.3.) </p>
+        </li>
+      </ul>
+      <h3 style="font-weight: normal;" dir="ltr">Version 4.3 (10/09/2014)</h3>
+      <ul>
+        <li><strong style="font-weight: normal;">Revised
+            and updated the calculation engine to support the
+            assessment of three specific high-performance
+            RTU systems (each of these options corresponds to a
+            commercially available add-on control system or a
+            specific rooftop unit).</strong>
+          <ul>
+            <li><strong style="font-weight: normal;">A new
+                calculator feature, "Specific Candidate
+                Unit,"&nbsp; allows the user to select one of these
+                specific
+                systems for evaluation. Selecting a system activates
+                specific&nbsp;algorithms to represent the system:
+                <ul>
+                  <li>Specific fan-control strategies from the
+                    manufacturer of
+                    the advanced-control system.</li>
+                  <li>Specific performance curves from the
+                    manufacturers
+                    of the
+                    three-stage unit and the variable-speed unit.</li>
+                </ul>
+              </strong></li>
+            <li><strong style="font-weight: normal;">Extended
+                general
+                algorithms for modeling staged systems to represent
+                units having three or more stages.</strong></li>
+            <li><strong style="font-weight: normal;">Extended algorithms for
+                modeling variations in evaporator fan speed, condenser fan speed,
+                and condenser cooling capacity to better represent staged and
+                variable-capacity RTUs. This yields better estimates of sensible
+                capacity and better modeling of row-split evaporators as affected by
+                flow and capacity variations. This also improves the calculator's
+                estimates of evaporator and condenser fan-energy consumption and
+                better estimates&nbsp;fan energy when a system is in economizer
+                mode.</strong></li>
+            <li>Added a feature to specify the <span style="font-style: italic;">n</span> value used in
+              applying fan-affinity laws in fan-energy calculations.</li>
+            <li>Promoted the "Number of Stages" feature so it can be
+              specified&nbsp;differently for the candidate and
+              standard units.</li>
+            <li>Updated and added content to the <span style="font-style: italic;">help</span> and <span
+                style="font-style: italic;">methods</span> pages.
+              Added a new <em>quick-start</em> page that is
+              accessible off the main menu. Added an overview page
+              to the spreadsheet and additional annotation.</li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Added functionality to
+            support the calculation of savings related to&nbsp;variable-speed
+            condenser fans. Split out the condenser fan on the <em>Controls</em>
+            page, calculation engine, and&nbsp;results
+            reporting.
+            Added a
+            "Condenser Fan" help
+            topic&nbsp;and updated related help topics and methods
+            pages.</strong></li>
+        <li><strong style="font-weight: normal;">Updated
+            the spreadsheet to include example calculated values in
+            the "EER" and
+            "EER-Cond" part-load tables on the "Part-load
+            Performance" sheet. This
+            is done with Visual Basic code embedded in the workbook.
+            The code
+            includes regression models for capacity and condenser
+            power&nbsp;for an example RTU represented by the
+            spreadsheet. This code also accounts
+            for&nbsp;common part-load behaviors: (1) variable-speed
+            condenser
+            and
+            evaporator fans, and (2) cycling degradation.</strong></li>
+        <li>User interface improved:<strong style="font-weight:
+            normal;"></strong>
+          <ul>
+            <li><strong style="font-weight: normal;">Added
+                page-state capture and re-load (from
+                local storage)&nbsp;capability on the <em>Controls</em> page
+                to support use
+                of&nbsp;WebKit-type browsers such as Google Chrome
+                and Apple Safari.
+                This
+                is necessary to preserve the state of several of the
+                features&nbsp;when returning to the <em>Controls</em> page
+                from the <em>Results
+                </em>page.</strong></li>
+            <li><strong style="font-weight: normal;">Added
+                a feature to preserve the vertical scroll
+                position of the <em>Controls</em> page. This preserves
+                the&nbsp;scroll
+                position
+                when&nbsp;using features that invoke a resend
+                (regeneration) of the
+                <em>Controls </em>page
+                from the server.</strong></li>
+            <li><strong style="font-weight: normal;">Modified&nbsp;the
+                custom-load
+                model features to enable viewing the load-model
+                parameters
+                for each of the standard building types. Modified
+                the
+                lock-the-load-line feature so that locking now acts
+                to&nbsp;disable
+                the
+                building-type feature and two of the custom-model
+                features.&nbsp;Added
+                a&nbsp;help topic for the custom-load model
+                features.</strong></li>
+            <li><strong style="font-weight: normal;">Changed
+                the humidity feature to be visible whenever the
+                "Advanced Features" are
+                displayed. This&nbsp;is consistent with the approach
+                used with the
+                custom-load model features.</strong></li>
+            <li><strong style="font-weight: normal;">Resolved
+                several CSS (style-sheet) formatting issues to
+                improve rendering
+                behavior and speed in the Internet Explorer and
+                Google Chrome browsers.</strong></li>
+            <li>Added an input parameter-summary table that is
+              displayed after the results table for each run.</li>
+            <li>Combined the two discounting-related features into
+              one row.</li>
+            <li>Removed
+              the S&amp;I feature which has been replaced by the
+              "Building Type"
+              feature. The S&amp;I fraction is now reported in the
+              design table as
+              the "Internal Loads Fraction" in the "Design
+              Conditions" table.</li>
+            <li>Made each gray-divider row on the <em>Controls </em>page to
+              act like a submission button.</li>
+            <li>Improved
+              the x-axis and y-axis scaling on the "Loads and Hours"
+              and "Equipment Performance"
+              charts so that all four similar charts (standard,
+              candidate, occupied,
+              and unoccupied) are scaled similarly.</li>
+          </ul>
+        </li>
+        <li>Published Calculator User Manual (April 2015)</li>
+      </ul>
+      <h3 dir="ltr"><strong style="font-weight: normal;">Version 4.2 (9/26/2012)</strong></h3>
+      <ul>
+        <li><strong style="font-weight: normal;">Corrected
+            a problem in the fan energy calculations. This
+            issue occurred when the "Fan and Compressor" feature was
+            set to "V-Spd
+            Always ON" or "2-Spd Always ON" and the "Setback"
+            feature was set to
+            "Cond. Off." For these two cases, the calculator
+            overestimated fan
+            energy consumption during unoccupied hours.</strong></li>
+      </ul>
+      <h3 dir="ltr"><strong style="font-weight: normal;">Version 4.1 (9/21/2011)</strong></h3>
+      <ul>
+        <li><strong style="font-weight: normal;">Implemented
+            the use of EnergyPlus load models to calculate
+            S&amp;I factors and ventilation levels based on the
+            selection of a
+            building type.</strong></li>
+        <li><strong style="font-weight: normal;">Changed
+            the web application name from UAC Cost Estimator to
+            RTU Comparison Calculator (RTUCC).</strong></li>
+        <li><strong style="font-weight: normal;">Updated
+            the help and methods pages. Added new content on
+            latent-load calculations and the building-type feature.</strong></li>
+      </ul>
+      <h3 dir="ltr"><strong style="font-weight: normal;">Version 4.0 (1/15/2011)</strong></h3>
+      <ul>
+        <li><strong style="font-weight: normal;">Apparatus
+            Dew Point / By-Pass Factor (ADP/BPF) modeling of
+            sensible capacities (S/T ratios):
+          </strong>
+          <ul>
+            <li><strong style="font-weight: normal;">Full
+                implementation of iterative solution methods. Robust
+                approach for web
+                application. New module with shared psychrometric
+                routines and ADP/BPF
+                functionality.</strong></li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Dynamic
+            web-based regression capability:
+          </strong>
+          <ul>
+            <li><strong style="font-weight: normal;">Implemented
+                commercial module&nbsp;in the calculator. Applied
+                this for a dynamic
+                regression of detailed user data and ADP/BPF demo
+                page.</strong></li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Restructuring
+            of software to better support double runs of the engine
+            (full
+            comparisons) and promotion of general features to the
+            specific feature
+            groups (standard and candidate):
+          </strong>
+          <ul>
+            <li><strong style="font-weight: normal;">Classes
+                and procedures for structuring of bin data and
+                parsing and modeling of spreadsheet data.</strong></li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Fan-control features and algorithms:
+          </strong>
+          <ul>
+            <li><strong style="font-weight: normal;">Collected
+                new supporting fan data for fan power (vs.
+                capacity) for setting power defaults.</strong></li>
+            <li><strong style="font-weight: normal;">Converted
+                to more appropriate (industry standard) curve
+                shaping methods where
+                operations are done using gross capacities (not
+                net).</strong></li>
+            <li><strong style="font-weight: normal;">Features
+                for user specification of evaporator fan,
+                condenser unit, and auxiliary electronics power
+                draw.</strong></li>
+            <li><strong style="font-weight: normal;">Choices
+                for user-control strategies of the fans and
+                compressors including
+                simulation of variable-speed fans and
+                variable-capacity compressors.</strong></li>
+            <li><strong style="font-weight: normal;">Fan-affinity
+                laws are used in calculating fan power at
+                part-load conditions.</strong></li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Spreadsheet
+            interface:
+          </strong>
+          <ul>
+            <li><strong style="font-weight: normal;">Added
+                feature for importing detailed <strong>full-load</strong>
+                performance data from a spreadsheet into the web
+                application. Built
+                data processing capability in the web application
+                for modeling
+                (regressing) and using the detailed performance data
+                from the
+                specification spreadsheet. This is a mechanism to
+                feed data from a
+                manufacturer's detailed specification into the
+                calculation engine of
+                the web application. </strong></li>
+            <li><strong style="font-weight: normal;">Added
+                feature for importing and modeling condenser <strong>part-load</strong>
+                performance based on a spreadsheet table of
+                part-load EER values. This
+                table is a superset of the part-load EERs that are
+                required to
+                calculate an IEER aggregate.</strong></li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Night
+            setback:
+          </strong>
+          <ul>
+            <li><strong style="font-weight: normal;">This
+                feature supports an automated double run of the
+                calculation engine.
+                The double run splits operation into occupied and
+                unoccupied bin hours.
+                Unoccupied hours are analyzed at a setback
+                temperature reduced from
+                the setpoint used during occupied hours.</strong></li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Oversizing
+            feature:
+          </strong>
+          <ul>
+            <li><strong style="font-weight: normal;">Changed
+                to a more intuitive user interface and
+                supporting algorithms.</strong></li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Payback
+            calculations:
+          </strong>
+          <ul>
+            <li><strong style="font-weight: normal;">Improved
+                the calculation approach and corresponding messaging
+                to
+                the user.</strong></li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Larger
+            range of capacities (3-30 Tons) and corresponding
+            additional DOE-2 shaping curves added for units less
+            than 5 tons.</strong></li>
+        <li><strong style="font-weight: normal;">User
+            specification of system performance degradation as a
+            function of load fraction.</strong></li>
+        <li><strong style="font-weight: normal;">Features
+            and algorithmic support for demand (peak power)
+            and corresponding cost calculations.</strong></li>
+        <li><strong style="font-weight: normal;">Promoted
+            some existing features so they can be configured
+            separately for each unit: economizer, S/T ratio,
+            degradation factor.</strong></li>
+        <li><strong style="font-weight: normal;">Improved
+            mixed-air routines for better accounting of fan
+            heat (mixing based on mass flows).</strong></li>
+        <li><strong style="font-weight: normal;">Correction
+            of load-matching problem at design conditions.</strong></li>
+        <li><strong style="font-weight: normal;">Indoor
+            humidity limits.</strong></li>
+        <li><strong style="font-weight: normal;">Various
+            improvements in the report page to support new
+            features.</strong></li>
+      </ul>
+      <strong style="font-weight: normal;"><br>
+      </strong>
+      <h3 dir="ltr"><strong style="font-weight: normal;">Version 3.1 (11/16/2004)</strong></h3>
+      <ul>
+        <li>
+          <p dir="ltr"><strong style="font-weight: normal;">Added
+              hover-help tips for when mouse
+              cursor is over the defining table cells of the Design
+              Conditions and
+              Bin Calculations tables.&nbsp; This includes any table
+              cell with a
+              cryptic definition in the bin-calcs report.&nbsp; Made
+              some minor
+              changes to the definitions on the bin-calcs report
+              page.</strong></p>
+        </li>
+        <li>
+          <p dir="ltr"><strong style="font-weight: normal;">Added
+              restriction to inside humidity ratio calculation (when
+              in auto mode) so
+              that its corresponding relative humidity cannot exceed
+              100%.</strong></p>
+        </li>
+        <li>
+          <p dir="ltr"><strong style="font-weight: normal;">Removed
+              operation which automatically fed
+              manufacturer-specific cost data to the cost features.</strong></p>
+        </li>
+      </ul>
+      <h3 dir="ltr"><strong style="font-weight: normal;">Version 3.0 (04/10/2003)</strong></h3>
+      <ul>
+        <li><strong style="font-weight: normal;"> Changed
+            economics <a href="methods/EconomicFormulas.html">
+              algorithms</a>
+          </strong>
+          <ul>
+            <li><strong style="font-weight: normal;">Discounting:
+                Changed the uniform present value equation to be
+                dependent on the
+                effective discount rate (as opposed to using the
+                nominal discount rate,
+                an assumed inflation rate, and an escalation rate as
+                was done in the
+                original release).</strong></li>
+            <li><strong style="font-weight: normal;">Rate
+                of Return: Changed from an approximate closed-form
+                equation to an exact iterative method.</strong></li>
+            <li><strong style="font-weight: normal;">Payback: Added
+                feature to calculate and present an
+                exact iterative result.</strong></li>
+          </ul>
+        </li>
+        <li><strong style="font-weight: normal;">Added <a href="methods/methods_outline.html">methods</a>
+            pages and context-sensitive <a href="Help_Controls.html">help
+              topics</a>. </strong></li>
+        <li><strong style="font-weight: normal;">Added <a
+              href="methods/CoolingCorrectionCurves_Manufacturer.html">capability</a>
+            to represent special performance characteristics of <a
+              href="Help_Controls.html#Total_Capacity">manufacturers'
+              units</a>.
+          </strong></li>
+        <li><strong style="font-weight: normal;">Changed
+            default value of <a href="Help_Controls.html#StoT_Ratio">S/T
+              ratio</a> (an
+            "Advanced Feature") from 0.75 to 0.72.&nbsp;&nbsp;<br>
+            Note that this change slightly affects the results as
+            compared to
+            Version 2.0.&nbsp; To reproduce Version 2.0 results,
+            simply set the
+            S/T
+            feature back to 0.75. </strong></li>
+        <li><strong style="font-weight: normal;">Added a
+            "retail" schedule:&nbsp; M-Fri 9am-10pm, Sun
+            11-6. </strong></li>
+        <li><strong style="font-weight: normal;">Added process to track if
+            feature values differ from the
+            defaults (background
+            color of the default table cell turns yellow if
+            selection differs from
+            default value). </strong></li>
+        <li><strong style="font-weight: normal;">Changed
+            the definition of the OCF factor to include
+            normalization by the S/T ratio at AHRI test conditions. </strong></li>
+      </ul>
+      <strong style="font-weight: normal;"><br>
+      </strong>
+      <h3 dir="ltr"><strong style="font-weight: normal;">Version 2.0 (10/17/2002)</strong></h3>
+      <ul>
+        <li><strong style="font-weight: normal;">Converted the calculation
+            engine from a "total" to a "sensible" energy analysis.<br>
+            Note that this change significantly affects the results
+            from the UAC
+            Cost Estimator.&nbsp; Refer to the discussions in the
+            help topics
+            for
+            additional information on qualitative behaviors
+            associated with various
+            features (see especially: <a href="Help_Controls.html#Ventilation_Rate">ventilation</a>,
+            <a href="Help_Controls.html#Indoor_Relative_Humidity">humidity</a>,
+            <a href="Help_Controls.html#Lock_load_line">lock load-line</a>,
+            and enthalpy features)</strong></li>
+        <li><strong style="font-weight: normal;">Added
+            "Advanced Features."</strong></li>
+        <li><strong style="font-weight: normal;">Added
+            mixed-air calculations to properly determine the
+            conditions entering the evaporator coil.</strong></li>
+        <li><strong style="font-weight: normal;">Added a <a href="bypass.asp">system
+              performance calculation page</a> that serves to
+            illustrate the
+            correction methods (see methods pages: <a href="methods/CoolingCorrectionCurves.html">system
+              power draw</a>,
+            and <a href="methods/CoolingCorrectionCurvesSensible.html">sensible
+              capacity</a>).&nbsp;
+            It also demonstrates the iterative apparatus dew-point
+            methods that
+            were used in developing the generalization to the
+            sensible capacity
+            correction.&nbsp; This generalization serves to extend
+            the DOE-2
+            curves
+            to entering temperatures other than 80F.</strong></li>
+        <li><strong style="font-weight: normal;">Corrected
+            formulation error related to over-sizing factor.</strong></li>
+        <li><strong style="font-weight: normal;">Corrected
+            formulation error related to staging. </strong></li>
+      </ul>
+      <strong style="font-weight: normal;"><br>
+      </strong>
+      <h3 dir="ltr"><strong style="font-weight: normal;">Version 1.0 (09/28/2001)</strong></h3>
+      <ul>
+        <li><strong style="font-weight: normal;">Initial
+            release</strong></li>
+      </ul>
+    </div>
+
+    <div id="footer_new"></div>
+  </div>
+</body>
+
+</html>

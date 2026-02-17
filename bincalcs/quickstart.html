@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RTU Bin-Method Calculator - Quick Start</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="quickstart col2">
+  <div id="page">
+    <div id="header"></div> 
+        
+    <!-- Update file path and alt text to reflect the correct file and proper title for the site -->
+    <div id="container">
+      <div id="main">
+
+        <div class="homeLink">
+          <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+        </div>
+
+        <h1>Quick Start</h1>
+        <p style="font-weight: normal;" dir="ltr">This
+          outline discusses the four <span style="font-weight: bold;">basic
+            modes</span>
+          in which the calculator is used to represent a rooftop unit. The
+          intent here is to describe the data requirements for each of
+          these modes and strategies to make the best comparisons with
+          consideration for data availability. This discussion will
+          generally progress from low data-input requirements to high. Help on
+          each of the calculator features below can be accessed by clicking on
+          the info icon next to the feature's name on the calculator's
+          <em>Control</em> page.</p>
+        <h2 style="font-weight: normal;" dir="ltr"><span style="font-weight: normal;">Generic</span>: </h2>
+        <p style="font-weight: normal;" dir="ltr">This is the default mode and
+        uses a generic set of DOE-2 coil curves to represent all units.</p>
+        <ul>
+          <li> <span style="font-weight: bold;">No data; a basic demo</span>: A
+          simple click of the submit button will use all the default values of
+          the calculator's features and will generate the basic summary output
+          on the <em>Results</em> page. Turning on the "<strong>Show bin
+          calculations</strong>" feature will produce a more detailed report.
+          Clicking the "<strong>Advanced Features</strong>" checkbox displays
+          additional calculator parameters and their default values.<br>
+          </li>
+          <li><span style="font-weight: bold;">Basic description of a
+              single-stage RTU</span>: This is the minimum data that
+            is needed for an initial comparison of two single-stage
+            units (with single-speed evaporator fans). This level of
+            comparison can be done without enabling the "Advanced Features" of
+            the calculator.<br>
+            <ul>
+              <li><span style="font-weight: bold;">Total capacity</span>
+                (and oversizing factor): The nominal size of the unit
+                in kBtuh. This is the cooling capacity at AHRI test
+                conditions.</li>
+              <li><span style="font-weight: bold;">EER</span>: This is
+                the energy efficiency rating of the unit at AHRI test
+                conditions.</li>
+              <li><span style="font-weight: bold;">Costs</span>:
+                Purchase cost (in units of k$: $1,000 = 1 k$) and
+                estimate of annual costs ($).</li>
+              <li><span style="font-weight: bold;">Economizer</span>:
+                This should be checked if the unit can
+                be configured for economizing and it is enabled.</li>
+            </ul>
+          </li>
+          <li><span style="font-weight: bold;">The environment</span>:
+            This characterizes the environment which essentially
+            determines how hard (and how long) the unit will have to
+            work.<br>
+            <ul>
+              <li><strong>Building type</strong>: Pick a building
+                type. This establishes a building-load model that
+                predicts cooling load as driven by weather data.</li>
+              <li><strong>Location</strong>: Pick a state and city to
+                establish the weather data used in driving the
+                building-load model.</li>
+              <li><strong>Schedule</strong>: Pick a schedule that best
+                represents the occupancy patterns in the building.</li>
+              <li><strong>Setpoint and setback</strong>: Pick a
+                setpoint temperature and also a setback temperature to
+                determine control points for occupied and unoccupied
+                periods.</li>
+            </ul>
+          </li>
+          <li><strong>Economics</strong>: This affects the savings and
+            payback calculations.
+            <ul>
+              <li><strong>Electric Utility Rate</strong>: Enter your
+                local electric rate.</li>
+              <li><strong>Equipment life</strong>: This is the time
+                period over which energy and cost savings are
+                calculated.</li>
+              <li><strong>Discounting</strong>: If it is difficult to
+                estimate a discount rate, turn this feature off to
+                give non-discounted (simple) payback calculations.<br>
+                <br>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h2>Generic with "Advanced features": </h2>
+        <p>Clicking the "Advanced Features" checkbox reveals added features
+        which allow the calculator to do more detailed modeling of the
+        single-stage unit. These features also support the modeling of the more
+        advanced characteristics of multi-stage and variable-capacity systems.
+        Please also refer to the help topics for these features.</p>
+        <ul>
+          <li> <strong>More detailed</strong> representation for the
+            <strong>single-stage unit</strong>:
+            <ul>
+              <li><strong>Fan and Condenser power data</strong>: The
+                "Power Inputs" feature allows the user to specify
+                the three power inputs. The evaporator fan power can
+                be estimated as the difference between the gross and
+                net capacity of the unit (expressed in kWatts). The
+                user will notice that the calculator recalculates the
+                EER and condenser power if the evaporator fan or the
+                auxiliary values are edited. A helpful editing pattern
+                is to first edit the fan and aux fields, then re-enter
+                the EER value. Clicking the "Power" button (upper
+                right) will recalculate default values for the
+                power parameters based on the unit's capacity and EER.</li>
+              <li><span style="font-weight: bold;">E-Fan and Condenser</span>:
+                Choose between "1-Spd: Always ON" and "1-Spd: Cycles
+                With Compressor." The difference here is that one
+                setting models the evaporator fan as running
+                continuously and the other allows the fan to cycle off
+                with the compressor. Refer to the help topic for this
+                feature for additional information related to
+                unoccupied hours and economizing.</li>
+              <li><strong>Humidity</strong>: Generally it is best to
+                leave this set to automatic unless there is data on
+                internal humidity levels that might be affected by a
+                separate humidity control system.</li>
+              <li><strong>Ventilation</strong>: This feature value is
+                automatically calculated based on building type and
+                generally does not need to be edited.</li>
+              <li><strong>Degradation factor</strong>: This is the
+                fractional drop in efficiency of the unit when running
+                at small loads. It will be difficult to get a specific
+                value from a manufacturer. This can be edited to
+                explore the sensitivity of the savings to changes in
+                this parameter. Generally leave this at the default
+                value.</li>
+              <li><strong>S/T Ratio</strong>: This is
+                sensible-to-total capacity ratio at AHRI test
+                conditions. This should be available in a
+                manufacturer's performance brochure. Leave at default
+                levels if not available.</li>
+              <li><strong>Demand</strong>: Generally only use these
+                fields if you must calculate a demand charge. Refer to
+                the help topic for this feature (click on the info
+                icon).</li>
+            </ul>
+          </li>
+          <li><strong>Staged and Variable-capacity units</strong>:
+            Four of the "Advanced Features" facilitate
+            modeling of variable-capacity systems.
+            <ul>
+              <li><strong>The features</strong>:
+                <ul>
+                  <li><strong>E-Fan and Condenser</strong>: Select
+                    from three different system types: (1) one- or
+                    two-stage units with a single-speed
+                    evaporator fan, (2) units with multi-stage
+                    condensers, and (3) units with a variable-capacity
+                    condenser.</li>
+                  <li><strong>Number of Stages</strong>: The number of
+                    stages in a unit with a staged condenser. Leave
+                    this set to 1 for single-stage and
+                    variable-capacity units.</li>
+                  <li><strong>N for Fan Energy Calcs</strong>: The
+                    value of <span style="font-style: italic;">n</span>
+                    used in fan-affinity law calculations for
+                    variable-speed fans. This should generally be left
+                    at the default value. This feature has no impact
+                    for a single-stage unit with a single-speed
+                    evaporator fan.</li>
+                  <li><strong>Condenser Fan</strong>: The fraction of
+                    condenser power used by the condenser fan at AHRI
+                    rating conditions. This fraction can usually be
+                    estimated from a manufacturer's brochure. This
+                    feature applies only (and can only be edited) if
+                    the "V-Spd" unit is selected under the "<strong style="font-weight: normal;">E-Fan and
+                      Condenser</strong>"
+                    feature.</li>
+                </ul>
+              </li>
+              <li><strong>Examples</strong>:
+                <ul>
+                  <li><strong>Two-stage</strong> unit with a <strong>single-speed</strong>
+                    evaporator fan: <br>
+                    Set the "Number of Stages" feature to 2. Set the "<strong style="font-weight: normal;">E-Fan and
+                      Condenser</strong>"
+                    feature to one of the "1-Spd" choices.</li>
+                  <li><strong>Two-stage</strong> unit with a <strong>two-speed</strong>
+                    evaporator fan:<br>
+                    Set the "Number of Stages" feature to 2. Set the "<strong style="font-weight: normal;">E-Fan and
+                      Condenser</strong>"
+                    feature to one of the "N-Spd" choices.</li>
+                  <li><strong>Multi-stage</strong> unit with a
+                  corresponding<strong><span style="font-weight: bold;"><span
+                  style="font-weight: bold;"> </span></span>multi-speed</strong>
+                    evaporator fan: This is the generalization of the previous
+                    case.<br>
+                    Change the "Number of Stages" feature to the corresponding
+                    level. Set the "<strong style="font-weight: normal;">E-Fan
+                    and Condenser</strong>" feature to one of the "N-Spd"
+                    choices.</li>
+                  <li>A unit with a <strong>variable-capacity
+                  compressor</strong>, <strong>variable-speed condenser
+                  fan</strong>, and <strong>variable-speed evaporator
+                  fan</strong>: <br>
+                    Set the "<strong style="font-weight: normal;">E-Fan
+                      and Condenser</strong>" feature to the
+                    "V-Spd" choice.<br>
+                    <br>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h2><span style="font-weight: normal;">Three Specific Units</span>:</h2>
+        <p>In contrast to the generic correction curves that are used in the
+        modes described above, specific performance curves and algorithms are
+        used to characterize these three units and are written into the computer
+        code of the calculator's computation engine. These proprietary curves
+        and algorithms were provided to PNNL from the manufacturers. There is a
+        <a class="Jump"
+        href="/coolrtu-js/bincalcs/methods/CoolingCorrectionCurves_3SpecificUnits.html">methods
+        page</a> which provides background information on these units. Please
+        also refer to the help topic for this feature.</p>
+        <ul>
+          <li><strong>Specific Candidate Unit</strong>: Use this advanced
+            feature to select one of the three units. A selection here
+            automatically sets values for several related calculator features:
+            "E-Fan and Condenser" and "Number of Stages." These
+            automatically-set values may need refinement depending on the
+            specifics of the application. For example, when setting the
+            “Specific Candidate Unit” feature to the “Advanced Controls” value
+            this type of add-on technology can be applied to either a
+            single-stage or two-stage unit. Similarly, depending on whether the
+            unit’s evaporator fan is set to cycle with the compressor or run
+            continuously will determine whether the “E-Fan and Condenser” setting
+            needs refinement.</li>
+          <li><strong>Other features</strong>: Selecting one these specific
+          units defines its basic nature; however, additional parameters should
+          be set to fully characterize a particular version of the unit. This
+          includes all other RTU-related parameters that are used under the
+          generic-mode approach described above: EER, capacity, power splits,
+          S/T ratio, and degradation factor (if not V-Spd). Use default values
+          if parameters can not be obtained from a manufacturer's brochure. As
+          done above, the environment and economic parameters need to be set:
+          State and City, Schedule, etc.<br>
+            <br>
+          </li>
+        </ul>
+        <h2><span style="font-weight: normal;">The Spreadsheet Interface</span>:</h2>
+        <p>The spreadsheet provides a general mechanism to characterize
+        full-load and part-load performance of an RTU's condenser using tables
+        from a manufacturer's performance brochure. Please review the help topic
+        for the "Spreadsheet" feature. There is a <a
+        href="/coolrtu-js/bincalcs/methods/CoolingCorrectionCurves_Manufacturer.html"
+        class="Jump">methods page</a>
+          that provides additional information. The spreadsheet itself has
+          additional instructions and annotation inside. Note that spreadsheet
+          models are not allowed to be used with the "Specific Candidate Unit"
+          feature.</p>
+        <p>There are three levels of input data. Only the full-load
+          data (first bullet below) is required. The second and third
+          bullets describe optional inputs:</p>
+        <ul>
+          <li><strong>Full-load total gross capacity and condenser
+          power</strong> (required): This data is readily available from
+          manufacturers' performance tables. Some interpolation might be
+          required as the spreadsheet needs this data at particular operating
+          temperatures. This data alone can be used to replace the generic coil
+          curves. The good news is that users can build a coil model from this
+          data even if they do not have the additional data described below. If
+          the user prefers to stop at this data level, there are two control
+          cells in the spreadsheet for facilitating putting NAs (Not Available)
+          in the S/T cells (B20 on the Full-Load Performance sheet) and NAs in
+          the part-load tables (B3 on the Part-Load Performance sheet). The NAs
+          will cause the calculator to use only the full-load coil data and
+          activate its native apparatus dew-point method for S/T modeling and
+          its native part-load modeling of fans and condensers for estimating
+          part-load performance.</li>
+          <li><strong>S/T data </strong>(not required): The sensible-to-total
+          capacity ratios are also generally available from manufacturers.
+          However the native S/T modeling in the calculator is capable of
+          accounting for changing evaporator flow and condenser capacity levels.
+          For this reason, the spreadsheet's S/T model is only recommended for
+          systems with a single-stage and a single-speed evaporator fan.</li>
+          <li><strong>Part-load data</strong> (not required): This type of
+          tabulated data is currently not available for the public from
+          manufacturers. As a result this portion of the spreadsheet is only a
+          prototype and demonstrates how this part-load data could be structured
+          in a way related to IEER calculations. The B3 cell on the part-load
+          sheet can be used to turn this off (fill with NAs) or show example
+          values that are generated with consideration for the part-load nature
+          of a single-stage unit or a variable-capacity unit.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="footer_new"></div>
+  </div>
+</body>
+
+</html>

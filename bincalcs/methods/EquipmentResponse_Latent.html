@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>PNNL: RTU Comparison Calculator - Latent Loads</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="links col1">
+  <div id="page">
+    <div id="header"></div>
+    
+    <div id="main">
+      <div class="homeLink">
+        <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+      </div>
+      
+      <p><a href="EquipmentResponse.html">&lt;&lt; Previous</a> | <a href="methods_outline.html">Outline</a> | <a href="EconomicFormulas.html">Next &gt;&gt;</a></p>
+      <h1>Sensible and Latent Loads</h1>
+      
+      <p>This three-point outline (with interspersed comments) describes how the
+      calculator accounts for latent loads. This is a high-level algorithmic
+      progression from operating conditions to runtimes. Portions of this are
+      also discussed on the "Equipment Response to Loads" (previous) page.</p>
+      
+      <ol start="1">
+        <li><strong>Evaporator Coil Conditions</strong>: Outside air
+        (ventilation) and indoor air mix before passing over the coil.
+        Conditions in the mixed stream depend on weather (outdoor dry-bulb and
+        wet-bulb) and indoor air (dry-bulb, setpoint, and room
+        humidity).<br>
+        
+        <p style="margin-top: 8px;">
+        The analysis of latent and sensible loads starts at the evaporator
+        coil. It is the conditions at the coil that determine how much of the
+        system's total capacity is available for handling sensible loads and
+        how much of that capacity will be used for dehumidification. The coil
+        conditions are determined by mixed-air calculations that consider the
+        contributions from the two air streams (indoor return air and outdoor
+        ventilation air).
+        </p>
+        </li>
+      </ol>
+      
+      <ol start="2">
+        <li><strong>Latent and Sensible System Capacity:</strong> Components of total capacity are based on mixed air conditions.
+          <ul>
+            <li>Rated system capacities and S/T ratio (at AHRI test conditions) are projected to coil conditions.
+              <ul>
+                <li><strong>ASHRAE</strong> psychrometric routines (thermodynamic properties of moist air)</li>
+                <li><strong>DOE-2</strong> total-capacity curves for evaporator coils
+                  <ul>
+                    <li><strong>EnergyPlus</strong> Apparatus dew-point and
+                    bypass-factor algorithms for calculating latent and sensible
+                    components of total capacity</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          Once coil conditions are known, then the rated capacities can be
+          projected to them. This projection takes the characteristics of the
+          system at AHRI test conditions (Outdoor dry-bulb = 95F, Inside
+          dry-bulb=80F, Inside wet-bulb=67F) and projects to the mixed-air coil
+          conditions in the simulation (as affected by indoor setpoint and
+          weather-bin conditions).<br>
+          
+          <p style="margin-top: 8px;"></p>
+          The three sub-bullets list the algorithmic sources for the projection
+          calculations. The result of the projection is sensible and latent
+          capacities at coil conditions. A significant portion of the
+          computational code of the calculator is in support of this step.
+          </p>
+        </li>
+      </ol>
+      
+      <ol start="3">
+        <li><strong>Runtimes</strong> are determined by the system's sensible
+        capacity to maintain the indoor dry-bulb (satisfy sensible loads) as
+        controlled by the thermostat.
+          <ul>
+            <li>Building<strong> Sensible </strong>Loads<strong>:</strong>
+            Load-line established to match (1) the <strong>system</strong>
+            sensible <strong>capacity</strong> at outdoor design conditions and
+            (2) the sensible <strong>internal</strong> <strong>loads</strong>
+            when outdoor conditions equal the setpoint.</li>
+            
+            <li>Building<strong> Latent </strong>Loads<strong>
+            (condensate):</strong> Calculated using S/T ratio at coil conditions
+            and sensible loads (see "LLdE" and "S/T" columns in the bin
+            tables).</li>
+          </ul>
+          
+          <p>This statement on runtimes reflects how a thermostatically
+          controlled air conditioner works. It simply tries to keep the dry-bulb
+          temperature from rising. That is, as sensible loads act to increase
+          the temperature of the room air (and eventually trigger the
+          thermostat), the air conditioner runs (cooling the air) until the
+          thermostat says to stop.</p>
+          
+          <p>Runtimes are basically the ratio of the sensible load to the
+          sensible capacity. So by establishing the sensible capacity of the
+          system we can determine how long it has to run (to satisfy the
+          thermostat).</p>
+          
+          <p>The first sub-bullet describes the two outdoor conditions that
+          establish the sensible-load line (design and setpoint).</p>
+          
+          <p>While the unit runs to counteract sensible loads, it also
+          dehumidifies. To calculate condensate formation (latent coil load),
+          the split between sensible and latent capacities (the S/T ratio) and
+          the sensible load (SL), can be used. S/T is short for the ratio of the
+          sensible to total capacities.</p>
+          
+          <p>LL = TL * L/T = (SL/(S/T)) * (1 - S/T)</p>
+          
+          <p>This LL (Latent Load) is reported in the calculator as the "LLdE"
+          column in the bin calculations. Another column that gives a good
+          indication of how the coil conditions are affecting the sensible and
+          latent capacities is the "S/T" column.</p>
+          
+          <p>Systems in humid climates will have a lower portion of their capacity available for sensible cooling (lower S/T ratios).</p>
+        </li>
+      </ol>
+      
+      <h3>Assumptions about Indoor Humidity:</h3>
+      
+      <p>The two plots below show the difference between the outside and inside
+      humidity ratio as a function of the outdoor-indoor temperature difference
+      (left is raw hourly; right is daily average). This data is generated from
+      EnergyPlus modeling of a medium-sized office building. This shows a
+      positive difference during the summer cooling season (ΔT greater than
+      -10), and a negative difference in winter. Summer cooling, and resulting
+      dehumidification, suppresses the indoor humidity ratio.</p>
+      
+      <div style="text-align: center; margin: 10px 0 30px 0; display: flex; justify-content: center;">
+        <figure style="margin: 0 10px 0 0;">
+          <img src="images/EquipmentResponse_Latent_013_small.png" alt="Hourly humidity ratio difference vs temperature difference" width="440" height="450">
+          <figcaption style="font-size: 0.9em; margin-top: 5px;">Figure 1: Hourly humidity ratio difference vs temperature difference</figcaption>
+        </figure>
+        <figure style="margin: 0;">
+          <img src="images/EquipmentResponse_Latent_014_small.png" alt="Daily average humidity ratio difference vs temperature difference" width="440" height="449">
+          <figcaption style="font-size: 0.9em; margin-top: 5px;">Figure 2: Daily average humidity ratio difference vs temperature difference</figcaption>
+        </figure>
+      </div>
+      
+      <p>The calculator has two ways of modeling indoor humidity. The default is
+      to assume that that indoor humidity ratio tracks with the outdoor humidity
+      ratio. This assumption produces mixed-air (coil conditions) more humid
+      than would be seen in an hourly simulation like EnergyPlus. The
+      corresponding latent coil loads will be higher in the calculator than a
+      corresponding hourly model like EnergyPlus. The alternate assumption of
+      fixed indoor humidity assumes that some other conditioning device is
+      acting to control the indoor humidity to a fixed level. The latent coil
+      loads of the calculator should be similar to that of an hourly simulation which
+      also uses a fixed humidity assumption.</p>
+    </div>
+    
+    <div id="footer_new"></div>
+  </div>
+</body>
+</html>

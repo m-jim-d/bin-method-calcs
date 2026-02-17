@@ -1,0 +1,140 @@
+/*  Base stylesheet, subset of the original basic.css file */
+
+/* Essential Reset */
+html, body, div, h1, h2, h3, h4, p, a, img, 
+ul, ol, li, table, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  text-align: inherit;
+  vertical-align: baseline;
+  font-size: 100%;
+}
+
+/* Basic Elements */
+body {
+  background-color: white;
+  color: black;
+  font-family: "Avenir STD", "Avenir LT STD", Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 150%;
+}
+
+/* Links */
+a:link, a:visited {
+  color: #0077a4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Text Formatting */
+em, cite {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+sup {
+  position: relative;
+  font-size: 75%;
+  bottom: 1ex;
+}
+
+sub {
+  position: relative;
+  font-size: 75%;
+  top: 0.8ex;
+}
+
+/* Page Structure */
+#page {
+  width: 940px;
+  padding: 0 10px;
+}
+
+/* Main Content Styles */
+#main p, #main ul {
+  margin: 0 0 1em 0;
+}
+
+#main h1, #main h2 {
+  color: #d57500;
+}
+
+#main h3, #main h4 {
+  color: #cf6200;
+}
+
+#main h1 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+#main h2 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+#main h3 {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* Lists */
+#main ul {
+  margin-top: 8px;
+}
+#main li {
+  margin-left: 18px;
+  margin-bottom: 8px;
+}
+#main li::marker {
+  color: #e36a00;
+  font-size: 1.5em;
+  line-height: 0.2em;
+}
+#main ol {
+  margin-top: 8px;
+}
+#main ol li::marker {
+  font-size: 1.2em;
+  color: #e36a00;
+  line-height: 0.2em;
+}
+
+/* Tables - Simplified */
+#main table, #main td, #main th {
+  border: 1px solid #b2b3b5;
+  border-collapse: collapse;
+}
+
+#main th, #main td {
+  padding: 0.5em 1em;
+  vertical-align: top;
+}
+
+#main th {
+  color: #cf6200;
+  text-align: left;
+}
+
+/* Footer - Minimal */
+#footer_new {
+  clear: both;
+}
+
+/* Override Chrome's default blue color with your preferred color */
+:root {
+  --checkbox-color: #686868; /* desert sand #cf6200; green in header #0A5F23; gray #e4e4e400;*/
+}
+input[type="checkbox"] {
+  accent-color: var(--checkbox-color);
+}
+
+

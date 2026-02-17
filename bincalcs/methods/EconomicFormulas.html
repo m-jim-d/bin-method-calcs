@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RTU Bin-Method Calculator - Economics: Equations</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="links col1">
+  <div id="page">
+    <div id="header"></div>
+    
+    <div id="main">
+      <div class="homeLink">
+        <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+      </div>
+      
+      <p><a href="EquipmentResponse_Latent.html">&lt;&lt; Previous</a> | <a href="methods_outline.html">Outline</a> | <a href="Economics.html">Next &gt;&gt;</a></p>
+      <h1>Economics: <em>Equations</em></h1>
+      
+      <p>Economic results are presented based on the estimated annual costs and the purchase cost of the rooftop unit.<br>
+      The following equations are used in these calculations:</p>
+      
+      <ul>
+        <li><span style="color: rgb(0, 0, 255);">Uniform Present Value Factor</span>: Factor used in calculating present value of a recurring cost.</li>
+      </ul>
+
+      <p style="margin-left: 20px;">UPV(N, DR) = (a - 1) / DR*a</p>
+      
+      <p style="margin-left: 40px;">where,<br><br>
+        a = (1 + DR)<sup>N</sup><br>
+        DR = Effective Discount Rate (see next equation)<br>
+        N = Number of years over which the recurring cost occurs<br>
+      </p>
+      
+      <ul>
+        <li><span style="color: rgb(0, 0, 255);">Effective Discount Rate</span>: Discount rate after the effects of inflation are removed. Note this equation is not used in the calculator (the input for discount rate is an effective value, not a nominal value). The equation is offered here to further illustrate the difference between the nominal and effective discount rates.</li>
+      </ul>
+
+      <p style="margin-left: 20px;">DR = (1 + ND) / (1 + IR) - 1.0</p>
+      
+      <p style="margin-left: 40px;">where,<br><br>
+        ND = Nominal Discount Rate (including effects of inflation)<br>
+        IR = Assumed inflation rate<br>
+      </p>
+      
+      <ul>
+        <li><span style="color: rgb(0, 0, 255);">Life Cycle Cost</span>: Present day value of purchase cost and annually recurring costs over N years of operation.</li>
+      </ul>
+
+      <p style="margin-left: 20px;">LCC = C<sub>purchase</sub> + (UPV(N, DR) * C<sub>annual</sub>)</p>
+      
+      <p style="margin-left: 40px;">where,<br><br>
+        C<sub>purchase</sub> = Unit purchase cost (purchase and installation)<br>
+        C<sub>annual</sub> = Annual cost (fuel and maintenance)<br>
+      </p>
+      
+      <ul>
+        <li><span style="color: rgb(0, 0, 255);">Annualized Cost</span>: The uniform annual payment such that the discounted present value of the payment series is equal to the life cycle cost of the system in question. Or it can be thought of as the uniform annual loan payments on a loan for the amount of the life cycle cost.</li>
+      </ul>
+
+      <p style="margin-left: 20px;">AC = LCC / UPV(N, DR)</p>
+
+      <ul>
+        <li><span style="color: rgb(0, 0, 255);">Net Present Value</span>: The life cycle cost difference between the two competing units.</li>
+      </ul>
+
+      <p style="margin-left: 20px;">NPV = LCC<sub>candidate</sub> - LCC<sub>standard</sub></p>
+
+      <ul>
+        <li><span style="color: rgb(0, 0, 255);">Simple Payback</span>: Estimate of number of years in which annual cost savings compensate for the additional capital costs of the candidate unit.</li>
+      </ul>
+
+      <p style="margin-left: 20px;">SPB = Capital Cost Savings / Annual Cost Savings</p>
+
+      <ul>
+        <li><span style="color: rgb(0, 0, 255);">Payback</span>: Number of years in which annual cost savings compensate for the additional capital costs of the candidate unit. This is determined by iteration in the calculator (i.e., N when NPV(N)=0).</li>
+        <li><span style="color: rgb(0, 0, 255);">Rate of Return</span>: The discount rate at which the net present value is zero. This is determined by iteration in the calculator (i.e., DR when NPV(DR)=0).</li>
+        <li><span style="color: rgb(0, 0, 255);">Savings to Investment Ratio</span>: Ratio of the present worth of operating cost savings to the purchase cost savings.</li>
+      </ul>
+
+      <p style="margin-left: 20px;">SIR = (C_ST<sub>annual</sub> - C_CA<sub>annual</sub>) * UPV(N, DR) / (C_CA<sub>purchase</sub> - C_ST<sub>purchase</sub>)</p>
+      
+      <p style="margin-left: 40px;">where,</p>
+      <p style="margin-left: 40px;">
+        C_ST<sub>annual</sub> = <em>Annual</em> costs of <em>standard</em> unit<br>
+        C_CA<sub>annual</sub> = <em>Annual</em> costs of <em>candidate</em> unit<br>
+        C_ST<sub>purchase</sub> = <em>Purchase</em> costs of <em>standard</em> unit<br>
+        C_CA<sub>purchase</sub> = <em>Purchase</em> costs of <em>candidate</em> unit<br>
+      </p>
+    </div>
+    
+    <div id="footer_new"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RTU Bin-Method Calculator - Equipment Response to Loads</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+  <!-- CSS files that were in globals.inc -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+  <!-- Load the header and footer script -->
+  <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="links col1">
+  <div id="page">
+    <div id="header"></div>
+    
+    <div id="main">
+      <div class="homeLink">
+        <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+      </div>
+      
+      <p><a href="CoolingCorrectionCurves_3SpecificUnits.html">&lt;&lt; Previous</a> | <a href="methods_outline.html">Outline</a> | <a href="EquipmentResponse_Latent.html">Next &gt;&gt;</a></p>
+      <h1>Equipment Response To Loads</h1>
+      
+      <figure class="floatRight" style="max-width: 500px;">
+        <img style="width: 496px; height: 337px;" alt="Equipment Performance Chart for Wichita, KS" 
+            title="Wichita, KS" src="images/Wichita_Performance.png">
+        <figcaption>
+          <strong>Wichita, KS: Equipment Performance</strong>
+          <p>This chart of equipment performance is generated when the "Show bin calculations" option is selected. The chart data is from five of the columns in the bin-calculations tables.</p>
+          <ul>
+            <li>The <span style="color: rgb(255, 0, 0);">red</span> (TCF) line is the correction to the total capacity.</li>
+            <li>The <span style="background-color: white; color: rgb(51, 204, 0);">green</span> (PCF) line is the correction to the system power draw.</li>
+            <li>The <span style="color: rgb(255, 153, 102);">brown</span> line is the S/T ratio.</li>
+            <li>The lines with square markers indicate system energy usage and are normalized to allow plotting with the correction factors.
+              <ul>
+                <li><span style="background-color: rgb(153, 255, 255);">Blue</span> square markers indicate consumption from the condenser.</li>
+                <li><span style="background-color: rgb(255, 102, 102);">Red</span> square markers indicate consumption by the evaporator fan.</li>
+              </ul>
+            </li>
+          </ul>
+        </figcaption>
+      </figure>
+      
+      <p>Modeling the unit's response to the cooling load starts with corrections to the total gross (full-load) capacity as affected by outdoor and mixed-air conditions and evaporator fan air-flow rate. This is followed by solving for the condenser runtime or doing an iterative search for the condenser capacity level at which the RTU's sensible capacity balances the sensible cooling load. Once the run times (or capacity levels of staged or variable capacity units) are determined, fan energy and condenser power levels are established and corresponding energy usage is calculated.</p>
+      
+      <p>This outline provides a high-level description of this sequence of steps:</p>
+      
+      <ul>
+        <li><span style="font-weight: bold;">Entering (coil) conditions</span> are determined with a mixed-air calculation based on ventilation rate and economizer usage.</li>
+        
+        <li><strong>Capacity Corrections</strong>:
+          <ul>
+            <li><span style="font-weight: bold;">Total capacity</span> is calculated as corrections to gross AHRI rated capacities as affected by environmental conditions (outdoor dry-bulb, and entering wet-bulb and dry-bulb). Corrections can be in one of three forms: (1) Generic DOE-2 corrections curves, (2) Spreadsheet-based correction curve, and (3) Specific manufacturers' corrections as selected by the "Specific Candidate Unit" feature.</li>
+            <li><span style="font-weight: bold;">Sensible capacity</span> is calculated using the apparatus dew-point bypass factor method. Outside temperature, mixed-air temperature and wet-bulb affect the estimate of sensible capacity. For staged and variable-capacity system, capacity level and fan-speed level also affect these calculations. (Note that the spreadsheet interface supports regression modeling of the sensible-to-total ratio data as provided in manufacturers' data. However, capacity level and fan level effects on S/T are not considered if S/T data is supplied with the spreadsheet.)</li>
+          </ul>
+        </li>
+        
+        <li><span style="font-weight: bold;">Load balance</span> between sensible capacity and sensible load can be calculated for <span style="font-weight: bold;">three types</span> of RTU:
+          <ul>
+            <li><span style="font-weight: bold;">Single-stage</span> system: The unit runs for part of the hour (cycles).</li>
+            <li><span style="font-weight: bold;">Multiple-stage</span> systems: As a multi-stage unit attempts to match its capacity to the cooling load it will progress from lower to higher stage capacities. This search for balance starts with its first stage, then steps through pairs of intermediate stages, and potentially ending at its highest stage level. During times of intermediate load levels, the lower stage level (of the stage pair) and the associated compressors that comprise it, run the whole hour. The difference between the two levels in the stage pair (a single compressor) runs part of the hour (cycles) and its performance is degraded according to run-time fraction.</li>
+            <li><span style="font-weight: bold;">Variable-capacity compressors</span>: Through an iterative calculation, the unit's compressor capacity and fan flow are adjusted to balance the sensible capacity with the sensible load.</li>
+          </ul>
+        </li>
+        
+        <li><span style="font-weight: bold;">Condenser-power corrections</span>:
+          <ul>
+            <li><strong>Full-load</strong> corrections are made to the rated efficiency as affected by environmental conditions. In a process that mirrors the correction methods for capacity, full-load condenser power corrections are made based on the efficiency and capacity corrections.</li>
+            <li><strong>Part-load</strong> corrections:
+              <ul>
+                <li>For systems that cycle, degradation is calculated using a linear relationship depending on the user specified "Degradation Factor."</li>
+                <li>For systems with variable-capacity condensers, as the system unloads, the compressor power scales down in proportion to the capacity, and the condenser fan power follows fan-affinity laws. The variable-speed system does not need to cycle and therefore has no part-load degradation.</li>
+                <li>(Note that the spreadsheet interface provides a polynomial-regression model of condenser power as a function of load fraction and outside dry-bulb. This can be used to model fixed or variable capacity systems.)</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        
+        <li><span style="font-weight: bold;">Evaporator fan power</span>:
+          <ul>
+            <li><span style="font-weight: bold;">Full-load</span> evaporator fan power can be specified on the <em>Controls</em> page or the default value can be used as determined by the unit's rated total capacity. The following linear relationship is based on a survey of RTUs: Power_FullLoad = (0.0132 * TotalCapacity_kBtuh) - 0.2283.</li>
+            <li><strong>Part-load</strong> corrections:
+              <ul>
+                <li><strong>Single-speed</strong> fans run at the same speed (and power) whenever they are on.</li>
+                <li>For <strong>multi-speed</strong> fans, affinity laws are used to estimate fan-power draw at part-load conditions. The fan-flow rate scales with capacity as the unit unloads.<br>
+                  Power_PartLoad = Power_FullLoad * ((CFM_PartLoad)/(CFM_FullLoad))^<em>n</em>, where <em>n</em> has a default value of 2.5 but can be specified on the <em>Controls</em> page.</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      
+      <h2>Discussion:</h2>
+      <p>The following comments discuss algorithmic details in the calculation engine:</p>
+      
+      <ul>
+        <li>The calculator accounts for <span style="font-weight: bold;">fan
+        savings</span> of evaporator and condenser fans that change speeds as
+        capacities change. For systems with a variable-capacity compressor, both
+        the evaporator and condenser fans will operate at reduced power levels.
+        For staged systems, only the evaporator fan reduces speed; the condenser
+        fans turn on/off as their corresponding compressor turns on/off. Reduced
+        fan speeds correspond to reduced fan power. For example, a fan running
+        at half speed will operate at 1/8th power if a fan-affinity law where
+        <span style="font-style: italic;">n</span>=3 is used (e.g. (1/2)^3 =
+        1/8). The <span style="font-style: italic;">n</span> value can be
+        changed by the user on the calculator's <em>Controls</em> page. For systems
+        with condenser fans that change speed, the fraction of the condenser
+        power at test conditions must be known (or estimated) to facilitate the
+        calculation.</li>
+        
+        <li>With version 4.3 comes improved modeling of the <span
+        style="font-weight: bold;">sensible capacity</span> of the unit as <span
+        style="font-weight: bold;">affected by flow changes</span>. This means
+        the calculator is now representing row-split units (evaporators in
+        series) and therefore a single-speed fan on a two-stage unit will yield
+        a much more sensible first stage (this makes it more efficient in terms
+        of satisfying the sensible load as governed by a sensible thermostat).
+        These flow effects are also visible for higher multi-stage and
+        variable-speed compressor systems. They become more sensible as they run
+        at lower condenser capacities (and fan flows).</li>
+        
+        <li>The Advanced Control retrofit (an option available under the
+        "Specific Candidate Unit" feature) acts to reduce the speed of a
+        single-speed evaporator fan. When this option is selected, <span
+        style="font-weight: bold;">fan-related</span> corrections to <span
+        style="font-weight: bold;">gross-total capacity</span> and <span
+        style="font-weight: bold;">efficiency</span> are made based on the
+        fan-speed fraction (relative to rating conditions). These are the
+        standard flow-driven correction curves that are part of the DOE-2 set of
+        curves. These corrections have a relatively small impact on savings
+        calculations for the Advance Control retrofit with less then a 1%
+        reduction in overall savings.</li>
+        
+        <li>Modeling of the Advanced Control retrofit unit in the calculator
+        indicates a small <span style="font-weight: bold;">condenser
+        penalty</span> (negative condenser energy savings). This is because the
+        reduced fan speeds make the unit less sensible (more latent because the
+        coil is colder) and so there is more condenser runtime needed to satisfy
+        the sensible load. There is some supporting evidence of this in the PNNL
+        field assessment data. This is indicated in the field data by overall
+        unit savings that are less than the fan savings. However, it is
+        important to note that the evaporator-fan energy savings are much larger
+        than the condenser penalty, so there is clearly a net benefit to the
+        Advanced Control retrofit.</li>
+        
+        <li><span style="font-weight: bold;">Integrated-economizer</span> cases
+        (temperature bins where economizer cooling must be supplemented by DX
+        cooling) are processed so that when the DX is on, the fan speed
+        corresponds to the capacity fraction of the unit. This approach attempts
+        to satisfy the load by running part of the hour in economizer-only mode
+        (high-fan speed) and part of the hour in DX-only mode. If first-stage DX
+        (or minimum capacity of a variable speed system) can't sufficiently
+        supplement the economizer, then the attempt at integrated operation is
+        replaced by a normal DX analysis (no economizer). This reflects the fact
+        that at higher stage levels for staged systems (or at capacity levels
+        above the minimum capacity for units with variable capacity condensers)
+        the DX runs the whole hour.</li>
+        
+        <li>The calculation engine prevents any variable-speed system from
+        operating in variable-speed mode below <span style="font-weight:
+        bold;">15% of capacity</span>. When a variable speed system operates
+        below the 15% limit it does not run the full hour. Instead, a run time
+        is calculated using the 15% minimum.</li>
+      </ul>
+    </div>
+    
+    <div id="footer_new"></div>
+  </div>
+</body>
+</html>

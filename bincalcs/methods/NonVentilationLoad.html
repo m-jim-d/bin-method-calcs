@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>RTU Bin-Method Calculator - Load Lines</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- CSS files that were in globals.inc -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_base.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_public-server.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/coolrtu-js/shared/styles_bmc.css?123" />
+
+    <!-- Load the header and footer script -->
+    <script src="/coolrtu-js/bincalcs/load_header_footer.js"></script>
+</head>
+
+<body class="links col1">
+    <div id="page">
+        <div id="header"></div>
+
+        <div id="main">
+            <div class="homeLink">
+                <a href="/coolrtu-js/bincalcs/controls.html" target="_blank" title="Open a new bin-method calculator." class="Jump">Open a calculator</a>
+            </div>
+
+            <p><a href="methods_outline.html">&lt;&lt; Previous</a> | <a href="methods_outline.html">Outline</a> | <a href="ExampleLoadData.html">Next &gt;&gt;</a></p>
+            <h1>Establishing Loads: <em>Sensible Load Lines</em></h1>
+            <figure style="float: right; margin: 0 0 10px 20px;">
+                <img alt="Total Load Line Chart" src="images/TotalLoadLine.png" border="0" height="416" width="450" />
+            </figure>
+
+            <ul>
+                <li>Establish high point of the total sensible load line
+                    <ul>
+                        <li>Total <span style="color: blue;">sensible load</span> = Total <span
+                                style="color: blue;">sensible capacity</span> @ design conditions
+                            <ul>
+                                <li>Use rated sensible capacity <a class="Jump"
+                                        href="CoolingCorrectionCurvesSensible.html">corrected</a> to design conditions
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>Establish two points for the non-ventilation line
+                    <ul>
+                        <li>Subtract off <strong>S</strong>ensible <strong>V</strong>entilation <strong>L</strong>oad at
+                            design conditions
+                            <ul>
+                                <li><strong>SVL</strong> = <em>f</em> (ventilation mass flow, t<sub>out</sub> -
+                                    t<sub>in</sub>)</li>
+                            </ul>
+                        </li>
+                        <li>Solar and internal gains point (the intercept)
+                            <ul>
+                                <li>Value is calculated based on user's selection of building type and location.
+                                    Calculation is based on EnergyPlus load models for ASHRAE building types.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h2>Discussion</h2>
+            <p>
+                The calculator uses weather data to conduct a binned energy analysis for the rooftop unit in cities
+                across the United States. Weather tape data (outdoor dry-bulb and coincident web-bulb) was binned in 5
+                degree increments and filtered by the selected occupancy schedule. The result is a database of hours (in
+                each bin) and coincident wet-bulb temperatures for each city and occupancy schedule combination.
+            </p>
+            <p>
+                The first step in the binned analysis is to determine the air-conditioning load for each weather bin.
+                Since building characteristics are not explicitly entered for the calculator, building loads must be
+                inferred by assuming the unit would be installed in a building suitable for its specified capacity. Load
+                behaviors for this hypothetical building are established via a "<span style="color: red;">Total</span>"
+                sensible load line and the "<span style="color: teal;">Non-ventilation</span>" sensible load line. These
+                load lines are defined by the yellow line markers in the figure to the right.
+            </p>
+            <p>
+                Fundamental to the cost estimator is the assumption that total sensible loads and <a class="Jump"
+                    href="CoolingCorrectionCurvesSensible.html">sensible capacity</a> are balanced at design conditions.
+                This balance is achieved by scaling a linear building-load model until the load equals the unit's
+                capacity at design conditions.
+            </p>
+            <p>
+                Another principal concept is that internal gains and solar loads contribute to the total sensible load.
+                This essentially produces an intercept in the load model such that there is a cooling load even when the
+                outdoor temperature matches the setpoint. This two-point nature to the load model allows for
+                quantitative adjustments to better reflect various building types. For example, the "Building Type"
+                feature allows the user to select a building type which is internally dominated and insensitive to
+                weather (high internal gains as with a multi-story office building) or one more coupled to the weather
+                (low internal gains as with a warehouse). The EnergyPlus load models for each building type can be
+                manually edited to produce custom versions of each model. The analysis used in developing the load
+                models can be reviewed in Appendix A of the <a class="Jump"
+                    href="/coolrtu-js/bincalcs/PNNL-24130_RTUCC_UserManual_2015-4-2_V2.pdf" target="_blank">User
+                    Manual</a>. There is also related discussion in the help for the "Building Type" feature.
+            </p>
+            <p>
+                The calculator uses a sensible load analysis formulation. Humidity impacts on performance are accounted
+                for as they affect the unit's sensible capacity to meet the total sensible load (and also the effects on
+                system power draw). Interior humidity conditions can be set to automatically track the outside
+                conditions (by assuming inside humidity ratio is equal to outside humidity ratio), or they can be set to
+                a constant (relative humidity) value. Note that energy usage associated with other humidity controlling
+                devices is not included in the estimates by the calculator.
+            </p>
+        </div>
+
+        <div id="footer_new"></div>
+    </div>
+</body>
+
+</html>
