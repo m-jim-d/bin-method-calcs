@@ -86,6 +86,6 @@ IF %help%==on (
    )
 
    git add .
-   git commit -am "Updated to use relative paths."
+   git commit -am "Updated to deal with case sensitivity."
    git push origin main
 )

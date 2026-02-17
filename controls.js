@@ -32,7 +32,7 @@ var cityData = null;
 
 async function loadCityData() {
    try {
-      var resp = await fetch('data/Stations.json');
+      var resp = await fetch('data/stations.json');
       var stations = await resp.json();
       cityData = {};
       for (var i = 0; i < stations.length; i++) {

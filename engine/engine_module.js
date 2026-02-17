@@ -1452,7 +1452,7 @@ export async function runBinCalcs(form, opts = {}) {
     }
 
     const [stations, weather] = await Promise.all([
-      loadJsonCached('../data/Stations.json'),
+      loadJsonCached('../data/stations.json'),
       loadJsonCached('../data/Tbins_new.json'),
     ]);
 
