@@ -57,10 +57,6 @@ IF %help%==on (
          copy /Y "%SRC%\%%F" "%DST%\%%F"
       )
 
-      REM ---- Spreadsheet downloads ----
-      xcopy "%SRC%\DetailedPerformanceData\*" "%DST%\DetailedPerformanceData\" /Y /I
-      copy /Y "%SRC%\DetailedPerformanceData_VSCD.xlsm" "%DST%\DetailedPerformanceData_VSCD.xlsm"
-
       REM ---- Engine modules ----
       FOR %%F IN (
          engine_module.js
