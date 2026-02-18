@@ -48,6 +48,7 @@ methods/                 Engineering methods pages describing the calculations
 - **[Quick Start](https://m-jim-d.github.io/bin-method-calcs/quickstart.html)** — Step-by-step instructions for running a comparison
 - **[Engineering Methods](https://m-jim-d.github.io/bin-method-calcs/methods/methods_outline.html)** — Description of the calculation methods
 - **[Revision History](https://m-jim-d.github.io/bin-method-calcs/RevisionHistory.html)** — Version changelog
+- **[Architecture](ARCHITECTURE.md)** — Code structure, calculation flow, and module communication
 
 ## Technical Notes
 
