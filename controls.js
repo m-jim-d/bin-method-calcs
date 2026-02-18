@@ -123,6 +123,36 @@ function problemInPowerValue(controlName) {
    return false;
 }
 
+function text_notOK(theText, regExpression) {
+   if ((theText.length == 0) || (theText.search(regExpression) != -1)) {
+      return true;
+   } else {
+      return false;
+   }
+}
+
+function countMatches(theText, regExpression) {
+   if (theText.search(regExpression) == -1) {
+      return 0;
+   } else {
+      return theText.match(regExpression).length;
+   }
+}
+
+function checkTextBoxNumber(textBoxName, numberPeriods) {
+   var theText = document.forms.HECACParameters[textBoxName].value;
+   if (numberPeriods == 'None') {
+      return (text_notOK(theText, /[^0-9\.]/) || (countMatches(theText, /\./g) != 0));
+   } else if (numberPeriods == 'NoneOrOne') {
+      return (text_notOK(theText, /[^0-9\.]/) || (countMatches(theText, /\./g) > 1));
+   } else if (numberPeriods == 'One') {
+      return (text_notOK(theText, /[^0-9\.]/) || (countMatches(theText, /\./g) != 1));
+   } else {
+      window.alert('error 1 from checkTextBoxValue');
+      return false;
+   }
+}
+
 function updateEER(strCorS) {
    var myForm = document.forms.HECACParameters;
    var dblCap_kbtuh = myForm['txtTotalCap'].value * 1;
@@ -1518,6 +1548,111 @@ async function submitToEngine() {
       return;
    }
 
+   // ---- Numeric field validation (matches ASP CheckThenSubmit) ----
+
+   // Sync txtTotalCap from combo before validating
+   var capSel_v = document.getElementById('cmbTotalCap');
+   var dblCapacity = parseInt(capSel_v.options[capSel_v.selectedIndex].text, 10);
+   form['txtTotalCap'].value = dblCapacity;
+
+   if (checkTextBoxNumber('txtTotalCap', 'NoneOrOne')) {
+      window.alert('The total capacity field must contain a number (e.g. 84 or 84.4)'); return;
+   } else if (dblCapacity < 36 || dblCapacity > 360) {
+      window.alert('The total capacity must be within the range of 36 to 360 kBtuh.'); return;
+   }
+
+   if (advOn && checkTextBoxNumber('txtSI_Fraction', 'NoneOrOne')) {
+      window.alert('The S&I fraction must be a positive number (e.g. 0.622)'); return;
+   } else if (advOn) {
+      var dblSI = form['txtSI_Fraction'].value * 1.0;
+      if (dblSI < 0 || dblSI > 1) {
+         window.alert('The S&I fraction must be a number between 0 and 1.'); return;
+      }
+   }
+
+   if (advOn && checkTextBoxNumber('txtVentilationValue', 'NoneOrOne')) {
+      window.alert('The ventilation value must be a positive number (e.g. 10.5)'); return;
+   }
+
+   if (checkTextBoxNumber('txtElectricityRate', 'One')) {
+      window.alert('The electric utility rate field must contain a decimal number (e.g. 0.05)'); return;
+   }
+
+   if (checkTextBoxNumber('txtEER', 'NoneOrOne')) {
+      window.alert('The candidate unit EER field must contain a number (e.g. 11 or 11.3)'); return;
+   } else if (form['txtEER'].value * 1.0 < 5 || form['txtEER'].value * 1.0 > 17) {
+      window.alert('The EER of the candidate unit must be within the range of 5.0 to 17.0.'); return;
+   }
+
+   if (checkTextBoxNumber('txtEER_Standard', 'NoneOrOne')) {
+      window.alert('The standard unit EER field must contain a number (e.g. 11 or 11.3)'); return;
+   } else if (form['txtEER_Standard'].value * 1.0 < 5 || form['txtEER_Standard'].value * 1.0 > 17) {
+      window.alert('The EER of the standard unit must be within the range of 5.0 to 17.0.'); return;
+   }
+
+   if (checkTextBoxNumber('txtUnitCost', 'NoneOrOne')) {
+      window.alert('The Unit Cost field (Candidate) must contain a number (e.g. 5 or 5.4)'); return;
+   } else if (form['txtUnitCost'].value * 1.0 < 0 || form['txtUnitCost'].value * 1.0 > 100) {
+      window.alert('The cost of the candidate unit must be within the range of 0.0 to 100.0 (in units of k$).'); return;
+   }
+
+   if (checkTextBoxNumber('txtUnitCost_Standard', 'NoneOrOne')) {
+      window.alert('The Unit Cost field (Standard) must contain a number (e.g. 2 or 2.4)'); return;
+   } else if (form['txtUnitCost_Standard'].value * 1.0 < 0 || form['txtUnitCost_Standard'].value * 1.0 > 100) {
+      window.alert('The cost of the standard unit must be within the range of 0.0 to 100.0 (in units of k$).'); return;
+   }
+
+   if (advOn && checkTextBoxNumber('txtCondFanPercent_C', 'NoneOrOne')) {
+      window.alert('The Condenser Fan percentage value (Candidate) must be a number (e.g. 9 or 9.5)'); return;
+   } else if (advOn && (form['txtCondFanPercent_C'].value * 1.0 < 0 || form['txtCondFanPercent_C'].value * 1.0 > 20)) {
+      window.alert('The Condenser Fan percentage (Candidate) must be within the range of 0.0 to 20.0.'); return;
+   }
+
+   if (advOn && checkTextBoxNumber('txtCondFanPercent_S', 'NoneOrOne')) {
+      window.alert('The Condenser Fan percentage value (Standard) must be a number (e.g. 9 or 9.5)'); return;
+   } else if (advOn && (form['txtCondFanPercent_S'].value * 1.0 < 0 || form['txtCondFanPercent_S'].value * 1.0 > 20)) {
+      window.alert('The Condenser Fan percentage (Standard) must be within the range of 0.0 to 20.0.'); return;
+   }
+
+   if (form['txtUnitCost_Standard'].value * 1.0 == form['txtUnitCost'].value * 1.0) {
+      window.alert('The cost of the standard unit must differ from the cost of the candidate unit.'); return;
+   }
+
+   if (checkTextBoxNumber('txtMaintenance_Standard', 'NoneOrOne')) {
+      window.alert('The annual-maintenance cost field for the standard unit must contain a number (e.g. 100 or 100.5)'); return;
+   } else if (form['txtMaintenance_Standard'].value * 1.0 < 0 || form['txtMaintenance_Standard'].value * 1.0 > 5000) {
+      window.alert('The annual maintenance cost of the standard unit must be within the range of 0 to 5000.'); return;
+   }
+
+   if (checkTextBoxNumber('txtMaintenance_Candidate', 'NoneOrOne')) {
+      window.alert('The annual-maintenance cost field for the candidate unit must contain a number (e.g. 100 or 100.5)'); return;
+   } else if (form['txtMaintenance_Candidate'].value * 1.0 < 0 || form['txtMaintenance_Candidate'].value * 1.0 > 5000) {
+      window.alert('The annual maintenance cost of the candidate unit must be within the range of 0 to 5000.'); return;
+   }
+
+   if (checkTextBoxNumber('txtDiscountRate', 'NoneOrOne')) {
+      window.alert('The discount rate field must contain a number (e.g. 3 or 3.4)'); return;
+   } else if (form['txtDiscountRate'].value * 1.0 <= 0 || form['txtDiscountRate'].value * 1.0 > 20) {
+      window.alert('The discount rate must be greater than 0.0 and less than 20.0'); return;
+   }
+
+   if (checkTextBoxNumber('txtNUnits', 'None')) {
+      window.alert('The number of units field must contain an integer number (e.g. 3)'); return;
+   } else if (form['txtNUnits'].value * 1 < 1) {
+      window.alert('The number of units field must be set to 1 or greater'); return;
+   }
+
+   if (advOn && problemInPowerValue('txtBFn_kw_C'))  return;
+   if (advOn && problemInPowerValue('txtBFn_kw_S'))  return;
+   if (advOn && problemInPowerValue('txtAux_kw_C'))  return;
+   if (advOn && problemInPowerValue('txtAux_kw_S'))  return;
+   if (advOn && problemInPowerValue('txtCond_kw_C')) return;
+   if (advOn && problemInPowerValue('txtCond_kw_S')) return;
+
+   if (advOn && checkTextBoxNumber('txtDemandCostPerKW', 'NoneOrOne')) {
+      window.alert('The demand cost field must contain a number.'); return;
+   }
+
    // Check N-Spd fan mode requires stages >= 2 (matches ASP validation)
    if (advOn) {
       var nSpdMsg = function(unit) {
@@ -1535,10 +1670,13 @@ async function submitToEngine() {
       }
    }
 
+   if (advOn && form['cmbSpecific_RTU_C'] && form['cmbSpecific_RTU_C'].value !== 'None' && form['txtSpreadsheetData_C'] && form['txtSpreadsheetData_C'].value !== '') {
+      window.alert('Spreadsheet data is not allowed if a specific candidate unit has been selected. Please set the "Specific Candidate Unit" field to "None" or clear out the "Spreadsheet Data" field.');
+      return;
+   }
+
    // Sync hidden fields
    document.getElementById('txtDiscountRate_hidden').value = document.getElementById('txtDiscountRate').value;
-   var capSel = document.getElementById('cmbTotalCap');
-   document.getElementById('txtTotalCap').value = parseInt(capSel.options[capSel.selectedIndex].text, 10);
 
    // Sync building-model hidden fields
    syncBuildingModelFields();
