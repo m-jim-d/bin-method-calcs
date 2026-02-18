@@ -11,6 +11,8 @@
  * - Cached in IndexedDB
  * 
  * Dependencies: psychro.js
+ * 
+ * See ARCHITECTURE.md for how this module fits into the engine pipeline.
  */
 
 import { Phr_wb, Pwb_hr, dblStandardPressure } from './psychro.js';

@@ -5,6 +5,8 @@
  * Module for sharing capacity and performance related routines.
  * 
  * Dependencies: psychro.js
+ *
+ * See ARCHITECTURE.md for how this module fits into the engine pipeline.
  */
 
 import {
@@ -519,6 +521,8 @@ export function Mixer2(objSD, dblIDB, dblIHR, dblODB, dblOHR, dblBP,
     return { EHR: dblEHR, EDB: dblEDB, EWB: dblEWB };
 }
 
+// Part-load cycling degradation factor (matches ASP CyclingEfficiency).
+// At full load returns 1.0; below full load degrades by PLDegrFactor %.
 export function CyclingEfficiency(objSD, dblLoadFraction) {
     if (dblLoadFraction < 1.0) {
         return (dblLoadFraction * (objSD.PLDegrFactor / 100)) + (100 - objSD.PLDegrFactor) / 100;
@@ -526,6 +530,7 @@ export function CyclingEfficiency(objSD, dblLoadFraction) {
     return 1.0;
 }
 
+// Fan affinity law: power scales as (flow fraction)^N_Affinity.
 export function FanPowerFactor_AffinityLaw(objSD, dblLoadFraction) {
     if (dblLoadFraction < 1.0) {
         return Math.pow(dblLoadFraction, objSD.N_Affinity);
@@ -533,6 +538,8 @@ export function FanPowerFactor_AffinityLaw(objSD, dblLoadFraction) {
     return 1.0;
 }
 
+// Part-load evaporator fan power (kW) using affinity law.  Tracks peak via
+// the optional peak object ({ value }) for demand-cost calculations.
 export function FanPower_PL_kW(objSD, dblFlowFraction, peak) {
     const dblFanPower_PL_kW = objSD.BFn_kw * FanPowerFactor_AffinityLaw(objSD, dblFlowFraction);
     if (peak && typeof peak === 'object') {
@@ -541,6 +548,9 @@ export function FanPower_PL_kW(objSD, dblFlowFraction, peak) {
     return dblFanPower_PL_kW;
 }
 
+// Part-load condenser power (kW) at bin conditions.  Applies temperature
+// correction (TCF × ECF or spreadsheet model), then part-load correction
+// (cycling degradation, affinity law, or NEER model).  Tracks peak demand.
 export function CondenserPower_PL_kW(objSD, objStage, dblODB, dblEWB, dblEDB, peak, totalCap) {
     const dblCondenserPowerAtTest = objSD.Cond_kw;
 
@@ -638,6 +648,8 @@ export function CondenserPower_PL_kW(objSD, objStage, dblODB, dblEWB, dblEDB, pe
     return dblCond_AtBC_PL_Stage_kw;
 }
 
+// Return the smallest discrete stage fraction that exceeds the ventilation
+// fraction (ensures fan speed is high enough to deliver required outdoor air).
 export function StageFractionAboveVent(objSD, ventilationFraction) {
     const dblStageArray = objSD.StageLevels;
     const intMaxStageArrayIndex = dblStageArray.length - 1;
@@ -648,6 +660,10 @@ export function StageFractionAboveVent(objSD, ventilationFraction) {
     return 1.0;
 }
 
+// Flow Fraction — determine evaporator fan flow fraction for the given
+// operating mode ('C-On' = compressor running, 'C-Off' = compressor off).
+// Accounts for fan controls type (1-Spd, N-Spd, Variable), economizer
+// state, and ventilation minimum.  Matches ASP FlowFraction().
 export function FF(objSD, dblCapFraction, objSP, strMode, blnEconomizerRunning, dblODB, ventilationFraction) {
     if (objSD.Specific_RTU === 'Advanced Controls') {
         if (strMode === 'C-On') {
@@ -732,6 +748,11 @@ export function FF(objSD, dblCapFraction, objSP, strMode, blnEconomizerRunning, 
     return 0;
 }
 
+// Determine compressor stage level and runtime fractions for the given
+// sensible load at bin conditions.  Populates the StagePair (SP) with
+// capacity fractions, flow fractions, and runtimes for stages A, B, BmA.
+// Returns the composite stage level (e.g. 1.7 = stage 2 at 70% runtime).
+// Handles single-stage, multi-stage, and variable-capacity systems.
 export function StageLevel(objSD, BCC, dblSensibleLoad_KBtuH, SP, opts) {
     const totalCap = opts?.totalCap;
     const cfm = opts?.cfm;

@@ -1,3 +1,14 @@
+// ============================================================
+// load_header_footer.js — Dynamic page header and footer
+// ============================================================
+//
+// Injects the green/gray banner header and matching footer into
+// any page that includes <div id="header"> and <div id="footer_new">.
+// Runs automatically on DOMContentLoaded.
+//
+// See ARCHITECTURE.md for the overall module map.
+// ============================================================
+
 // Function to load header and footer content dynamically
 function loadHeaderAndFooter() {
     // Wait for the DOM to be fully loaded

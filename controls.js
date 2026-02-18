@@ -1,4 +1,44 @@
-﻿// ---- Populate Total Capacity dropdown (36..360) ----
+﻿// ============================================================
+// controls.js — Page-level logic for Controls.html
+// ============================================================
+//
+// This file handles all form interaction, input validation, and results
+// rendering for the Bin-Method RTU Comparison Calculator.  It is the
+// glue between the HTML form (Controls.html) and the calculation engine
+// (engine/engine_module.js).
+//
+// Flow:
+//   Page load  → populate dropdowns, fetch city data, run recalcVentilation()
+//   User edits → onChangeHandler() dispatches per-control logic
+//   Submit     → submitToEngine() validates inputs, calls the engine,
+//                then buildResultsHTML() renders economics, bin tables,
+//                and charts (Google Charts)
+//
+// For a detailed description of the calculation flow, module
+// communication, and ASP/JS parity notes, see ARCHITECTURE.md.
+//
+// Sections (search for "// ----" or "// ===="):
+//   Dropdown population          — cmbTotalCap, cmbPLDegrFactor
+//   City data                    — loadCityData, updateCities
+//   Utility / validation         — cFD, cFDW, problemInPowerValue,
+//                                  checkTextBoxNumber, text_notOK, countMatches
+//   EER / power helpers          — updateEER, updateCond_kw
+//   Spreadsheet data             — validateSpreadsheetData, parseSpreadsheetFields,
+//                                  applySpreadsheetToForm
+//   Ventilation                  — recalcVentilation, refineVentilationFromCapacity
+//   Fan power defaults           — setFanPowerValuesAndDefaults, resetPowerDefaults
+//   Default-color tracking       — checkForDefaults
+//   Change handler               — onChangeHandler
+//   Load line lock               — fetchLoadLine
+//   Advanced controls toggle     — toggleAdvanced
+//   Building load models         — buildingLoadModels, calcSIV, syncBuildingModelFields
+//   Economics helpers            — UPV, NPV_calc, ROR_calc, Payback_calc, formatNumber
+//   Chart drawing                — drawPaybackChart, drawBinLoadsChart, drawBinPerfChart
+//   Submit & results             — submitToEngine, buildResultsHTML
+//   Page initialization          — loadCityData → updateCities → recalcVentilation
+// ============================================================
+
+// ---- Populate Total Capacity dropdown (36..360) ----
 (function() {
    var sel = document.getElementById('cmbTotalCap');
    for (var i = 36; i <= 360; i++) {
@@ -95,12 +135,16 @@ function selectValueInPullDownBox(boxname, valueToSelect) {
    }
 }
 
+// Color For Default — highlights the "default" column cell to show whether
+// the current value differs from the factory default (dark = matches, lighter = changed).
 function cFD(blnInequality, strCellName) {
    var theCell = document.getElementById(strCellName);
    if (!theCell) return;
    theCell.style.backgroundColor = blnInequality ? '#3a3b3e' : '#707276';
 }
 
+// Color For Default (Warning variant) — yellow tint on the control cell itself
+// to flag caution states (e.g. spreadsheet data active, building model edited).
 function cFDW(blnInequality, strCellName) {
    var theCell = document.getElementById(strCellName);
    if (!theCell) return;
@@ -123,6 +167,7 @@ function problemInPowerValue(controlName) {
    return false;
 }
 
+// Returns true if theText is empty or contains characters matching regExpression.
 function text_notOK(theText, regExpression) {
    if ((theText.length == 0) || (theText.search(regExpression) != -1)) {
       return true;
@@ -131,6 +176,7 @@ function text_notOK(theText, regExpression) {
    }
 }
 
+// Returns the number of regex matches in theText.
 function countMatches(theText, regExpression) {
    if (theText.search(regExpression) == -1) {
       return 0;
@@ -139,6 +185,9 @@ function countMatches(theText, regExpression) {
    }
 }
 
+// Validates that a form text field contains a well-formed number.
+// numberPeriods: 'None' = integer, 'NoneOrOne' = integer or decimal, 'One' = must have decimal point.
+// Returns true if the value is INVALID (matches ASP Controls.asp checkTextBoxNumber).
 function checkTextBoxNumber(textBoxName, numberPeriods) {
    var theText = document.forms.HECACParameters[textBoxName].value;
    if (numberPeriods == 'None') {
@@ -378,6 +427,10 @@ async function recalcVentilation() {
    }
 }
 
+// Compute default blower-fan, auxiliary, and condenser power from total capacity
+// using the linear regression constants (matches ASP FanPower_Default / Condenser_Power_kW).
+// strMode: 'AlsoFormValues' writes to form inputs; 'OnlyDefaults' updates only the
+// default-display TDs and re-checks colors.
 function setFanPowerValuesAndDefaults(dblCapacityTotal_kBtuh, strMode) {
    var dblBFn_slope_kW_per_kBtuh = 0.0132;
    var dblBFn_int_kW = -0.2283;
@@ -422,6 +475,9 @@ function resetPowerDefaults() {
    if (chkS) chkS.checked = false;
 }
 
+// Compare the current value of controlName against its factory default and
+// update the background color of the corresponding "default" column cell.
+// Called after every control change to give the user a visual diff.
 function checkForDefaults(controlName) {
    var sVPDB = theSelectedValueInPullDownBox;
    var form = document.forms.HECACParameters;
@@ -542,6 +598,10 @@ function checkForDefaults(controlName) {
    }
 }
 
+// Central dispatcher for all form-control onchange events.  Each branch
+// mirrors the ASP post-back handler for that control (SubmitTheFormToItself
+// or GeneralChangeHandler).  Keeps hidden fields, dependent controls, and
+// default-column colors in sync.
 function onChangeHandler(controlName) {
    if (controlName === 'cmbTotalCap') {
       var strTotalCap = theSelectedValueInPullDownBox('cmbTotalCap');
@@ -818,6 +878,9 @@ function onChangeHandler(controlName) {
    }
 }
 
+// When the user checks "Lock Load Line", run the engine with the lock OFF
+// to compute the normal load line, then store slope/intercept so subsequent
+// submits use the locked values.  Matches ASP's LockLoadLine post-back flow.
 async function fetchLoadLine() {
    var form = document.forms.HECACParameters;
    if (form['chkLockLoadLine'] && form['chkLockLoadLine'].checked) {
@@ -902,6 +965,8 @@ async function fetchLoadLine() {
    }
 }
 
+// Show or hide the Advanced Features rows and populate power / building-model
+// fields when Advanced is turned ON.  Matches ASP's chkAdvancedControls handler.
 function toggleAdvanced() {
    checkForDefaults('chkAdvancedControls');
    var show = document.getElementById('chkAdvancedControls').checked;
@@ -1538,6 +1603,10 @@ async function refineVentilationFromCapacity(psychro, perf, sensCapDesign, desig
 // ============================================================
 // SUBMIT: Run JS engine and render results
 // ============================================================
+// Validates all form inputs (matches ASP CheckThenSubmit), imports the engine
+// modules, runs exportBinCalcsJson(), and passes the JSON result to
+// buildResultsHTML() for rendering.  Errors (including BPF/ADP failures)
+// are caught and displayed in the results pane.
 async function submitToEngine() {
    var form = document.forms.HECACParameters;
 
@@ -1770,6 +1839,12 @@ async function submitToEngine() {
 // ============================================================
 // Build the results HTML from the JS engine JSON output
 // ============================================================
+// Receives the JSON object returned by engine.exportBinCalcsJson() and
+// produces the full results page: design-conditions table, economics
+// summary (LCC, payback, ROR, SIR), parameter summary, bin Tables A & B,
+// Loads/Hours and Performance charts, spreadsheet model summaries, and
+// the side-by-side chart grid.  All economics are computed per-unit then
+// scaled by nUnits for display (matching ASP Engine.asp pattern).
 function buildResultsHTML(js) {
    var econ = js.economics || {};
    var annual = js.annual || {};

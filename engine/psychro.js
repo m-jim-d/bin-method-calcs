@@ -8,6 +8,9 @@
  * - Humidity ratio: lb water / lb dry air
  * - Enthalpy: Btu / lb dry air
  * - Specific volume: ft³ / lb dry air
+ *
+ * Converted from psychro.asp (VBScript).  Used by every other engine module.
+ * See ARCHITECTURE.md for how this module fits into the engine pipeline.
  */
 
 // Standard pressure at sea level (inches Hg)
@@ -20,6 +23,7 @@ export const dblKWtoKBTUH = 3.412;
 // Specific Volume Functions
 //=========================================================
 
+// Specific volume from dry-bulb, humidity ratio, and barometric pressure.
 export function Psv_hr(db, hr, bp) {
     return 53.352 * (db + 459.67) * (1 + 1.6078 * hr) / (bp * 144 / 2.0360);
 }
@@ -36,6 +40,7 @@ export function Psv_wb(db, wb, bp) {
 // Dew Point Functions
 //=========================================================
 
+// Dew point from humidity ratio and barometric pressure (ASHRAE correlation).
 export function Pdp_hr(hr, bp) {
     const pv_inhg = bp * hr / (0.62198 + hr);
     const pv_psi = pv_inhg / 2.0360;
@@ -71,6 +76,7 @@ export function Pdp_wb(db, wb, bp) {
 // Humidity Ratio (from enthalpy)
 //=========================================================
 
+// Humidity ratio from dry-bulb and enthalpy (inverse of Ph_hr).
 export function Phr_h(db, h) {
     return (h - 0.240 * db) / (1061 + 0.444 * db);
 }
@@ -79,6 +85,7 @@ export function Phr_h(db, h) {
 // Water vapor pressure at saturation (inches Hg)
 //=========================================================
 
+// Saturation vapor pressure (inches Hg) from dry-bulb (ASHRAE Hyland-Wexler).
 export function Ppvs(db) {
     const db_R = db + 459.67;
 
@@ -104,6 +111,7 @@ export function Phrs(db, bp) {
 // Humidity Ratio Functions
 //=========================================================
 
+// Humidity ratio from dry-bulb, wet-bulb, and barometric pressure.
 export function Phr_wb(db, wb, bp) {
     return ((1093 - 0.556 * wb) * Phrs(wb, bp) - 0.240 * (db - wb)) / (1093 + 0.444 * db - wb);
 }
@@ -117,6 +125,7 @@ export function Phr_rh(db, rh, bp) {
 // Enthalpy (Btu/lbs dry air)
 //=========================================================
 
+// Enthalpy (Btu/lb dry air) from dry-bulb and humidity ratio.
 export function Ph_hr(db, hr) {
     return (0.240 * db) + hr * (1061 + 0.444 * db);
 }
@@ -166,6 +175,8 @@ export function Pwba_hr(db, hr) {
     }
 }
 
+// Wet-bulb from dry-bulb, humidity ratio, and barometric pressure
+// (Newton iteration via Pwbest).
 export function Pwb_hr(db, hr, bp) {
     const hr_target = hr;
     let wb_first_guess;
@@ -306,6 +317,8 @@ export function BPF_FromA0(dblA0_BPF, dblEDB, dblEWB, dblBP, dblCFM_Stage) {
 // Apparatus Dew Point and Bypass factor routines
 //=========================================================
 
+// Apparatus Dew Point (ADP) via marching along the condition line from
+// supply toward saturation.  Returns { adp, hrAtADP, errorMessage }.
 export function ADP_main(dblSDB, dblSHR, dblEDB, dblEHR, dblBP) {
     // Returns { adp, hrAtADP, errorMessage }
     const dblTemperatureStep = 0.2;
@@ -370,6 +383,8 @@ export function ADP_main(dblSDB, dblSHR, dblEDB, dblEHR, dblBP) {
 // Supply Conditions (Closed Form)
 //=========================================================
 
+// Supply air conditions (closed-form) from total capacity, S/T ratio,
+// airflow, and entering conditions.  Returns { shr, sdb, errorMessage }.
 export function SupplyCond_CF(dblTotalCap_Btuh, dblSTratio, dblCFM, dblEDB, dblEHR, dblBP) {
     // Returns { shr, sdb, errorMessage }
     
@@ -428,6 +443,8 @@ export function BPF(dblEDB, dblSDB, dblADP) {
     return (dblSDB - dblADP) / (dblEDB - dblADP);
 }
 
+// Compute BPF from capacity and S/T ratio: supply conditions → ADP → BPF.
+// Returns { bpf, errorMessage }.
 export function BPF_ADP_SC(dblTotalCap_Btuh, dblSTratio, dblCFM, dblEDB, dblEHR, dblBP) {
     // Calc supply conditions (SC) from capacity and S/T, then ADP, and finally BPF
     // Returns { bpf, errorMessage }

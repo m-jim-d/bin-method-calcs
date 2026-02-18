@@ -1,3 +1,30 @@
+// ============================================================
+// classes.js — Data-model classes for the bin-method engine
+// ============================================================
+//
+// Defines the shared data structures used by engine_module.js and
+// performance_module.js to represent RTU system properties, staging
+// state, bin-calculation results, form inputs, and spreadsheet-based
+// regression models.
+//
+// Classes:
+//   StagePair / StageState   — compressor staging state (A, B, BmA)
+//   EnteringConditions        — mixed-air conditions entering the coil
+//   OutdoorConditions         — outdoor dry-bulb, wet-bulb, HR, pressure
+//   SpreadSheetData           — parsed nameplate fields from pasted data
+//   LeastSquaresModel         — OLS regression (capacity, power, S/T, NEER)
+//   SystemProperties          — per-unit properties (Candidate or Standard)
+//   TwoDDictionary            — 2-D bin array (ODB rows × named columns)
+//   FormValues                — typed accessor for HTML form inputs
+//   CellTitles                — tooltip / definition strings for bin tables
+//
+// Converted from the ASP/VBScript classes in bincalcs/include/classes.asp.
+// See ARCHITECTURE.md for how these classes fit into the engine pipeline.
+// ============================================================
+
+// Represents a pair of compressor stages (A and B) and the incremental
+// stage (BmA = B minus A).  Used by StageLevel() in performance_module.js
+// to determine runtime fractions at each capacity level.
 export class StagePair {
   constructor() {
     this.A = new StageState();
@@ -31,6 +58,9 @@ export class StagePair {
   }
 }
 
+// State for a single compressor stage within a StagePair.
+// Tracks capacity fraction, flow fraction, runtime, and correction factors
+// that are populated by StageLevel() and consumed by energy calculations.
 export class StageState {
   constructor() {
     this.CondType = undefined;
@@ -62,6 +92,8 @@ export class StageState {
   }
 }
 
+// Mixed-air conditions entering the evaporator coil (after mixing
+// outdoor ventilation air with return air and adding fan heat).
 export class EnteringConditions {
   constructor() {
     this.ODB = undefined;
@@ -71,6 +103,7 @@ export class EnteringConditions {
   }
 }
 
+// Outdoor ambient conditions at a given temperature bin.
 export class OutdoorConditions {
   constructor() {
     this.DB = undefined;
@@ -80,6 +113,9 @@ export class OutdoorConditions {
   }
 }
 
+// Nameplate / catalog fields parsed from manufacturer spreadsheet data
+// (pasted into the Advanced Controls textarea).  Populated by
+// SystemProperties.ParseAndModel().
 export class SpreadSheetData {
   constructor() {
     this.AirFlow = undefined;
@@ -99,10 +135,13 @@ export class SpreadSheetData {
   }
 }
 
+// ---- Least-squares regression helpers (used by SystemProperties) ----
+
 function _isFiniteNumber(x) {
   return typeof x === "number" && Number.isFinite(x);
 }
 
+// Gaussian elimination with partial pivoting.  Solves Ax = b.
 function _solveLinearSystem(A, b) {
   const n = A.length;
   const M = A.map((row, i) => row.slice().concat([b[i]]));
@@ -148,6 +187,7 @@ function _solveLinearSystem(A, b) {
   return x;
 }
 
+// Evaluate a single model term (e.g. "X1^2*X2") given a map of variable values.
 function _evalTerm(term, xVals) {
   let result = 1;
   const factors = term.split("*").map((s) => s.trim()).filter(Boolean);
@@ -168,6 +208,10 @@ function _evalTerm(term, xVals) {
   return result;
 }
 
+// Ordinary least-squares regression model.  Fits polynomial-style terms
+// (e.g. "X1 + X1^2 + X2^2 + X1*X2") to tabular data via the normal
+// equations.  Produces coefficients, t-values, R², and residual SE
+// (matching the ASP COM regression output).
 class LeastSquaresModel {
   constructor() {
     this.IsSolved = false;
@@ -312,6 +356,10 @@ class LeastSquaresModel {
   }
 }
 
+// All properties for one RTU system (Candidate or Standard).
+// Populated by _systemFromForm() in engine_module.js.  Holds EER,
+// power splits, fan controls, staging, spreadsheet models, and the
+// four LeastSquaresModel instances for manufacturer-data regressions.
 export class SystemProperties {
   constructor() {
     this.SystemName = undefined;
@@ -357,6 +405,8 @@ export class SystemProperties {
     this.NEER_PL_Model = new LeastSquaresModel();
   }
 
+  // Fit a regression model from spreadsheet data.  Returns '' on success
+  // or an error message string on failure.
   Fit_Model(strNameArray, strModelString, strModelDesc, dblDataArray, dfxModel) {
     if (!(dfxModel instanceof LeastSquaresModel)) {
       throw new Error("Fit_Model expects a LeastSquaresModel");
@@ -376,6 +426,10 @@ export class SystemProperties {
     return text.split(/\r\n|\n|\r/);
   }
 
+  // Parse the pasted spreadsheet text into structured arrays, then fit
+  // regression models for gross capacity, condenser power, S/T ratio,
+  // and normalized EER.  strMode='parseOnly' skips model fitting.
+  // Returns { errorMessage }.
   ParseAndModel(strMode) {
     const strVersion_requirement = "V1.2";
     const rows = this.ParseSpreadsheetData();
@@ -632,6 +686,7 @@ export class SystemProperties {
     return out;
   }
 
+  // Predict S/T ratio at given conditions using the fitted model, clamped to [0, 1].
   Predict_ST_Ratio(dblODB, dblEWB, dblEDB) {
     const dblRawPrediction = this.ST_Ratio_Model.PredictValueAlt([dblODB, dblEWB, dblEDB]);
 
@@ -640,6 +695,7 @@ export class SystemProperties {
     return dblRawPrediction;
   }
 
+  // Predict gross capacity correction factor (ratio to ARI rating conditions).
   Predict_Gross_Capacity_Correction(dblODB, dblEWB) {
     return (
       this.GrossCapacity_KBtu_Model.PredictValueAlt([dblODB, dblEWB]) /
@@ -647,6 +703,7 @@ export class SystemProperties {
     );
   }
 
+  // Predict condenser power correction factor (ratio to ARI rating conditions).
   Predict_Condenser_Correction(dblODB, dblEWB) {
     return (
       this.Condenser_kW_Model.PredictValueAlt([dblODB, dblEWB]) /
@@ -654,6 +711,7 @@ export class SystemProperties {
     );
   }
 
+  // Predict normalized EER at part-load (load percent 0-100) and ODB.
   Predict_PartloadFactor(dblLoadPercent, dblODB) {
     let load = dblLoadPercent;
     if (load > 100.0) load = 100.0;
@@ -665,6 +723,10 @@ export class SystemProperties {
   }
 }
 
+// Two-dimensional bin-data array indexed by named columns and ODB rows.
+// Used by the ASP engine for intermediate bin results; retained in JS for
+// structural parity.  Column names are defined via DefineColumnNames();
+// rows span the ODB range in 5°F increments.
 export class TwoDDictionary {
   constructor() {
     this._binArray = Array.from({ length: 100 }, () => Array.from({ length: 41 }, () => "NA"));
@@ -795,6 +857,10 @@ export class TwoDDictionary {
   }
 }
 
+// Typed accessor wrapper around the raw form-input dictionary.
+// Provides named getters with defaults and unit conversions (e.g.
+// VentilationFraction, CFM, Oversizing_LoadReductionFactor).
+// Constructed by FormValues.fromObject() in computeLoadLine().
 export class FormValues {
   constructor() {
     this._values = {};
@@ -1048,6 +1114,8 @@ export class FormValues {
   }
 }
 
+// Human-readable tooltip / definition strings for every column in the
+// bin-calculation tables (Table A: loads/conditions, Table B: performance).
 export class CellTitles {
   constructor() {
     this.Elv = "Elevation at specified location (feet)";
@@ -1100,6 +1168,8 @@ export class CellTitles {
   }
 }
 
+// Format a number in scientific notation with the given number of
+// significant digits (e.g. FormatSciNotation(0.00123, 4) → "1.2300e-3").
 export function FormatSciNotation(dblInputNumber, intSignificant) {
   return Number(dblInputNumber).toExponential(intSignificant);
 }

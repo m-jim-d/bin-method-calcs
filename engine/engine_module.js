@@ -1,3 +1,26 @@
+// ============================================================
+// engine_module.js — Main calculation engine for the bin-method tool
+// ============================================================
+//
+// Orchestrates the full bin-method calculation:
+//   1. Reads form inputs and builds SystemProperties for Candidate & Standard
+//   2. Loads weather/station JSON data (cached in memory)
+//   3. Computes the non-ventilation load line (computeLoadLine)
+//   4. Loops over temperature bins (occupied + unoccupied) to compute
+//      staging, economizer, energy, and demand for each unit (runOneSystem)
+//   5. Assembles economics (LCC, payback, ROR, SIR) and returns a JSON
+//      result object via exportBinCalcsJson()
+//
+// Converted from Engine.asp + Controls.asp (VBScript/ASP).
+// See ARCHITECTURE.md for the full module dependency graph and data flow.
+//
+// Key exports:
+//   exportBinCalcsJson(form, opts) — run engine, return structured JSON
+//   computeLoadLine({...})         — compute non-ventilation load line
+//   runBinCalcs(form, opts)        — internal: full engine pass
+//   getLastLoadLine()              — retrieve load line from last run
+// ============================================================
+
 import { Phr_wb, Phr_rh, Prh_hr, Pwb_hr, Ph_hr, dblStandardPressure, dblKWtoKBTUH, BPF_ADP_SC, A0_FromBPF } from './psychro.js';
 import {
   IRH_Track_OR_Set,
@@ -222,6 +245,9 @@ function _asNumberOr(form, name, fallback) {
   return Number.isFinite(v) ? v : fallback;
 }
 
+// Build a SystemProperties object for one unit (unitKey='C' or 'S') by
+// reading form inputs, applying defaults, and inferring condenser power
+// from EER when not explicitly provided.  Matches ASP FormValues.Establish.
 function _systemFromForm(form, unitKey, opts) {
   const totalCap = opts.totalCap;
   const cfm = opts.cfm;
@@ -358,6 +384,9 @@ function _modelDebug(objSD) {
   }
 }
 
+// Integrated economizer + DX staging for bins where the economizer alone
+// cannot meet the load.  Determines the DX runtime fraction needed to
+// supplement economizer cooling.  Returns { ok, runtime, debug }.
 function _capacityLevelIntegrated_Staged(objSD, SP, BOC, nonVentLoad, idbSetpoint, pressure, totalCap, cfm, ventCFM, ventilationFraction) {
   // Port of legacy CapacityLevel_Integrated() for staged systems.
   // Returns { ok, runtime } where runtime is DX runtime fraction for stage A, or ok:false if integrated fails.
@@ -434,6 +463,10 @@ function _capacityLevelIntegrated_Staged(objSD, SP, BOC, nonVentLoad, idbSetpoin
   }
 }
 
+// Primary entry point: run the full engine and return a structured JSON
+// object containing annual energy, economics, design conditions, bin
+// details, and spreadsheet model summaries.  Called by submitToEngine()
+// in controls.js.
 export async function exportBinCalcsJson(form, opts = {}) {
   // Always recompute so the export reflects the current form state and latest engine logic.
   // (Avoids stale globals causing parity deltas to persist after code changes.)
@@ -929,6 +962,10 @@ export async function exportBinCalcsJson(form, opts = {}) {
   };
 }
 
+// Compute the non-ventilation sensible load line (slope and intercept)
+// from design conditions, S&I fraction, ventilation, and capacity.
+// Optionally applies a locked load line from the form.  Returns
+// { ok, slope, intercept, design, debug, warnings } or { ok:false, errorMessage }.
 export function computeLoadLine({ formValues, candidateSD, stageState, datasets }) {
   try {
     if (!formValues) return { ok: false, errorMessage: 'Missing formValues' };
@@ -1188,6 +1225,10 @@ export function computeLoadLine({ formValues, candidateSD, stageState, datasets 
   }
 }
 
+// Internal engine entry point: parse all form inputs, load JSON data,
+// compute the load line, then loop over temperature bins for both
+// Candidate and Standard units.  Stores results in module-level state
+// (_lastRunPhase1, _lastRunInputs) for consumption by exportBinCalcsJson.
 export async function runBinCalcs(form, opts = {}) {
   try {
     if (!form) {
@@ -1444,7 +1485,7 @@ export async function runBinCalcs(form, opts = {}) {
     async function loadJsonCached(url) {
       const resolvedUrl = new URL(url, _moduleBase).href;
       if (cache[resolvedUrl]) return cache[resolvedUrl];
-      const resp = await fetch(resolvedUrl, { cache: 'no-store' });
+      const resp = await fetch(resolvedUrl);
       if (!resp.ok) throw new Error('Failed to load ' + url + ': ' + resp.status);
       const data = await resp.json();
       cache[resolvedUrl] = data;
@@ -1656,6 +1697,11 @@ export async function runBinCalcs(form, opts = {}) {
     const ventCFM = (formValues.VentilationUnits === 'CFM') ? formValues.VentilationValue : (cfm * (formValues.VentilationValue / 100));
     const ventilationFraction = ventCFM / cfm;
 
+    // Run the bin-by-bin energy calculation for one RTU system.
+    // Loops over occupied and unoccupied hours, computing economizer
+    // contribution, staging, condenser/fan/aux energy, and peak demand.
+    // Returns { annualTotal, annualCondenser, annualEFan, annualAux,
+    //           peakDemand, binsOcc, binsUnocc, ... }.
     function runOneSystem(objSD) {
       const SP = new StagePair();
       SP.A.ResetToFullLoad();

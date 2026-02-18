@@ -86,6 +86,6 @@ IF %help%==on (
    )
 
    git add .
-   git commit -am "Updated to deal with case sensitivity."
+   git commit -am "Updated documentation."
    git push origin main
 )
