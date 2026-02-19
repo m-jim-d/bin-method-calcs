@@ -53,6 +53,7 @@ IF %help%==on (
          ARCHITECTURE.md
          BuildingLoadModels.pdf
          DetailedPerformanceData.zip
+         favicon.ico
       ) DO (
          echo F| xcopy /Y /D "%SRC%\%%F" "%DST%\%%F"
       )
