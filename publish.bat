@@ -26,18 +26,18 @@ IF %help%==on (
    IF %copy%==on (
       REM ---- Top-level folders ----
       REM shared: CSS + header/footer HTML. Skip globals.inc which is ASP-only.
-      xcopy "%SRC%\shared\*.css" "%DST%\shared\" /Y /I
-      xcopy "%SRC%\shared\*.html" "%DST%\shared\" /Y /I
+      xcopy "%SRC%\shared\*.css" "%DST%\shared\" /Y /D /I
+      xcopy "%SRC%\shared\*.html" "%DST%\shared\" /Y /D /I
 
       REM docs: PDF manuals
-      xcopy "%SRC%\docs\*" "%DST%\docs\" /Y /I
+      xcopy "%SRC%\docs\*" "%DST%\docs\" /Y /D /I
 
       REM images: site banner and icons. Skip _notes, Thumbs.db.
-      xcopy "%SRC%\images\*.jpg" "%DST%\images\" /Y /I
-      xcopy "%SRC%\images\*.png" "%DST%\images\" /Y /I
+      xcopy "%SRC%\images\*.jpg" "%DST%\images\" /Y /D /I
+      xcopy "%SRC%\images\*.png" "%DST%\images\" /Y /D /I
 
       REM data: JSON only. Skip .mdb Access databases.
-      xcopy "%SRC%\data\*.json" "%DST%\data\" /Y /I
+      xcopy "%SRC%\data\*.json" "%DST%\data\" /Y /D /I
 
       REM ---- Page-level files ----
       FOR %%F IN (
@@ -54,7 +54,7 @@ IF %help%==on (
          BuildingLoadModels.pdf
          DetailedPerformanceData.zip
       ) DO (
-         copy /Y "%SRC%\%%F" "%DST%\%%F"
+         echo F| xcopy /Y /D "%SRC%\%%F" "%DST%\%%F"
       )
 
       REM ---- Engine modules ----
@@ -65,12 +65,12 @@ IF %help%==on (
          database_module.js
          classes.js
       ) DO (
-         copy /Y "%SRC%\engine\%%F" "%DST%\engine\%%F"
+         echo F| xcopy /Y /D "%SRC%\engine\%%F" "%DST%\engine\%%F"
       )
 
       REM ---- Methods: all HTML + images ----
-      xcopy "%SRC%\methods\*.html" "%DST%\methods\" /Y /I
-      xcopy "%SRC%\methods\images\*" "%DST%\methods\images\" /Y /I /E
+      xcopy "%SRC%\methods\*.html" "%DST%\methods\" /Y /D /I
+      xcopy "%SRC%\methods\images\*" "%DST%\methods\images\" /Y /D /I /E
 
       ECHO(
       ECHO Copy complete.
