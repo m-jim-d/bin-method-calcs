@@ -215,8 +215,8 @@ function openHelpModal(theHashMark) {
     // to force Safari to repaint the iframe compositing layer.
     helpModalFrame.onload = function() {
         setTimeout(function() {
-            window.scrollTo(window.scrollX, window.scrollY + 1);
-            window.scrollTo(window.scrollX, window.scrollY - 1);
+            window.scrollTo(window.scrollX, window.scrollY + 10);
+            window.scrollTo(window.scrollX, window.scrollY - 10);
         }, 100);
     };
     
