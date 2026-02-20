@@ -9,7 +9,6 @@ var helpModalOverlay = null;
 var helpModalFrame = null;
 var currentHelpHash = '';
 var escapeKeyListenerAdded = false; // Track if escape listener is already added
-var _savedScrollY = 0; // Preserve scroll position when locking body overflow
 var _helpViewerBase = (function() {
     var s = document.currentScript;
     if (!s || !s.src) return '';
@@ -207,34 +206,18 @@ function openHelpModal(theHashMark) {
         helpUrl += '#' + theHashMark;
     }
     
-    // Save scroll position before locking body (Safari workaround)
-    _savedScrollY = window.scrollY;
-    
     // Load content and show modal
     helpModalFrame.src = helpUrl;
     helpModalOverlay.style.display = 'flex';
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
     
-    // Safari/WebKit blank-iframe workaround: after the iframe loads,
-    // force a layout reflow by briefly shrinking the iframe, then
-    // restoring it. This makes Safari repaint the compositing layer.
+    // Safari/WebKit blank-iframe workaround: nudge the scroll position
+    // to force Safari to repaint the iframe compositing layer.
     helpModalFrame.onload = function() {
-        var f = helpModalFrame;
-        var origH = f.style.height;
-        f.style.height = 'calc(100% - 1px)';
         setTimeout(function() {
-            f.style.height = origH;
-            // After reflow, scroll to hash target if needed
-            try {
-                var iDoc = f.contentWindow;
-                if (currentHelpHash) {
-                    var el = iDoc.document.getElementById(currentHelpHash);
-                    if (el) { el.scrollIntoView(true); }
-                } else {
-                    iDoc.scrollTo(0, 0);
-                }
-            } catch(e) { /* cross-origin — ignore */ }
-        }, 60);
+            window.scrollTo(window.scrollX, window.scrollY + 1);
+            window.scrollTo(window.scrollX, window.scrollY - 1);
+        }, 100);
     };
     
     // Focus the modal overlay instead of iframe for better key handling
@@ -261,10 +244,6 @@ function closeHelpModal() {
         
         // Restore background scrolling
         document.body.style.overflow = '';
-        // Restore scroll position only if Safari shifted it (avoid side-effects)
-        if (Math.abs(window.scrollY - _savedScrollY) > 1) {
-            window.scrollTo(0, _savedScrollY);
-        }
     }
 }
 
