@@ -1,10 +1,15 @@
 @ECHO off
 
-:: Script for copying and publishing (deploying) files to Github Hosting 
-:: The nocopy option allows you to use the filemanager to hand copy a single file and then deploy without updating the whole site.
+:: Publish script: copies source files to the GitHub Pages production folder
+:: and pushes to the remote repository.
+::   publish          - copy files + git push (default commit message)
+::   publish nocopy   - git push only (skip file copy)
+::   publish nopush   - copy files only (skip git push)
+::   publish "" "msg" - copy files + git push with a custom commit message
 
 SET help=off
 SET copy=on
+SET msg=Updated documentation.
 SET SRC=C:\Users\Jim\Documents\webcontent\uac-js
 SET DST=C:\Users\Jim\Documents\webcontent\github-website\bin-method-calc
 
@@ -13,13 +18,18 @@ IF "%1"=="help" (
    
 ) ELSE IF "%1"=="nocopy" (
    SET copy=off
+) ELSE IF "%1"=="nopush" (
+   SET copy=on
 )
+IF NOT "%2"=="" SET msg=%~2
 
 IF %help%==on (
    ECHO(
    ECHO Parameters
    ECHO ---help
-   ECHO ---nocopy //publish without copying
+   ECHO ---nocopy //push to github without copying to production
+   ECHO ---nopush //copy to production without pushing to github
+   ECHO   %%2  optional commit message (default: "Updated documentation.")
    ECHO(
    
 ) ELSE (
@@ -88,7 +98,13 @@ IF %help%==on (
       ECHO(
    )
 
-   git add .
-   git commit -am "Updated documentation."
-   git push origin main
+   IF NOT "%1"=="nopush" (
+      git add .
+      git commit -am "%msg%"
+      git push origin main
+   ) ELSE (
+      ECHO(
+      ECHO Git push was skipped.
+      ECHO(
+   )
 )
