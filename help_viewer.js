@@ -215,22 +215,26 @@ function openHelpModal(theHashMark) {
     helpModalOverlay.style.display = 'flex';
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
     
-    // Scroll iframe content to top (or hash target) once loaded — fixes
-    // Safari/WebKit rendering the iframe at an unexpected scroll offset.
+    // Safari/WebKit blank-iframe workaround: after the iframe loads,
+    // force a layout reflow by briefly shrinking the iframe, then
+    // restoring it. This makes Safari repaint the compositing layer.
     helpModalFrame.onload = function() {
-        try {
-            var iDoc = helpModalFrame.contentWindow;
-            if (currentHelpHash) {
-                var el = iDoc.document.getElementById(currentHelpHash);
-                if (el) { el.scrollIntoView(true); }
-            } else {
-                iDoc.scrollTo(0, 0);
-            }
-        } catch(e) { /* cross-origin — ignore */ }
-        
-        // Force Safari to repaint the iframe (workaround for blank-frame bug).
-        helpModalFrame.style.opacity = '0.99';
-        setTimeout(function() { helpModalFrame.style.opacity = '1'; }, 50);
+        var f = helpModalFrame;
+        var origH = f.style.height;
+        f.style.height = 'calc(100% - 1px)';
+        setTimeout(function() {
+            f.style.height = origH;
+            // After reflow, scroll to hash target if needed
+            try {
+                var iDoc = f.contentWindow;
+                if (currentHelpHash) {
+                    var el = iDoc.document.getElementById(currentHelpHash);
+                    if (el) { el.scrollIntoView(true); }
+                } else {
+                    iDoc.scrollTo(0, 0);
+                }
+            } catch(e) { /* cross-origin — ignore */ }
+        }, 60);
     };
     
     // Focus the modal overlay instead of iframe for better key handling
@@ -255,9 +259,12 @@ function closeHelpModal() {
             helpModalFrame.src = 'about:blank';
         }
         
-        // Restore background scrolling and scroll position (Safari workaround)
+        // Restore background scrolling
         document.body.style.overflow = '';
-        window.scrollTo(0, _savedScrollY);
+        // Restore scroll position only if Safari shifted it (avoid side-effects)
+        if (Math.abs(window.scrollY - _savedScrollY) > 1) {
+            window.scrollTo(0, _savedScrollY);
+        }
     }
 }
 
