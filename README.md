@@ -4,7 +4,7 @@
 
 A client-side engineering calculator that estimates annual cooling energy usage for rooftop air conditioning units (RTUs) using the bin method of analysis. It compares a high-efficiency candidate unit against a standard-efficiency baseline and provides economic metrics for the investment.
 
-**[Launch the Calculator](https://m-jim-d.github.io/bin-method-calcs/Controls.html)**
+**[Launch the Calculator](https://bincalcs.triquence.org/Controls.html)**
 
 ## Overview
 
