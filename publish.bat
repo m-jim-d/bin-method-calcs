@@ -35,6 +35,7 @@ IF %help%==on (
       REM images: site banner and icons. Skip _notes, Thumbs.db.
       xcopy "%SRC%\images\*.jpg" "%DST%\images\" /Y /D /I
       xcopy "%SRC%\images\*.png" "%DST%\images\" /Y /D /I
+      xcopy "%SRC%\images\*.svg" "%DST%\images\" /Y /D /I
 
       REM data: JSON only. Skip .mdb Access databases.
       xcopy "%SRC%\data\*.json" "%DST%\data\" /Y /D /I
@@ -54,6 +55,11 @@ IF %help%==on (
          BuildingLoadModels.pdf
          DetailedPerformanceData.zip
          favicon.ico
+         sitemap.html
+         sitemap.css
+         jquery-3.7.1.min.js
+         utilities.js
+         pageStuff.js
       ) DO (
          echo F| xcopy /Y /D "%SRC%\%%F" "%DST%\%%F"
       )

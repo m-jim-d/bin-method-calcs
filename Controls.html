@@ -10,18 +10,36 @@
    <meta name="keywords"           content="HVAC,UAC,cost,estimator,calculator,bin,analysis,energy,unitary,air,conditioner,pychrometric,economic,savings,charting,sensible,correction,mixed,air,design,cities,states,stages,cycling,degradation" />
    <meta name="robots"             content="noindex, nofollow" />
 
+   <!-- The navigation menu -->
+   <link href="sitemap.css?v=20" rel="stylesheet" type="text/css">
+   <script src="jquery-3.7.1.min.js?v=3"></script>
+   <script src="utilities.js?v=45"></script>
+   <script src="pageStuff.js?v=3"></script>
+
    <link rel="stylesheet" type="text/css" media="screen" href="shared/styles_base.css" />
    <link rel="stylesheet" type="text/css" media="screen" href="shared/styles_public-server.css?101" />
-   <link rel="stylesheet" type="text/css" media="screen" href="shared/styles_bmc.css?124" />
+   <link rel="stylesheet" type="text/css" media="screen" href="shared/styles_bmc.css?125" />
 
    <script src="help_viewer.js"></script>
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
    <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
    </script>
+
+   <!-- The navigation menu -->
+   <script>
+      $(window).on('load', function() {
+         pS.init({"pageDesc":"Bin-Method Calculator"});
+      });
+   </script>
 </head>
 
 <body class="col1 CEpage">
+
+<!-- The navigation menu -->
+<div id="navDiv"></div>
+<img class="menuicon" id="opener" src="images/menu.svg" alt="" style="cursor:pointer; position:absolute; top:6px; left:8px;">
+
 <div id="page">
 
 <div id="subBanner" style="width: 940px; height: 40px; display: flex; overflow: hidden; border-radius: 7px 7px 0 0;">

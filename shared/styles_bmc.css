@@ -215,3 +215,44 @@ body.uacHome #leftNav a#uacHome,
    width: 20px; height: 20px;
    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' stroke='%23fff' fill='none'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-size='12' fill='%23fff'%3Ei%3C/text%3E%3C/svg%3E");
 }
+
+/* Override sitemap.css's position:fixed on the menu icon;
+   actual positioning is set inline in Controls.html. */
+.menuicon {
+   position: absolute;
+}
+
+/* ---- Navigation-menu overlay overrides ----
+   The global reset in styles_base.css zeros font-size, font-weight,
+   margin, and padding on all elements — including those inside the
+   overlay.  These rules use .overlay-qualified selectors so they beat
+   the base reset and restore the overlay's intended appearance. */
+.overlay a:link, .overlay a:visited {
+   color: white;
+   font-size: 24px;
+   font-weight: normal;
+   text-decoration: none;
+}
+.overlay a.section:link, .overlay a.section:visited {
+   font-size: 26px;
+   font-weight: bold;
+}
+.overlay a:hover, .overlay a:focus {
+   color: rgba(70,70,70, 1.00);
+   text-decoration: none;
+   background-color: lightgray;
+}
+.overlay ul {
+   margin-bottom: 10px;
+   padding-left: 30px;
+}
+.overlay li {
+   margin: 7px 0px 7px;
+}
+.overlay a.closebtn:link, .overlay a.closebtn:visited {
+   font-size: 45px;
+}
+.overlay {
+   background-color: rgba(50,50,50, 0.90);
+   line-height: normal;
+}
