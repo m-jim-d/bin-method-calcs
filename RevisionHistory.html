@@ -7,6 +7,12 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
 
+  <!-- The navigation menu -->
+  <link href="sitemap.css?v=20" rel="stylesheet" type="text/css">
+  <script src="jquery-3.7.1.min.js?v=3"></script>
+  <script src="utilities.js?v=45"></script>
+  <script src="pageStuff.js?v=3"></script>
+
   <!-- CSS files that were in globals.inc -->
   <link rel="stylesheet" type="text/css" media="screen" href="shared/styles_base.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="shared/styles_public-server.css" />
@@ -15,9 +21,20 @@
   <!-- Load the header and footer script -->
   <script src="load_header_footer.js"></script>
 
+  <!-- The navigation menu -->
+  <script>
+     $(window).on('load', function() {
+        pS.init({"pageDesc":"Bin-Method Calculator: Revision History"});
+     });
+  </script>
 </head>
 
 <body class="rev_history col2">
+
+<!-- The navigation menu -->
+<div id="navDiv"></div>
+<img class="menuicon" id="opener" src="images/menu.svg" alt="" style="cursor:pointer; position:absolute; top:6px; left:8px;">
+
   <div id="page">
     <div id="header"></div>
 
