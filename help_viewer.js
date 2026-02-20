@@ -211,15 +211,6 @@ function openHelpModal(theHashMark) {
     helpModalOverlay.style.display = 'flex';
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
     
-    // Safari/WebKit blank-iframe workaround: nudge the scroll position
-    // to force Safari to repaint the iframe compositing layer.
-    helpModalFrame.onload = function() {
-        setTimeout(function() {
-            window.scrollTo(window.scrollX, window.scrollY + 10);
-            window.scrollTo(window.scrollX, window.scrollY - 10);
-        }, 100);
-    };
-    
     // Focus the modal overlay instead of iframe for better key handling
     setTimeout(function() {
         if (helpModalOverlay) {
