@@ -14,8 +14,7 @@ SET SRC=C:\Users\Jim\Documents\webcontent\uac-js
 SET DST=C:\Users\Jim\Documents\webcontent\github-website\bin-method-calc
 
 IF "%1"=="help" (
-   SET help=on 
-   
+   SET help=on
 ) ELSE IF "%1"=="nocopy" (
    SET copy=off
 ) ELSE IF "%1"=="nopush" (
