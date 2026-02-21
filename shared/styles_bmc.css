@@ -266,7 +266,7 @@ body.uacHome #leftNav a#uacHome,
 
 /* Landscape mobile: ensure overlay is above all page content,
    move close button fully inside the overlay, and push menu
-   items down so they don't crowd the X. */
+   items down so they don't crowd the X.  */
 @media screen and (orientation: landscape) and (max-device-width: 980px) {
    .overlay {
       z-index: 10;
