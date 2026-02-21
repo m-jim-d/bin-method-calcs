@@ -256,3 +256,26 @@ body.uacHome #leftNav a#uacHome,
    background-color: rgba(50,50,50, 0.90);
    line-height: normal;
 }
+
+/* Mobile: white hamburger icon against the green banner */
+@media screen and (max-device-width: 980px) {
+   .menuicon {
+      filter: invert(1);
+   }
+}
+
+/* Landscape mobile: ensure overlay is above all page content,
+   move close button fully inside the overlay, and push menu
+   items down so they don't crowd the X. */
+@media screen and (orientation: landscape) and (max-device-width: 980px) {
+   .overlay {
+      z-index: 10;
+   }
+   .overlay .closebtn {
+      top: 2px;
+      font-size: 40px;
+   }
+   .overlay .overlay-content {
+      top: 14%;
+   }
+}
