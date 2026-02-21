@@ -1,3 +1,4 @@
 publish.bat
+publish_dev.bat
 init.bat
 *.svg
