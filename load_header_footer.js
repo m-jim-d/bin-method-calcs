@@ -15,6 +15,7 @@ function loadHeaderAndFooter() {
     document.addEventListener('DOMContentLoaded', function () {
         // Get header element
         const headerElement = document.getElementById('header');
+        if (headerElement) {
         
         // Include the header content directly - no placeholder needed since we're setting it immediately
         headerElement.innerHTML = `
@@ -25,18 +26,21 @@ function loadHeaderAndFooter() {
                 </div>
             </div>
         `;
+        }
             
         // Add footer content directly
         const footerElement = document.getElementById('footer_new');
-        footerElement.innerHTML = `
-            <div id="subBanner" style="width: 940px; height: 18px; display: flex; overflow: hidden; border-radius: 0px 0px 7px 7px;">
-                <div style="width: 25%; height: 100%; background-color: #0A5F23;"></div>
-                <div style="width: 75%; height: 100%; background-color: #707276; display: flex; align-items: center; padding-left: 20px;">
-                    <span style="color: white; font-size: 22px; font-weight:500; font-family: Arial, sans-serif;"></span>
+        if (footerElement) {
+            footerElement.innerHTML = `
+                <div id="subBanner" style="width: 940px; height: 18px; display: flex; overflow: hidden; border-radius: 0px 0px 7px 7px;">
+                    <div style="width: 25%; height: 100%; background-color: #0A5F23;"></div>
+                    <div style="width: 75%; height: 100%; background-color: #707276; display: flex; align-items: center; padding-left: 20px;">
+                        <span style="color: white; font-size: 22px; font-weight:500; font-family: Arial, sans-serif;"></span>
+                    </div>
                 </div>
-            </div>
-            <p>&nbsp;</p>        
-        `;
+                <p>&nbsp;</p>        
+            `;
+        }
     });
 }
 
