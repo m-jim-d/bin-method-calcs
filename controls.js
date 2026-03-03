@@ -478,6 +478,8 @@ function resetPowerDefaults() {
 // Compare the current value of controlName against its factory default and
 // update the background color of the corresponding "default" column cell.
 // Called after every control change to give the user a visual diff.
+// NOTE: Default values here MUST stay in sync with getNonDefaultParams() below.
+// If you change a default in one place, change it in the other.
 function checkForDefaults(controlName) {
    var sVPDB = theSelectedValueInPullDownBox;
    var form = document.forms.HECACParameters;
@@ -596,6 +598,98 @@ function checkForDefaults(controlName) {
       cFDW(ssChecked_S, 'tdPLDegrFactor_S_control');
       cFDW(ssChecked_S, 'tdST_Ratio_S_control');
    }
+}
+
+// Collect all form parameters whose current value differs from the factory
+// default.  Returns a plain object { controlName: currentValue, ... }.
+// NOTE: Default values here MUST stay in sync with checkForDefaults() above.
+// If you change a default in one place, change it in the other.
+function getNonDefaultParams() {
+   var sVPDB = theSelectedValueInPullDownBox;
+   var form = document.forms.HECACParameters;
+   var diff = {};
+
+   // Helpers — loose (!=) compare matches checkForDefaults behavior with numeric strings
+   function chk(name, defaultVal) {
+      var val = form[name] ? form[name].value : undefined;
+      if (val === undefined) return;
+      if (val != defaultVal) diff[name] = val;
+   }
+   function chkSel(name, defaultVal) {
+      var val = sVPDB(name);
+      if (val != defaultVal) diff[name] = val;
+   }
+   function chkChk(name, defaultChecked) {
+      if (!form[name]) return;
+      if (form[name].checked !== defaultChecked) diff[name] = form[name].checked;
+   }
+   function chkVsTd(name) {
+      var td = document.getElementById('td' + name.substr(3) + '_default');
+      if (!td) return;
+      if (form[name].value !== td.textContent.trim()) diff[name] = form[name].value;
+   }
+
+   // --- Dropdowns ---
+   chkSel('cmbBuildingType', 'Office-Medium');
+   chkSel('cmbState', 'MO');
+   chkSel('cmbCityName2', 'Kansas City');
+   chkSel('cmbSchedule', 'M-Fri, 7 a.m. to 7 p.m.');
+   chkSel('cmbIDB', '75');
+   chkSel('cmbIDB_SetBack', '5');
+   chkSel('cmbTotalCap', '084');
+   chkSel('cmbOversizePercent', '0');
+   chkSel('cmbEquipmentLife', '15');
+   chkSel('cmbST_Ratio_C', '0.72');
+   chkSel('cmbST_Ratio_S', '0.72');
+   chkSel('cmbVentilationUnits', '% of Fan Cap.');
+   chkSel('cmbN_Affinity', '2.5');
+   chkSel('cmbIRH', '60');
+   chkSel('cmbNstages_C', '1');
+   chkSel('cmbNstages_S', '1');
+   chkSel('cmbFanControls_C', '1-Spd: Always ON');
+   chkSel('cmbFanControls_S', '1-Spd: Always ON');
+   chkSel('cmbPLDegrFactor_C', '25');
+   chkSel('cmbPLDegrFactor_S', '25');
+   chkSel('cmbSpecific_RTU_C', 'None');
+   chkSel('cmbDemandMonths', '0');
+
+   // --- Text inputs ---
+   chk('txtEER', 12);
+   chk('txtUnitCost', 4.5);
+   chk('txtEER_Standard', 9.0);
+   chk('txtUnitCost_Standard', 4.0);
+   chk('txtMaintenance_Standard', 0.0);
+   chk('txtMaintenance_Candidate', 0.0);
+   chk('txtElectricityRate', 0.08);
+   chk('txtDiscountRate', 7.0);
+   chk('txtNUnits', 1.0);
+   chk('txtCondFanPercent_C', 9.0);
+   chk('txtCondFanPercent_S', 9.0);
+   chk('txtDemandCostPerKW', 0);
+
+   // --- Dynamic-default text inputs (compare against <td> default cell) ---
+   chkVsTd('txtBFn_kw_C');
+   chkVsTd('txtAux_kw_C');
+   chkVsTd('txtCond_kw_C');
+   chkVsTd('txtBFn_kw_S');
+   chkVsTd('txtAux_kw_S');
+   chkVsTd('txtCond_kw_S');
+   chkVsTd('txtVentilationValue');
+
+   // --- Checkboxes ---
+   chkChk('chkEconomizer_C', true);
+   chkChk('chkEconomizer_S', true);
+   chkChk('chkChartPW', true);
+   chkChk('chkDetails', false);
+   chkChk('chkAdvancedControls', false);
+   chkChk('chkLockLoadLine', false);
+   chkChk('chkTrackOHR', true);
+
+   // --- Spreadsheet data: log presence only (not the raw data) ---
+   if (form['txtSpreadsheetData_C'] && form['txtSpreadsheetData_C'].value !== '') diff['hasSpreadsheet_C'] = true;
+   if (form['txtSpreadsheetData_S'] && form['txtSpreadsheetData_S'].value !== '') diff['hasSpreadsheet_S'] = true;
+
+   return diff;
 }
 
 // Central dispatcher for all form-control onchange events.  Each branch
@@ -1769,6 +1863,9 @@ async function submitToEngine() {
       if (!engine || typeof engine.exportBinCalcsJson !== 'function') {
          throw new Error('exportBinCalcsJson() not available in engine_module.js');
       }
+
+      // Log non-default parameters for this submit
+      pS.logEntry('BMC-submit:' + JSON.stringify(getNonDefaultParams()));
 
       // ASP flow: Controls.asp refines ventilation via Establish_SIV on page
       // load (and on post-backs that call SubmitTheFormToItself), then Submit
