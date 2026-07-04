@@ -102,7 +102,7 @@ function addModalCSS() {
     
     // Modal CSS rules
     var css = `
-    /* Modal Styles for Help_Controls.html */
+    /* Modal Styles for help_controls.html */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -198,7 +198,7 @@ function openHelpModal(theHashMark) {
     currentHelpHash = theHashMark || '';
     
     // Set the iframe source with hashmark and cache-busting parameter
-    var helpUrl = _helpViewerBase + "Help_Controls.html";
+    var helpUrl = _helpViewerBase + "help_controls.html";
     helpUrl += "?nocache=1234"; // manually update this number to force a refresh
     
     // Add hashmark if provided (after the cache parameter)
