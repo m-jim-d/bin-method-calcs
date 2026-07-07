@@ -629,6 +629,24 @@ export async function exportBinCalcsJson(form, opts = {}) {
       _pushOverride(o, 'LockedIntercept', inp.lockedIntercept, interceptDefault, undefined);
     }
 
+    // Weather location, schedule, and building type.
+    // These controls submit-to-self (Controls.asp), so the server re-renders the
+    // selected option as defaultSelected after a change -- making DOM defaults
+    // unreliable.  Compare against the fixed application defaults from Controls.asp
+    // instead.  stations.json stores city/state uppercase while the UI baseline is
+    // mixed-case, so compare case-insensitively (trimmed).
+    function _pushStrOverrideCI(key, value, defaultValue, source) {
+      const v = String(value ?? '').trim();
+      const d = String(defaultValue ?? '').trim();
+      if (v.toUpperCase() === d.toUpperCase()) return;
+      o[key] = { value: v, default: d, source: source || undefined };
+    }
+
+    _pushStrOverrideCI('State', inp.state, 'MO');
+    _pushStrOverrideCI('City', inp.city, 'KANSAS CITY');
+    _pushStrOverrideCI('Schedule', inp.schedule, 'M-Fri, 7 a.m. to 7 p.m.');
+    _pushStrOverrideCI('BuildingType', inp.buildingType, 'Office-Medium');
+
     return o;
   }
 
