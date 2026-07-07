@@ -467,6 +467,13 @@ function _capacityLevelIntegrated_Staged(objSD, SP, BOC, nonVentLoad, idbSetpoin
 // object containing annual energy, economics, design conditions, bin
 // details, and spreadsheet model summaries.  Called by submitToEngine()
 // in controls.js.
+//
+// Dual-purpose: this is the normal client entry point AND the source used by
+// the ASP parity harness.  A couple of fields/branches below exist only for
+// that harness (see `_computeOverrides` and the `opts.aspLoadLine` branch in
+// runBinCalcs); they are inert during normal client use.  The harness itself
+// (Export JSON button, diff UI) lives in the ASP dev repo, not here.  See the
+// "Parity Harness (Export JSON)" section in ARCHITECTURE.md.
 export async function exportBinCalcsJson(form, opts = {}) {
   // Always recompute so the export reflects the current form state and latest engine logic.
   // (Avoids stale globals causing parity deltas to persist after code changes.)
@@ -517,6 +524,10 @@ export async function exportBinCalcsJson(form, opts = {}) {
     }
   }
 
+  // Harness-only: builds `meta.overrides`, a list of inputs that differ from
+  // the Controls.asp defaults.  Consumed solely by the ASP parity harness's
+  // "Non-default inputs" table; the normal client's buildResultsHTML() never
+  // reads meta.overrides.  See ARCHITECTURE.md "Parity Harness (Export JSON)".
   function _computeOverrides() {
     const o = {};
 
@@ -1539,6 +1550,11 @@ export async function runBinCalcs(form, opts = {}) {
       datasets: { stations: stationsNorm, weather: weatherNorm },
     });
 
+    // Harness-only: when the ASP parity harness passes opts.aspLoadLine, override
+    // the JS-computed load line with the ASP one so both engines run on identical
+    // inputs (apples-to-apples bin comparison).  The normal client always calls
+    // exportBinCalcsJson(form, {}) with no aspLoadLine, so this branch is skipped.
+    // See ARCHITECTURE.md "Parity Harness (Export JSON)".
     const aspLoadLine = opts?.aspLoadLine;
     if (
       ll?.ok !== false &&

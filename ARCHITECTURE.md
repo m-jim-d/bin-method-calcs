@@ -14,9 +14,8 @@ For the original ASP architecture, see `readme.txt`.
 Controls.html          Main page: form UI, layout, CSS
 controls.js            Page-level script (extracted from Controls.html inline <script>)
 help_viewer.js         Help modal (opens Help_Controls.html in an iframe overlay)
-google_charts_rtucc.js Chart prototypes — ASP-only; NOT used by the JS version
 
-include/
+engine/
   engine_module.js     Core bin-method engine (the "Engine.asp" equivalent)
   performance_module.js  Correction factors, S/T ratio, staging, fan/condenser power
   psychro.js           Psychrometric functions (humidity ratio, wet bulb, BPF/ADP)
@@ -24,13 +23,19 @@ include/
   classes.js           Data classes: StageState, StagePair, SystemProperties
 ```
 
-### ASP-only files (development/testing environment)
+### ASP reference files (development repo only — NOT in this published repository)
+
+The ASP version is the original implementation, kept in the private development
+repo (`uac-js`) purely as a parity reference for the JS port and its testing
+harness (see "ASP ↔ JS Parity Testing" below). These files are **not published
+to this repository** and require an IIS/ASP server to run, so a reader of the
+published repo will not find them here.
 
 ```
-Controls.asp           ASP version of the controls page
-Engine.asp             ASP version of the engine (server-side calculation + rendering)
+Controls.asp           ASP version of the controls page (also hosts the parity harness UI)
+Engine.asp             ASP version of the engine (server-side calculation; emits JSON for the harness)
 include/*.asp          ASP include files (psychro, performance, database, classes, misc)
-google_charts_rtucc.js Used only by Engine.asp for chart rendering
+google_charts_rtucc.js Chart prototypes — used only by Engine.asp
 ```
 
 ---
@@ -287,3 +292,31 @@ comparison points:
 The `runInputs` object captured by the engine includes the source of every
 input value, making it possible to trace discrepancies to specific form
 field resolution differences between ASP and JS.
+
+### Parity Harness (Export JSON) — development only
+
+The comparison is driven by an **Export JSON** button on the ASP controls
+page, shown only when the page URL includes `?harness=1`. This is a
+development-only tool that lives in the private `uac-js` repo; it is **not
+part of this published repository** and requires the ASP reference engine +
+an IIS server, so a JS-only user will never invoke it.
+
+Flow:
+1. `exportParityJson()` (in the ASP `Controls.asp`) POSTs the form to
+   `Engine.asp?export=json`, which returns the ASP engine's results as JSON.
+2. It then runs the JS engine via `exportBinCalcsJson(form, { aspLoadLine })`,
+   passing the ASP-computed load line so both engines use identical inputs.
+3. `computeParityDiff()` / `renderParityDiff()` render a side-by-side diff of
+   annual energy, per-bin energy, economics, and non-default inputs.
+
+Because of this harness, a small amount of harness-only code lives in the
+shipped `engine/engine_module.js`. It is inert during normal client use:
+- `_computeOverrides()` → `meta.overrides`: lists the run's non-default inputs;
+  consumed only by the harness diff table (the normal client ignores it).
+- The `opts.aspLoadLine` branch in `runBinCalcs()`: forces the ASP load line
+  for an apples-to-apples run. The normal client always calls
+  `exportBinCalcsJson(form, {})` and never sets this option.
+
+Everything else `exportBinCalcsJson()` produces (annual energy, economics,
+bins, model summaries) is used by the normal client too — it is the primary
+client entry point, not a test-only function.
