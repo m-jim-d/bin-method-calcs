@@ -34,8 +34,8 @@ IF %copy%==on (
 
    REM images: mirror site icons so source deletions/renames propagate.
    REM /MIR purges dest files no longer in source. Only mirror web image types;
-   REM skip the _notes working folder and Thumbs.db.
-   robocopy "%SRC%\images" "%DST%\images" *.jpg *.png *.svg /MIR /XD _notes /XF Thumbs.db /NFL /NDL /NP
+   REM skip the old_images archive folder and Thumbs.db.
+   robocopy "%SRC%\images" "%DST%\images" *.jpg *.png *.svg /MIR /XD old_images /XF Thumbs.db /NFL /NDL /NP
 
    REM data: JSON only. Skip .mdb Access databases.
    xcopy "%SRC%\data\*.json" "%DST%\data\" /Y /D /I
@@ -76,9 +76,9 @@ IF %copy%==on (
    )
 
    REM ---- Methods: mirror all HTML + images (recurses subfolders) ----
-   REM /MIR purges dest files no longer in source. Skip working/scratch folders
-   REM (_notes, _vti_cnf, old_images) and Thumbs.db.
-   robocopy "%SRC%\methods" "%DST%\methods" /MIR /XD _notes _vti_cnf old_images /XF Thumbs.db /NFL /NDL /NP
+   REM /MIR purges dest files no longer in source. Skip the old_images archive
+   REM folder and Thumbs.db.
+   robocopy "%SRC%\methods" "%DST%\methods" /MIR /XD old_images /XF Thumbs.db /NFL /NDL /NP
 
    ECHO(
    ECHO Copy complete.
