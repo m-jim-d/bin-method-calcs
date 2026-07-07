@@ -76,8 +76,7 @@ IF %copy%==on (
    )
 
    REM ---- Methods: mirror all HTML + images (recurses subfolders) ----
-   REM /MIR purges dest files no longer in source. Skip the old_images archive
-   REM folder and Thumbs.db.
+   REM /MIR purges dest files no longer in source. Skip the old_images archive folder and Thumbs.db.
    robocopy "%SRC%\methods" "%DST%\methods" /MIR /XD old_images /XF Thumbs.db /NFL /NDL /NP
 
    ECHO(
