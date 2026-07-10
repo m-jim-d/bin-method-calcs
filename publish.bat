@@ -57,6 +57,7 @@ IF %copy%==on (
       BuildingLoadModels.pdf
       DetailedPerformanceData.zip
       favicon.ico
+      favicon.svg
       sitemap.html
       sitemap.css
       jquery-3.7.1.min.js
