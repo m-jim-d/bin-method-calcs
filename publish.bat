@@ -42,6 +42,8 @@ IF %copy%==on (
 
    REM ---- Page-level files ----
    FOR %%F IN (
+      _redirects
+      index.html
       controls.html
       controls.js
       help_viewer.js
