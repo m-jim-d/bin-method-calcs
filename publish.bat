@@ -59,6 +59,7 @@ IF %copy%==on (
       favicon.ico
       favicon.svg
       sitemap.html
+      sitemap.txt
       sitemap.css
       jquery-3.7.1.min.js
       utilities.js

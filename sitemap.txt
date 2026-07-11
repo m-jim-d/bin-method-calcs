@@ -1,0 +1,16 @@
+https://bincalcs.triquence.org/controls
+https://bincalcs.triquence.org/quickstart
+https://bincalcs.triquence.org/downloads
+https://bincalcs.triquence.org/bypass
+https://bincalcs.triquence.org/revisionhistory
+https://bincalcs.triquence.org/methods/methods_outline
+https://bincalcs.triquence.org/methods/non-ventilation-load
+https://bincalcs.triquence.org/methods/example-load-data
+https://bincalcs.triquence.org/methods/cooling-correction-curves
+https://bincalcs.triquence.org/methods/cooling-correction-curves_sensible
+https://bincalcs.triquence.org/methods/cooling-correction-curves_manufacturer
+https://bincalcs.triquence.org/methods/cooling-correction-curves_3-specific-units
+https://bincalcs.triquence.org/methods/equipment-response
+https://bincalcs.triquence.org/methods/equipment-response_latent
+https://bincalcs.triquence.org/methods/economics-formulas
+https://bincalcs.triquence.org/methods/economics-example
