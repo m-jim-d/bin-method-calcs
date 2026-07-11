@@ -26,6 +26,11 @@ html {
    clear: both;
 }
 
+/* Downloads page: match h2 section headings to the h1 size */
+.downloads #main h2 {
+   font-size: 20px;
+}
+
 table.controls {table-layout:fixed; width:895px;} 
 td.col1 {width: 245px;}
 td.col2 {width: 154px;}
