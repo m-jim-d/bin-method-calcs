@@ -11,9 +11,10 @@ For the original ASP architecture, see `readme.txt`.
 ## File Map
 
 ```
-Controls.html          Main page: form UI, layout, CSS
-controls.js            Page-level script (extracted from Controls.html inline <script>)
-help_viewer.js         Help modal (opens Help_Controls.html in an iframe overlay)
+index.html             The calculator itself — main page: form UI, layout, CSS.
+                       (Served at the site root; formerly named controls.html.)
+controls.js            Page-level script (loaded by index.html; extracted from its inline <script>)
+help_viewer.js         Help modal (opens help_controls.html in an iframe overlay)
 
 engine/
   engine_module.js     Core bin-method engine (the "Engine.asp" equivalent)
@@ -72,7 +73,7 @@ produces structured JSON, and `controls.js` builds the HTML.
 ### 1. Page Load
 
 ```
-Controls.html loads
+index.html loads (the calculator page)
   └─ controls.js executes (via <script defer>)
        ├─ IIFEs populate dropdowns (Total Capacity 36-360, Degradation 0-50)
        └─ loadCityData()

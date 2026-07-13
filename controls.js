@@ -1,11 +1,11 @@
 ﻿// ============================================================
-// controls.js — Page-level logic for controls.html
+// controls.js — Page-level logic for index.html (the calculator page)
 // ============================================================
 //
 // This file handles all form interaction, input validation, and results
 // rendering for the Bin-Method RTU Comparison Calculator.  It is the
-// glue between the HTML form (controls.html) and the calculation engine
-// (engine/engine_module.js).
+// glue between the HTML form (index.html — the calculator itself, formerly
+// controls.html) and the calculation engine (engine/engine_module.js).
 //
 // Flow:
 //   Page load  → populate dropdowns, fetch city data, run recalcVentilation()

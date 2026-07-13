@@ -222,7 +222,7 @@ body.uacHome #leftNav a#uacHome,
 }
 
 /* Override sitemap.css's position:fixed on the menu icon;
-   actual positioning is set inline in Controls.html. */
+   actual positioning is set inline in index.html (the calculator page). */
 .menuicon {
    position: absolute;
 }

@@ -1,4 +1,4 @@
-https://bincalcs.triquence.org/controls
+https://bincalcs.triquence.org/
 https://bincalcs.triquence.org/quickstart
 https://bincalcs.triquence.org/downloads
 https://bincalcs.triquence.org/bypass
