@@ -14,7 +14,7 @@ For the original ASP architecture, see `readme.txt`.
 index.html             The calculator itself — main page: form UI, layout, CSS.
                        (Served at the site root; formerly named controls.html.)
 controls.js            Page-level script (loaded by index.html; extracted from its inline <script>)
-help_viewer.js         Help modal (opens help_controls.html in an iframe overlay)
+help_viewer.js         Help modal (opens help-controls.html in an iframe overlay)
 
 engine/
   engine_module.js     Core bin-method engine (the "Engine.asp" equivalent)

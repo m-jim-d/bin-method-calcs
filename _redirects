@@ -34,3 +34,15 @@
 /methods/economic-formulas.html /methods/economics-formulas 301
 /methods/economics /methods/economics-example 301
 /methods/economics.html /methods/economics-example 301
+
+# Top-level pages renamed to hyphenated filenames (revision-history, help-controls).
+# Because the new names differ by more than case, both the legacy CamelCase URLs
+# and the brief lowercase names can be redirected safely (no case-only loop risk).
+/RevisionHistory /revision-history 301
+/RevisionHistory.html /revision-history 301
+/revisionhistory /revision-history 301
+/revisionhistory.html /revision-history 301
+/Help_Controls /help-controls 301
+/Help_Controls.html /help-controls 301
+/help_controls /help-controls 301
+/help_controls.html /help-controls 301

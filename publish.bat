@@ -47,8 +47,8 @@ IF %copy%==on (
       bypass.html
       downloads.html
       quickstart.html
-      revisionhistory.html
-      help_controls.html
+      revision-history.html
+      help-controls.html
       ARCHITECTURE.md
       BuildingLoadModels.pdf
       DetailedPerformanceData.zip
