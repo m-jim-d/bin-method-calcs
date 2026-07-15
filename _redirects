@@ -1,2 +1,5 @@
+# The calculator now lives at the site root (index.html, formerly controls.html).
+# These 301s redirect the old /controls URLs to / so existing links, bookmarks,
+# and search-indexed pages consolidate onto the new canonical root URL.
 /controls / 301
 /controls.html / 301

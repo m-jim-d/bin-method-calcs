@@ -29,9 +29,6 @@ IF %copy%==on (
    xcopy "%SRC%\shared\*.css" "%DST%\shared\" /Y /D /I
    xcopy "%SRC%\shared\*.html" "%DST%\shared\" /Y /D /I
 
-   REM docs: PDF manuals
-   xcopy "%SRC%\docs\*" "%DST%\docs\" /Y /D /I
-
    REM images: mirror site icons so source deletions/renames propagate.
    REM /MIR purges dest files no longer in source. Only mirror web image types;
    REM skip the old_images archive folder and Thumbs.db.
@@ -44,7 +41,6 @@ IF %copy%==on (
    FOR %%F IN (
       _redirects
       index.html
-      controls.html
       controls.js
       help_viewer.js
       load_header_footer.js
@@ -58,6 +54,7 @@ IF %copy%==on (
       DetailedPerformanceData.zip
       favicon.ico
       favicon.svg
+      robots.txt
       sitemap.html
       sitemap.txt
       sitemap.css
