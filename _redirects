@@ -3,3 +3,34 @@
 # and search-indexed pages consolidate onto the new canonical root URL.
 /controls / 301
 /controls.html / 301
+
+# The /methods pages were renamed to lowercase, hyphenated filenames.
+# Redirect the old URLs (both .html and clean-URL forms) to the new
+# canonical (extensionless) paths so existing links, bookmarks, and
+# search-indexed pages consolidate onto the new URLs.
+/methods/NonVentilationLoad /methods/non-ventilation-load 301
+/methods/NonVentilationLoad.html /methods/non-ventilation-load 301
+/methods/ExampleLoadData /methods/example-load-data 301
+/methods/ExampleLoadData.html /methods/example-load-data 301
+/methods/CoolingCorrectionCurves /methods/cooling-correction-curves 301
+/methods/CoolingCorrectionCurves.html /methods/cooling-correction-curves 301
+/methods/CoolingCorrectionCurvesSensible /methods/cooling-correction-curves_sensible 301
+/methods/CoolingCorrectionCurvesSensible.html /methods/cooling-correction-curves_sensible 301
+/methods/CoolingCorrectionCurves_Manufacturer /methods/cooling-correction-curves_manufacturer 301
+/methods/CoolingCorrectionCurves_Manufacturer.html /methods/cooling-correction-curves_manufacturer 301
+/methods/CoolingCorrectionCurves_3SpecificUnits /methods/cooling-correction-curves_3-specific-units 301
+/methods/CoolingCorrectionCurves_3SpecificUnits.html /methods/cooling-correction-curves_3-specific-units 301
+/methods/EquipmentResponse /methods/equipment-response 301
+/methods/EquipmentResponse.html /methods/equipment-response 301
+/methods/EquipmentResponse_Latent /methods/equipment-response_latent 301
+/methods/EquipmentResponse_Latent.html /methods/equipment-response_latent 301
+/methods/EconomicFormulas /methods/economics-formulas 301
+/methods/EconomicFormulas.html /methods/economics-formulas 301
+/methods/Economics /methods/economics-example 301
+/methods/Economics.html /methods/economics-example 301
+
+# Short-lived intermediate names (briefly live before the final rename).
+/methods/economic-formulas /methods/economics-formulas 301
+/methods/economic-formulas.html /methods/economics-formulas 301
+/methods/economics /methods/economics-example 301
+/methods/economics.html /methods/economics-example 301
