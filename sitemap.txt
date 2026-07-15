@@ -2,7 +2,7 @@ https://bincalcs.triquence.org/
 https://bincalcs.triquence.org/quickstart
 https://bincalcs.triquence.org/downloads
 https://bincalcs.triquence.org/bypass
-https://bincalcs.triquence.org/revisionhistory
+https://bincalcs.triquence.org/revision-history
 https://bincalcs.triquence.org/methods/methods_outline
 https://bincalcs.triquence.org/methods/non-ventilation-load
 https://bincalcs.triquence.org/methods/example-load-data
