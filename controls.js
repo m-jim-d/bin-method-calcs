@@ -1441,7 +1441,7 @@ function drawBinLoadsChart(divId, bdata, title, chartExtra) {
    var options = {
       title: title,
       titleTextStyle: {fontSize: 13, bold: true},
-      hAxis: {title: 'Outside Dry Bulb (Â°F)', titleTextStyle: {italic: false}},
+      hAxis: {title: 'Outside Dry Bulb (\u00B0F)', titleTextStyle: {italic: false}},
       vAxes: {
          0: {title: 'Load (kBtuh)', titleTextStyle: {italic: false}},
          1: {title: 'Hours', titleTextStyle: {italic: false}}
@@ -1488,7 +1488,7 @@ function drawBinPerfChart(divId, bdata, title, chartExtra) {
    var options = {
       title: title,
       titleTextStyle: {fontSize: 13, bold: true},
-      hAxis: {title: 'Outside Dry Bulb (Â°F)', titleTextStyle: {italic: false}},
+      hAxis: {title: 'Outside Dry Bulb (\u00B0F)', titleTextStyle: {italic: false}},
       vAxes: { 0: vAxis0, 1: vAxis1 },
       series: {
          0: {targetAxisIndex: 0, type: 'bars', color: '#69c'},
@@ -2614,9 +2614,9 @@ function buildResultsHTML(js) {
             h += '</table>';
 
             // Chart divs (Loads/Hours on left, Performance on right)
-            h += "<div style='display:flex; gap:16px; flex-wrap:wrap; margin:20px 0 5px 0;'>";
-            h += "<div id='" + lhDivId + "' style='width:450px; height:375px;'></div>";
-            h += "<div id='" + epDivId + "' style='width:450px; height:375px;'></div>";
+            h += "<div style='display:flex; gap:16px; flex-wrap:nowrap; margin:20px 0 5px 0;'>";
+            h += "<div id='" + lhDivId + "' style='min-width:500px; width:500px; height:375px;'></div>";
+            h += "<div id='" + epDivId + "' style='min-width:500px; width:500px; height:375px;'></div>";
             h += "</div>";
 
             // Queue chart data for drawing after DOM update
@@ -2696,8 +2696,8 @@ function buildResultsHTML(js) {
       for (var gr = 0; gr < gridRows.length; gr++) {
          var grow = gridRows[gr];
          h += "<div style='display:flex; gap:16px; flex-wrap:nowrap; margin:10px 0;'>";
-         h += "<div id='grid" + grow.chartType + "_candidate_" + grow.occType + "' style='min-width:450px; width:450px; height:375px;'></div>";
-         h += "<div id='grid" + grow.chartType + "_standard_" + grow.occType + "' style='min-width:450px; width:450px; height:375px;'></div>";
+         h += "<div id='grid" + grow.chartType + "_candidate_" + grow.occType + "' style='min-width:500px; width:500px; height:375px;'></div>";
+         h += "<div id='grid" + grow.chartType + "_standard_" + grow.occType + "' style='min-width:500px; width:500px; height:375px;'></div>";
          h += "</div>";
       }
       h += '</div>';
