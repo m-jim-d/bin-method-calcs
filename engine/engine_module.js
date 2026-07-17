@@ -37,7 +37,7 @@ import {
 import { getDesignConditions, getWeatherRecords, getHours } from './database_module.js?v=1';
 import { StageState, StagePair, SystemProperties } from './classes.js?v=6';
 
-const ENGINE_VERSION = 14;
+const ENGINE_VERSION = 15;
 
 // Module-level state (replaces globalThis globals for internal communication)
 let _lastRunPhase1 = null;   // set by runBinCalcs, read by exportBinCalcsJson
@@ -1023,6 +1023,19 @@ export function computeLoadLine({ formValues, candidateSD, stageState, datasets 
     const owbDesign = dc.OWB_Design;
     const pressureDesign = dc.Pressure_Design;
 
+    // Cold-city guard (matches ASP Controls.asp lines 492-496, Establish_SIV):
+    // the outdoor design temperature must exceed the indoor setpoint, otherwise
+    // there is no cooling design load and the design-condition capacity/BPF/ADP
+    // calculations below fail with a misleading BPF error.  Check up front and
+    // return a structured coldCity flag so the UI can show the correct warning.
+    if (odbDesign < idb) {
+      return {
+        ok: false,
+        coldCity: true,
+        errorMessage: `WARNING: The selected indoor setpoint temperature (${idb}) must be less than the outdoor design temperature (${odbDesign.toFixed(1)})`,
+      };
+    }
+
     const ohrDesign = Phr_wb(odbDesign, owbDesign, pressureDesign);
 
     const insideRH = IRH_Track_OR_Set(
@@ -1259,6 +1272,14 @@ export function computeLoadLine({ formValues, candidateSD, stageState, datasets 
 // Candidate and Standard units.  Stores results in module-level state
 // (_lastRunPhase1, _lastRunInputs) for consumption by exportBinCalcsJson.
 export async function runBinCalcs(form, opts = {}) {
+  // Clear per-run state up front so an early error return (e.g. the test-condition
+  // BPF/ADP guard for a high S/T ratio, or the cold-city load-line guard) cannot
+  // leave stale results behind.  Otherwise exportBinCalcsJson() would read a prior
+  // successful _lastRunPhase1 and silently return stale JSON, swallowing the warning.
+  _lastRunPhase1 = null;
+  _lastRunInputs = null;
+  _lastLoadLine = null;
+
   try {
     if (!form) {
       return '<div class="graph"><h2>Client-side engine error</h2><pre>Missing form</pre></div>';

@@ -362,7 +362,7 @@ async function recalcVentilation() {
       var form = document.forms.HECACParameters;
       var psychro = await import('./engine/psychro.js');
       var perf = await import('./engine/performance_module.js');
-      var engine = await import('./engine/engine_module.js?v=14');
+      var engine = await import('./engine/engine_module.js?v=15');
       if (!engine || typeof engine.exportBinCalcsJson !== 'function') return;
 
       // Iterative Establish_SIV matching ASP Controls.asp lines 405-431:
@@ -371,6 +371,33 @@ async function recalcVentilation() {
       if (lockWasChecked) form['chkLockLoadLine'].checked = false;
       var ranClean = false;
       var bpfErrorMsg = '';
+      // Seed the SIV iteration with a safe low ventilation guess (matches ASP's
+      // "initial guess" concept, Controls.asp lines 401-405).  A stale high value
+      // carried over from a previous, milder city (where ventilation can exceed
+      // 100%) would otherwise make the first computeLoadLine pass fail with a
+      // spurious negative-non-ventilation-slope error when switching to a warmer,
+      // higher-load city.  A low seed always yields a positive slope; the loop
+      // below then converges to the correct value regardless of the seed.
+      var ventUnitsSeed = theSelectedValueInPullDownBox('cmbVentilationUnits') || '';
+      var ventSeed;
+      if (ventUnitsSeed.toUpperCase().indexOf('CFM') >= 0) {
+         var capSeed = parseFloat(form['txtTotalCap'].value) || 84;
+         ventSeed = String(Math.round(0.10 * (capSeed / 12) * 400));
+      } else {
+         ventSeed = '10';
+      }
+      form['txtVentilationValue_NotAdvanced'].value = ventSeed;
+      form['txtVentilationValue'].value = ventSeed;
+      // Also seed the S&I fraction to a safe mid value (matches ASP's fallback,
+      // Controls.asp line 450).  A stale high S&I fraction carried over from a very
+      // mild city (tiny design dt makes S&I approach 1.0) makes the internal load
+      // (sandI) nearly equal the full sensible load, so even the low ventilation
+      // seed above yields a negative non-ventilation slope when switching to a
+      // warmer, higher-dt city.  refineVentilationFromCapacity recomputes the
+      // correct S&I for the current city on the first successful pass, so this
+      // seed only needs to guarantee a positive slope to start the iteration.
+      if (form['txtSI_Fraction_NotAdvanced']) form['txtSI_Fraction_NotAdvanced'].value = '0.5';
+      if (form['txtSI_Fraction']) form['txtSI_Fraction'].value = '0.5';
       for (var iter = 0; iter < 4; iter++) {
          try { await engine.exportBinCalcsJson(form, {}); } catch (ex) {
             // Capture BPF/ADP error detail from the engine exception
@@ -406,11 +433,18 @@ async function recalcVentilation() {
          form['txtVentilationValue_NotAdvanced'].value = fallback;
          form['txtVentilationValue'].value = fallback;
          if (warnArea) {
-            var unitName = 'Candidate';
-            if (bpfErrorMsg && bpfErrorMsg.indexOf('Standard Unit') >= 0) unitName = 'Standard';
-            var cleanMsg = bpfErrorMsg.replace(/^(Candidate|Standard) Unit BPF:\s*/i, '');
-            warnArea.innerHTML = 'WARNING: Try lowering the S/T ratio for the ' + unitName + ' Unit.<br>'
-               + 'ERROR Message from BPF calculation: ' + (cleanMsg || 'BPF/ADP calculation failed.');
+            var llState = engine.getLastLoadLine();
+            if (llState && llState.coldCity) {
+               // ASP Controls.asp lines 492-496 (Establish_SIV): cold-city warning.
+               warnArea.innerHTML = llState.errorMessage;
+            } else {
+               // ASP psychro.asp Get_BPF_and_A0: BPF/ADP S/T-ratio warning.
+               var unitName = 'Candidate';
+               if (bpfErrorMsg && bpfErrorMsg.indexOf('Standard Unit') >= 0) unitName = 'Standard';
+               var cleanMsg = bpfErrorMsg.replace(/^(Candidate|Standard) Unit BPF:\s*/i, '');
+               warnArea.innerHTML = 'WARNING: Try lowering the S/T ratio for the ' + unitName + ' Unit.<br>'
+                  + 'ERROR Message from BPF calculation: ' + (cleanMsg || 'BPF/ADP calculation failed.');
+            }
             warnArea.style.display = '';
          }
       } else {
@@ -1001,7 +1035,7 @@ async function fetchLoadLine() {
          // Run the iterative engine loop (matching submitToEngine) so ventilation is refined
          var psychro = await import('./engine/psychro.js');
          var perf = await import('./engine/performance_module.js');
-         var engine = await import('./engine/engine_module.js?v=14');
+         var engine = await import('./engine/engine_module.js?v=15');
          for (var iter = 0; iter < 4; iter++) {
             await engine.exportBinCalcsJson(form, {});
             var ll = engine.getLastLoadLine();
@@ -1219,6 +1253,13 @@ function restoreDefaults() {
    }
    // Show controls, hide results
    returnToControls();
+   // Re-establish ventilation for the restored (Kansas City) defaults, matching
+   // fresh page-load behavior.  Without this the hardcoded ventilation reset above
+   // is never validated against the restored city's load line, so a value that is
+   // too high (e.g. carried over conceptually from a prior milder city like Duluth)
+   // would fail the negative-non-ventilation-slope guard on submit.  recalcVentilation
+   // seeds low and converges to the correct value.
+   recalcVentilation();
 }
 
 function returnToControls() {
@@ -1859,7 +1900,7 @@ async function submitToEngine() {
       var perf = await import('./engine/performance_module.js');
 
       // Dynamically import the JS engine module
-      var engine = await import('./engine/engine_module.js?v=14');
+      var engine = await import('./engine/engine_module.js?v=15');
       if (!engine || typeof engine.exportBinCalcsJson !== 'function') {
          throw new Error('exportBinCalcsJson() not available in engine_module.js');
       }
@@ -1910,6 +1951,16 @@ async function submitToEngine() {
       }
 
    } catch(e) {
+      // Cold-city case (ASP Controls.asp lines 492-496, Establish_SIV): the load
+      // line establishment set a structured coldCity flag.  Show that warning
+      // directly, separate from the BPF/ADP S/T warning below.
+      var llState = engine && engine.getLastLoadLine && engine.getLastLoadLine();
+      if (llState && llState.coldCity) {
+         document.getElementById('resultsContent').innerHTML =
+            '<h2>RESULTS</h2>' +
+            '<p style="color:#cc0000; font-weight:bold;">' + llState.errorMessage + '</p>';
+         return;
+      }
       var errStr = String(e && (e.message || e));
       // Check for BPF/ADP error â€” show ASP-style warning (psychro.asp lines 368-370)
       var bpfDetail = '';
