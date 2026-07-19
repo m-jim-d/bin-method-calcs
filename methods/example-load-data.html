@@ -30,8 +30,19 @@
       <h1>Establishing Loads: <em>An example</em></h1>
       <div style="float: right;">
         <figure>
-          <img alt="Wichita, KS" src="images/Wichita.png">
-          <figcaption style="padding-left: 60px; margin-right: auto;"><strong>Loads and Hours: Wichita, KS; Medium Office</strong></figcaption>
+          <img alt="Wichita, KS" width="550" src="images/Wichita_loads.svg">
+          <figcaption style="padding-left: 70px; margin-right: auto;">
+            <strong>Loads and Hours: Wichita, KS; Medium Office</strong>
+            <ul>
+              <li>Red line: total sensible load (SLD)</li>
+              <li>Green line: sensible load after economizing (SLdE)</li>
+              <li>Gray dashed line: non-ventilation sensible load (NVSLd)</li>
+              <li>Steel-blue bars: total hours in each bin</li>
+              <li>Light-blue bars: scheduled hours of operation (Hrs)</li>
+              <li>Blue dot: set point</li>
+              <li>Red dot: design condition</li>
+            </ul>
+          </figcaption>
         </figure>
       </div>
       <ul>
@@ -56,7 +67,7 @@
       and bringing in additional ventilation air. When economizing, the supply
       fan runs at full speed.</p>
 
-      <p>In the example chart (produced by the RTU Comparison Calculator) for
+      <p>In the example chart (produced by the Bin Method Calculator) for
       Wichita, the "After Economizer" trace shows the final load data that will
       drive the run-time calculation (this trace is reduced to zero for those
       bins where the economizer can satisfy all the cooling load).</p>
@@ -75,15 +86,14 @@
       <p>The final step in presenting the load data to the unit is to determine
       the number of hours in which the unit experiences that load. In the
       example chart for Wichita, with a schedule of Monday - Friday, 7am - 7pm,
-      the hour distribution, as binned by outside temperature, is shown
-      normalized, with a fine red line (max value = 254 hours). This line is
-      labeled "Schedule." The potential total hours, as would be the case if no
-      schedule were filtering the hours, is shown by the fine dark-brown line,
-      labeled "Total Hours." This Total Hours trace is displayed for use as a
-      reference to give the user a sense of the impact of the filtering by the
-      schedule. When an "All Day, All Week" schedule is selected, these two
-      traces (filtered and unfiltered) are identical and lay on top of each
-      other.</p>
+      the hour distribution, as binned by outside temperature, is shown with the light-blue bars. 
+      These bars are labeled "Scheduled Hours." The potential total hours, as would be the case if no
+      schedule were filtering the hours, is shown by the steel-blue bars,
+      labeled "Total Hours." The total hours are displayed as a
+      reference to give the user a sense of the filtering applied by the
+      schedule. When an "All Day, All Week" schedule is selected, these two sets of bars
+      (filtered and unfiltered) are identical, same height, side by side.
+      </p>
 
       <p>When considering how unit performance varies from city to city, it is
       useful to keep in mind that the building-load model (in this case:
@@ -99,7 +109,7 @@
         temperatures, the more time at high load and low capacity; the result is
         longer run times per bin hour).</li>
       </ol>
-      <p> The RTU Comparison Calculator reports calculation results for any
+      <p> The Bin Method Calculator reports calculation results for any
       temperature bin where there is a positive cooling load (before economizer
       reductions). </p>
     </div>

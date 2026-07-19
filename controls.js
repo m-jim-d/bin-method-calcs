@@ -1359,6 +1359,158 @@ function buildPaybackDataTable(unitCost_C, unitCost_S, annualCost_C, annualCost_
    return data;
 }
 
+// ============================================================
+// SVG export via right-click context menu
+// ------------------------------------------------------------
+// Right-clicking any chart shows a small "Download SVG" menu.
+// The exported SVG is made scalable (viewBox + width="100%") so
+// it renders crisply at any browser zoom level. The on-page
+// chart is not altered (we export a clone).
+// ============================================================
+
+// Turn a chart title into a safe filename.
+function _svgFileName(name) {
+   var base = (name || 'chart').replace(/[^A-Za-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '');
+   return (base || 'chart') + '.svg';
+}
+
+// Serialize the <svg> inside a chart div into a scalable, standalone SVG string.
+function _chartSvgString(divId) {
+   var container = document.getElementById(divId);
+   var svg = container ? container.querySelector('svg') : null;
+   if (!svg) return null;
+
+   var clone = svg.cloneNode(true);
+   clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+   clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+
+   // Add a viewBox so the file scales cleanly at any zoom, while keeping
+   // real pixel width/height (height="auto" is invalid in a standalone SVG).
+   var w = parseFloat(svg.getAttribute('width'))  || svg.clientWidth  || 500;
+   var h = parseFloat(svg.getAttribute('height')) || svg.clientHeight || 375;
+   if (!clone.getAttribute('viewBox')) {
+      clone.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+   }
+   clone.setAttribute('width', w);
+   clone.setAttribute('height', h);
+
+   // Remove stray gridlines that fall outside the plot area. Google Charts
+   // draws minor gridlines beyond the axis range; at the SVG edges these
+   // show up as spurious vertical lines when the file is viewed or scaled.
+   var clip = clone.querySelector('clipPath rect');
+   if (clip) {
+      var plotL = parseFloat(clip.getAttribute('x'));
+      var plotR = plotL + parseFloat(clip.getAttribute('width'));
+      var plotT = parseFloat(clip.getAttribute('y'));
+      var plotB = plotT + parseFloat(clip.getAttribute('height'));
+      var plotH = plotB - plotT;
+      var plotW = plotR - plotL;
+      var rects = clone.querySelectorAll('rect');
+      for (var i = 0; i < rects.length; i++) {
+         var r = rects[i];
+         var rx = parseFloat(r.getAttribute('x'));
+         var ry = parseFloat(r.getAttribute('y'));
+         var rw = parseFloat(r.getAttribute('width'));
+         var rh = parseFloat(r.getAttribute('height'));
+         if (!isFinite(rx) || !isFinite(ry) || !isFinite(rw) || !isFinite(rh)) continue;
+         // Vertical gridline outside the plot's left/right bounds.
+         var isVertGrid = rw <= 1.5 && rh >= plotH * 0.8;
+         if (isVertGrid && (rx < plotL - 0.5 || rx > plotR + 0.5)) {
+            r.parentNode.removeChild(r);
+            continue;
+         }
+         // Horizontal gridline outside the plot's top/bottom bounds.
+         var isHorizGrid = rh <= 1.5 && rw >= plotW * 0.8;
+         if (isHorizGrid && (ry < plotT - 0.5 || ry > plotB + 0.5)) {
+            r.parentNode.removeChild(r);
+         }
+      }
+   }
+
+   return '<?xml version="1.0" encoding="UTF-8"?>\n' +
+          new XMLSerializer().serializeToString(clone);
+}
+
+// Trigger a download of the chart's SVG.
+function _downloadChartSvg(divId, filename) {
+   var str = _chartSvgString(divId);
+   if (!str) return;
+   var blob = new Blob([str], {type: 'image/svg+xml;charset=utf-8'});
+   var url = URL.createObjectURL(blob);
+   var a = document.createElement('a');
+   a.href = url;
+   a.download = filename;
+   document.body.appendChild(a);
+   a.click();
+   document.body.removeChild(a);
+   setTimeout(function() { URL.revokeObjectURL(url); }, 0);
+}
+
+// Lazily create the shared one-item context menu element.
+function _getSvgContextMenu() {
+   var menu = document.getElementById('svgDownloadMenu');
+   if (menu) return menu;
+
+   menu = document.createElement('div');
+   menu.id = 'svgDownloadMenu';
+   menu.style.cssText = [
+      'position:fixed', 'z-index:100000', 'display:none',
+      'background:#fff', 'border:1px solid #999', 'border-radius:4px',
+      'box-shadow:0 2px 8px rgba(0,0,0,0.25)', 'padding:4px 0',
+      'font:13px/1.4 Arial,sans-serif', 'min-width:120px', 'user-select:none'
+   ].join(';');
+
+   var item = document.createElement('div');
+   item.textContent = 'Download SVG';
+   item.style.cssText = 'padding:6px 14px; cursor:pointer; white-space:nowrap;';
+   item.onmouseenter = function() { item.style.background = '#e8f0fe'; };
+   item.onmouseleave = function() { item.style.background = ''; };
+   item.onclick = function() {
+      _hideSvgContextMenu();
+      if (menu._divId) _downloadChartSvg(menu._divId, menu._filename);
+   };
+   menu.appendChild(item);
+   document.body.appendChild(menu);
+
+   // Dismiss on outside click, scroll, or Escape.
+   document.addEventListener('click', _hideSvgContextMenu);
+   document.addEventListener('scroll', _hideSvgContextMenu, true);
+   document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') _hideSvgContextMenu();
+   });
+
+   return menu;
+}
+
+function _hideSvgContextMenu() {
+   var menu = document.getElementById('svgDownloadMenu');
+   if (menu) menu.style.display = 'none';
+}
+
+// Attach a right-click "Download SVG" menu to a chart div.
+function attachSvgContextMenu(divId, chartTitle) {
+   var container = document.getElementById(divId);
+   if (!container || container._svgMenuAttached) return;
+   container._svgMenuAttached = true;
+   container.addEventListener('contextmenu', function(e) {
+      // Only offer the menu when the SVG is actually present.
+      if (!container.querySelector('svg')) return;
+      e.preventDefault();
+      var menu = _getSvgContextMenu();
+      menu._divId = divId;
+      menu._filename = _svgFileName(chartTitle);
+      menu.style.display = 'block';
+      // Position at cursor, keeping the menu on-screen.
+      menu.style.left = '0px';
+      menu.style.top = '0px';
+      var mw = menu.offsetWidth, mh = menu.offsetHeight;
+      var x = Math.min(e.clientX, window.innerWidth - mw - 4);
+      var y = Math.min(e.clientY, window.innerHeight - mh - 4);
+      menu.style.left = Math.max(0, x) + 'px';
+      menu.style.top = Math.max(0, y) + 'px';
+   });
+}
+
 // ---- Draw payback chart ----
 function drawPaybackChart(dataTable, eqLife, vAxisTitle) {
    var headerRow = [
@@ -1388,6 +1540,9 @@ function drawPaybackChart(dataTable, eqLife, vAxisTitle) {
    };
 
    var chart = new google.visualization.LineChart(document.getElementById('payback_div'));
+   google.visualization.events.addListener(chart, 'ready', function() {
+      attachSvgContextMenu('payback_div', 'payback');
+   });
    chart.draw(googleDataTable, options);
 }
 
@@ -1503,6 +1658,9 @@ function drawBinLoadsChart(divId, bdata, title, chartExtra) {
    };
 
    var chart = new google.visualization.ComboChart(el);
+   google.visualization.events.addListener(chart, 'ready', function() {
+      attachSvgContextMenu(divId, title);
+   });
    chart.draw(dt, options);
 }
 
@@ -1546,6 +1704,9 @@ function drawBinPerfChart(divId, bdata, title, chartExtra) {
    };
 
    var chart = new google.visualization.ComboChart(el);
+   google.visualization.events.addListener(chart, 'ready', function() {
+      attachSvgContextMenu(divId, title);
+   });
    chart.draw(dt, options);
 }
 

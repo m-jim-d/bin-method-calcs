@@ -30,21 +30,17 @@
       <h1>Equipment Response To Loads</h1>
       
       <figure class="floatRight" style="max-width: 500px;">
-        <img style="width: 496px; height: 337px;" alt="Equipment Performance Chart for Wichita, KS" 
-            title="Wichita, KS" src="images/Wichita_Performance.png">
-        <figcaption>
-          <strong>Wichita, KS: Equipment Performance</strong>
+        <img style="width: 496px;" alt="Equipment Performance Chart for Wichita, KS" 
+            title="Wichita, KS" src="images/Wichita_Performance.svg">
+        <figcaption style="padding-left: 65px;">
+          <strong>Equipment Performance: Wichita, KS</strong>
           <p>This chart of equipment performance is generated when the "Show bin calculations" option is selected. The chart data is from five of the columns in the bin-calculations tables.</p>
           <ul>
-            <li>The <span style="color: rgb(255, 0, 0);">red</span> (TCF) line is the correction to the total capacity.</li>
-            <li>The <span style="background-color: white; color: rgb(51, 204, 0);">green</span> (PCF) line is the correction to the system power draw.</li>
-            <li>The <span style="color: rgb(255, 153, 102);">brown</span> line is the S/T ratio.</li>
-            <li>The lines with square markers indicate system energy usage and are normalized to allow plotting with the correction factors.
-              <ul>
-                <li><span style="background-color: rgb(153, 255, 255);">Blue</span> square markers indicate consumption from the condenser.</li>
-                <li><span style="background-color: rgb(255, 102, 102);">Red</span> square markers indicate consumption by the evaporator fan.</li>
-              </ul>
-            </li>
+            <li>Red line: Total capacity Correction Factor (TCF)</li>
+            <li>Green line: Power Correction Factor (PCF)</li>
+            <li>Blue line: Sensible to Total capacity ratio (S/T)</li>
+            <li>Blue bars: Condenser energy consumption (E_Cond)</li>
+            <li>Gold bars: Evaporator fan energy consumption (E_Fan)</li>
           </ul>
         </figcaption>
       </figure>
